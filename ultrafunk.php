@@ -5,7 +5,7 @@ Plugin URI:   https://github.com/ultrafunk/ultrafunk-plugin
 Author:       Ultrafunk
 Author URI:   https://ultrafunk.com
 Description:  ultrafunk.com WordPress plugin
-Version:      1.40.0
+Version:      1.40.1
 Tested up to: 5.9
 Requires PHP: 8.0
 License:      MIT License
@@ -41,6 +41,7 @@ else
 {
   require_once ULTRAFUNK_PLUGIN_PATH . 'inc/shared.php';
   require_once ULTRAFUNK_PLUGIN_PATH . 'inc/globals.php';
+  require_once ULTRAFUNK_PLUGIN_PATH . 'inc/request/default-routes.php';
   require_once ULTRAFUNK_PLUGIN_PATH . 'inc/request/route-request.php';
   require_once ULTRAFUNK_PLUGIN_PATH . 'inc/request/request-handler.php';
   require_once ULTRAFUNK_PLUGIN_PATH . 'inc/front/customize.php';
