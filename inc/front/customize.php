@@ -44,13 +44,12 @@ add_action('init', '\Ultrafunk\Plugin\Front\Customize\cleanup_wp_header');
 
 //
 // Remove Gutenberg Block Library stuff from header (CSS) + footer (SVGs)
-// https://core.trac.wordpress.org/ticket/54941#comment:6
 // https://github.com/WordPress/gutenberg/issues/38299
 //
 function remove_wp_block_library()
 {
   remove_action('wp_enqueue_scripts', 'wp_enqueue_global_styles');
-  remove_action('wp_footer', 'wp_enqueue_global_styles', 1);
+  remove_action('wp_body_open', 'wp_global_styles_render_svg_filters');
 }
 add_action('after_setup_theme', '\Ultrafunk\Plugin\Front\Customize\remove_wp_block_library', 10, 0);
 
