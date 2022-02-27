@@ -60,8 +60,6 @@ function register_custom() : void
   ];
     
   register_post_type('uf_track', $args);
-  
-//add_rewrite_rule('^track\/([0-9]+)$', 'index.php?post_type=uf_track&p=$matches[1]', 'top');
 }
 add_action('init', '\Ultrafunk\Plugin\PostTypes\register_custom');
 

@@ -15,6 +15,9 @@ namespace Ultrafunk\Plugin\Front\Customize;
 //
 function cleanup_wp_header() : void
 {
+  // Remove WP generator meta tag
+  remove_action('wp_head', 'wp_generator');
+  
   // Remove WP-Emoji for visitors
   remove_action('wp_head', 'print_emoji_detection_script', 7);
   remove_action('wp_print_styles', 'print_emoji_styles');
@@ -64,17 +67,3 @@ function add_tracks_to_feed(array $query_vars) : array
   return $query_vars;
 }
 add_filter('request', 'Ultrafunk\Plugin\Front\Customize\add_tracks_to_feed');
-
-/*
-//
-// Set post type link for custom posts
-//
-function custom_post_type_link(string $post_link, object $post) : string
-{
-  if (isset($post) && ($post->post_type === 'uf_track'))
-    return get_cached_home_url('/track/' . $post->ID . '/');
-
-  return $post_link;
-}
-add_filter('post_type_link', 'Ultrafunk\Plugin\custom_post_type_link', 10, 2);
-*/
