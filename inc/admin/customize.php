@@ -11,6 +11,17 @@ namespace Ultrafunk\Plugin\Admin\Customize;
 
 
 //
+// Remove default WordPress header stuff that is not needed...
+//
+function cleanup_wp_header() : void
+{
+  // Remove WP-Emoji for admins
+  remove_action('admin_print_scripts', 'print_emoji_detection_script');
+  remove_action('admin_print_styles', 'print_emoji_styles');
+}
+add_action('init', '\Ultrafunk\Plugin\Admin\Customize\cleanup_wp_header');
+
+//
 // Swap admin menu item positions for Posts and Tracks = Tracks first
 //
 function swap_menu_items()

@@ -15,16 +15,15 @@ namespace Ultrafunk\Plugin\Front\Customize;
 //
 function cleanup_wp_header() : void
 {
+  // Remove comments Feed from header since comments are always disabled
+  add_filter('feed_links_show_comments_feed', '__return_false');
+
   // Remove WP generator meta tag
   remove_action('wp_head', 'wp_generator');
   
   // Remove WP-Emoji for visitors
   remove_action('wp_head', 'print_emoji_detection_script', 7);
   remove_action('wp_print_styles', 'print_emoji_styles');
-
-  // Remove WP-Emoji for admins
-  remove_action('admin_print_scripts', 'print_emoji_detection_script');
-  remove_action('admin_print_styles', 'print_emoji_styles');
 
   // Remove support for embedding WordPress content
   remove_action('wp_head', 'wp_oembed_add_host_js');
