@@ -107,11 +107,11 @@ class RouteRequest
       $esc_request_url    = esc_url_raw($request_url);
       $url_parts          = explode('?', $esc_request_url, 2);
       $this->request_path = trim($url_parts[0], '/');
+      $this->params       = isset($url_parts[1]) ? $url_parts[1] : null;
 
       if (!empty($this->request_path) && (strlen($this->request_path) < 1024))
       {
         $this->path_parts = explode('/', $this->request_path, 25);
-        $this->params     = isset($url_parts[1]) ? $url_parts[1] : null;
         $route_key        = $this->find_route_key($routes);
 
         if ($route_key !== null)
