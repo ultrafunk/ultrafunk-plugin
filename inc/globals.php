@@ -31,6 +31,7 @@ Globals::construct();
 class Globals
 {
   // Each prop has getter function for fast access
+  public static $is_custom_query = false;
   public static $request_params  = [];
   public static $session_vars    = [];
   public static $cached_title    = null;
@@ -40,7 +41,7 @@ class Globals
     'display_perf_results' => true,
     'create_rnd_transient' => 0,
     'get_rnd_transient'    => 0,
-    'RouteRequest'         => 0,
+    'route_request'        => 0,
   ];
 
   // Use get_globals_prop('prop_name') for these
@@ -73,6 +74,16 @@ function get_globals_prop($property) : mixed
   return Globals::$$property;
 }
 
+function is_custom_query() : bool
+{
+  return Globals::$is_custom_query;
+}
+
+function set_is_custom_query(bool $value = true) : void
+{
+  Globals::$is_custom_query = $value;
+}
+
 function get_request_params() : array
 {
   return Globals::$request_params;
@@ -96,19 +107,19 @@ function set_session_vars(array $session_vars) : void
 function is_termlist(string $type_key = null) : bool
 {
   if ($type_key === null)
-    return !empty(Globals::$request_params['request_type']['termlist']);
+    return !empty(Globals::$request_params['type']['termlist']);
 
-  return (!empty(Globals::$request_params['request_type']['termlist']) &&
-          !empty(Globals::$request_params['request_type'][$type_key]));
+  return (!empty(Globals::$request_params['type']['termlist']) &&
+          !empty(Globals::$request_params['type'][$type_key]));
 }
 
 function is_list_player(string $type_key = null) : bool
 {
   if ($type_key === null)
-    return !empty(Globals::$request_params['request_type']['list_player']);
+    return !empty(Globals::$request_params['type']['list_player']);
 
-  return (!empty(Globals::$request_params['request_type']['list_player']) &&
-          !empty(Globals::$request_params['request_type'][$type_key]));
+  return (!empty(Globals::$request_params['type']['list_player']) &&
+          !empty(Globals::$request_params['type'][$type_key]));
 }
 
 function is_shuffle(int $player_type = PLAYER_TYPE::NONE) : bool
@@ -117,7 +128,7 @@ function is_shuffle(int $player_type = PLAYER_TYPE::NONE) : bool
     return !empty(Globals::$request_params['is_shuffle']);
 
   if ($player_type === PLAYER_TYPE::LIST)
-    return !empty(Globals::$request_params['request_type']['shuffle']);
+    return !empty(Globals::$request_params['type']['shuffle']);
 
   return false;
 }

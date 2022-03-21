@@ -97,11 +97,9 @@ function request_pagination(object $request_handler) : void
       'next_text' => 'Next &#10095;&#10095;',
     ];
 
-    $nav_header_text = $request_handler->title_parts['prefix'] . ': <span class="light-text">' . $request_handler->title_parts['title'] . '</span>';
-  
     ?>
-    <nav class="navigation pagination" role="navigation" aria-label=" ">
-      <h2 class="screen-reader-text"><?php echo $nav_header_text; ?></h2>
+    <nav class="navigation pagination" aria-label="Pagination">
+      <h2 class="screen-reader-text">Pagination</h2>
       <div class="nav-links">
         <?php echo paginate_links($args); ?>
       </div>
@@ -117,10 +115,11 @@ function request_pagination(object $request_handler) : void
 function set_list_session_vars(array $session_vars) : array
 {
   $params = get_request_params();
-  $data   = $params['request_data'];
+  $data   = $params['data'];
+  $query  = $params['query'];
   $path   = isset($params['route_path']) ? $params['route_path'] : '';
   
-  $session_vars['requestType'] = $params['request_type'];
+  $session_vars['requestType'] = $params['type'];
   $session_vars['currentPage'] = $params['current_page'];
   $session_vars['maxPages']    = $params['max_pages'];
 
@@ -163,12 +162,18 @@ function set_list_session_vars(array $session_vars) : array
     }
   }
 
-  // Prepend full site url for better client side validation
+  // Prepend full site url for better client side validation + append parameters if present
   if ($session_vars['prevPage'] !== null)
-    $session_vars['prevPage'] = PLUGIN_ENV['site_url'] . $session_vars['prevPage'];
+  {
+    $session_vars['prevPage']  = PLUGIN_ENV['site_url'] . $session_vars['prevPage'];
+    $session_vars['prevPage'] .= ($query['string'] !== null) ? "?{$query['string']}" : '';
+  }
 
   if ($session_vars['nextPage'] !== null)
-    $session_vars['nextPage'] = PLUGIN_ENV['site_url'] . $session_vars['nextPage'];
+  {
+    $session_vars['nextPage']  = PLUGIN_ENV['site_url'] . $session_vars['nextPage'];
+    $session_vars['nextPage'] .= ($query['string'] !== null) ? "?{$query['string']}" : '';
+  }
 
   return $session_vars;
 }

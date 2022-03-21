@@ -116,4 +116,15 @@ const DEFAULT_ROUTES =
       'shuffle_slug_page' => '/^list\/shuffle\/(\bchannel\b|\bartist\b)*\/[a-z0-9-]*\/page\/(?!0)\d{1,6}$/',
     ]
   ],
+  [
+    'route_uid'      => 'list/search',
+    'handler_file'   => 'inc/request/list-player-search.php',
+    'handler_class'  => '\Ultrafunk\Plugin\Request\ListPlayerSearch',
+    'template_file'  => 'content-list-player.php',
+    'template_class' => '\Ultrafunk\Theme\Templates\ListPlayer',
+    'routes' => [
+      'list_player_search'      => '/^list\/search$/',
+      'list_player_search_page' => '/^list\/search\/page\/(?!0)\d{1,6}$/',
+    ]
+  ],
 ];

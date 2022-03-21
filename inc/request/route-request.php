@@ -25,7 +25,8 @@ class RouteRequest
   private $server_url    = null;
   public $request_path   = null;
   public $path_parts     = null;
-  public $params         = null;
+  public $query_string   = null;
+  public $query_params   = null;
   public $matched_route  = null;
   public $handler_file   = null;
   public $handler_class  = null;
@@ -66,7 +67,7 @@ class RouteRequest
   private function request_needs_redirect(string $route_path) : bool
   {
     $page_1     = '/page/1';
-    $url_params = ($this->params !== null) ? "?$this->params" : '';
+    $url_params = ($this->query_string !== null) ? "?$this->query_string" : '';
 
     // Redirect when URL ends with /page/1 for WP + pretty permalinks behaviour
     if (substr_compare($this->request_path, $page_1, -\strlen($page_1)) === 0)
@@ -107,7 +108,12 @@ class RouteRequest
       $esc_request_url    = esc_url_raw($request_url);
       $url_parts          = explode('?', $esc_request_url, 2);
       $this->request_path = trim($url_parts[0], '/');
-      $this->params       = isset($url_parts[1]) ? $url_parts[1] : null;
+
+      if (isset($url_parts[1]))
+      {
+        $this->query_string = $url_parts[1];
+        parse_str($url_parts[1], $this->query_params);
+      }
 
       if (!empty($this->request_path) && (strlen($this->request_path) < 1024))
       {
@@ -203,7 +209,7 @@ function parse_request(bool $do_parse, object $wp_env) : bool
       require ULTRAFUNK_PLUGIN_PATH . $route_request->handler_file;
       
       $request_handler = new $route_request->handler_class($wp_env, $route_request);
-      $request_handler->parse_validate_set_params();
+      $request_handler->get_request_data();
 
       if (($route_request->template_file !== null) && ($route_request->template_class !== null))
       {
@@ -211,7 +217,7 @@ function parse_request(bool $do_parse, object $wp_env) : bool
       }
       else if ($request_handler->is_valid_request)
       {
-        perf_stop('RouteRequest', 'RouteRequest_start');
+        perf_stop('route_request', 'RouteRequest_start');
 
         // return false = We have parsed / handled this request, continue with our query_vars
         // https://developer.wordpress.org/reference/hooks/do_parse_request/        
@@ -220,7 +226,7 @@ function parse_request(bool $do_parse, object $wp_env) : bool
     }
   }
 
-  perf_stop('RouteRequest', 'RouteRequest_start');
+  perf_stop('route_request', 'RouteRequest_start');
   
   return $do_parse;
 }

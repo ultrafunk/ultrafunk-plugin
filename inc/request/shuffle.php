@@ -77,7 +77,7 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
       $this->params['path'] = ($this->params['type'] . '/' . $this->params['slug']);
   }
 
-  public function parse_validate_set_params() : void
+  protected function parse_validate_set_params() : bool
   {
     $paged = $this->get_page_num(999999);
     
@@ -117,9 +117,16 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
           'paged'     => $paged, 
         ];
 
-        $this->is_valid_request = true;
+        // ToDo: Needs to be updated to work as all the list-nnn.php classes,
+        // currently it is a mix of old and new...
+        if ($this->route_request->template_class === null)
+          $this->is_valid_request = true;
+
+        return true;
       }
     }
+
+    return false;
   }
 
   //

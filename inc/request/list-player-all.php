@@ -18,20 +18,14 @@ class ListPlayerAll extends \Ultrafunk\Plugin\Request\RequestHandler
     parent::__construct($wp_env, $route_request, 'list_player');
   }
 
-  public function parse_validate_set_params() : void
+  protected function parse_validate_set_params() : bool
   {
-    $this->request_params['request_type']['all'] = true;
+    $this->request_params['type']['all'] = true;
     $this->route_path   = 'list';
     $this->title_parts  = ['prefix' => 'Channel', 'title' => 'All Tracks'];
     $this->current_page = $this->get_current_page($this->route_request->path_parts, 2);
-    $this->max_pages    = $this->get_max_pages(\intval(wp_count_posts('uf_track')->publish), $this->items_per_page);
+    $this->query_args   = ['suppress_filters' => true ];
 
-    $this->is_valid_request = ($this->current_page <= $this->max_pages);
-
-    $this->query_args = [
-      'post_type'      => 'uf_track',
-      'paged'          => $this->current_page,
-      'posts_per_page' => $this->items_per_page,
-    ];
+    return true;
   }
 }

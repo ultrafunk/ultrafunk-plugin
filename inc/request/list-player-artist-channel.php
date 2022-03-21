@@ -26,7 +26,7 @@ class ListPlayerArtistChannel extends \Ultrafunk\Plugin\Request\RequestHandler
     {
       case 'list_player_artist':
       case 'list_player_artist_page':
-        $this->request_params['request_type']['artist'] = true;
+        $this->request_params['type']['artist'] = true;
         $this->taxonomy     = 'uf_artist';
         $this->term_type    = 'artists';
         $this->title_prefix = 'Artist';
@@ -34,7 +34,7 @@ class ListPlayerArtistChannel extends \Ultrafunk\Plugin\Request\RequestHandler
 
       case 'list_player_channel':
       case 'list_player_channel_page':
-        $this->request_params['request_type']['channel'] = true;
+        $this->request_params['type']['channel'] = true;
         $this->taxonomy     = 'uf_channel';
         $this->term_type    = 'channels';
         $this->title_prefix = 'Channel';
@@ -42,7 +42,7 @@ class ListPlayerArtistChannel extends \Ultrafunk\Plugin\Request\RequestHandler
     }
   }
 
-  public function parse_validate_set_params() : void
+  protected function parse_validate_set_params() : bool
   {
     $slug          = sanitize_title($this->route_request->path_parts[2]);
     $this->wp_term = get_term_by('slug', $slug, $this->taxonomy);
@@ -52,17 +52,11 @@ class ListPlayerArtistChannel extends \Ultrafunk\Plugin\Request\RequestHandler
       $this->route_path   = 'list/' . strtolower($this->title_prefix) . '/' . $slug;
       $this->title_parts  = ['prefix' => $this->title_prefix, 'title' => $this->wp_term->name];
       $this->current_page = $this->get_current_page($this->route_request->path_parts, 4);
-      $this->max_pages    = $this->get_max_pages($this->wp_term->count, $this->items_per_page);
-      
-      $this->is_valid_request = ($this->current_page <= $this->max_pages);
-
-      $this->request_params['request_data']['wp_term'] = $this->wp_term;
+      $this->request_params['data']['wp_term'] = $this->wp_term;
 
       $this->query_args = [
-        'post_type'      => 'uf_track',
-        'paged'          => $this->current_page,
-        'posts_per_page' => $this->items_per_page,
-        'tax_query'      => [
+        'suppress_filters' => true,
+        'tax_query'        => [
           [
             'taxonomy' => $this->taxonomy,
             'field'    => 'slug',
@@ -70,6 +64,10 @@ class ListPlayerArtistChannel extends \Ultrafunk\Plugin\Request\RequestHandler
           ],
         ],
       ];
+
+      return true;
     }
+
+    return false;
   }
 }

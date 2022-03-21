@@ -13,8 +13,8 @@ use const Ultrafunk\Plugin\Constants\PLUGIN_ENV;
 use function Ultrafunk\Plugin\Shared\console_log;
 
 use function Ultrafunk\Plugin\Globals\ {
-  get_request_params,
   perf_stop,
+  set_is_custom_query,
 };
 
 
@@ -34,6 +34,7 @@ abstract class RequestHandler
   public $current_page     = 1;
   public $max_pages        = 1;
   public $query_args       = [];
+  public $query_data       = null;
   
   public function __construct(object $wp_env, object $route_request, string $type_key = 'UNKNOWN_REQUEST_TYPE')
   {
@@ -41,8 +42,12 @@ abstract class RequestHandler
     $this->route_request  = $route_request;
     $this->items_per_page = PLUGIN_ENV['list_per_page'];
 
-    $this->request_params['request_type'][$type_key] = true;
-    $this->request_params['request_data'] = [];
+    $this->request_params['type'][$type_key] = true;
+    $this->request_params['data']  = [];
+    $this->request_params['query'] = [
+      'string' => $this->route_request->query_string,
+      'params' => $this->route_request->query_params,
+    ];
   }
 
   protected function set_request_params() : void
@@ -73,39 +78,115 @@ abstract class RequestHandler
              : 1);
   }
 
-  abstract public function parse_validate_set_params() : void;
+  abstract protected function parse_validate_set_params() : bool;
+
+  private function request_query(string $query_class) : object
+  {
+    set_is_custom_query(true);
+    $query_result = new $query_class($this->query_args);
+    set_is_custom_query(false);
+
+    return $query_result;
+  }
+
+  public function get_request_data() : void
+  {
+    if ($this->parse_validate_set_params())
+    {
+      if (!empty($this->request_params['type']['list_player']))
+      {
+        $this->query_args['post_type']      = 'uf_track';
+        $this->query_args['paged']          = $this->current_page;
+        $this->query_args['posts_per_page'] = $this->items_per_page;
+
+        $query_result = $this->request_query('WP_Query');
+
+        $this->query_data = $query_result->posts;
+        $this->max_pages  = $this->get_max_pages($query_result->found_posts, $this->items_per_page);
+        $this->is_valid_request = $query_result->have_posts();
+      }
+      else if (!empty($this->request_params['type']['termlist']))
+      {
+        $this->query_args['hide_empty'] = true;
+        
+        $query_result = $this->request_query('WP_Term_Query');
+
+        if ($query_result->terms !== null)
+        {
+          $this->request_params['data']['item_count'] = count($query_result->terms);
+          $this->query_data = $query_result->terms;
+          $this->is_valid_request = true;
+        }
+      }
+
+    //console_log($this);
+    }
+  }
+
   
-  public function render_content(string $template_name, string $template_function) : void
+  /**************************************************************************************************************************/
+
+  
+  private function begin_output() : void
+  {
+    // Show debug info for this request
+    //console_log($this->request_params);
+
+    // Output HTTP headers
+    $this->wp_env->send_headers();
+    
+    // Get site template header
+    get_header();
+  }
+
+  private function end_output() : void
+  {
+    // Stop performance counter
+    perf_stop('route_request', 'RouteRequest_start');
+    
+    // Get site template footer
+    get_footer();
+
+    // We are DONE!
+    exit;
+  }
+
+  public function render_content(string $template_name, string $render_function) : void
   {
     if ($this->is_valid_request)
     {
-      // Set public handler parameters for this request
+      // Set public parameters for this request
       $this->set_request_params();
 
-      // Debug info for the current request
-    //console_log($this);
-    //console_log(get_request_params());
+      $this->begin_output();
 
       // Load template file for this request
       require_once get_template_directory() . '/php/templates/' . $template_name;
 
-      // Output HTTP headers
-      $this->wp_env->send_headers();
-      
-      // Get site template header
-      get_header();
-      
       // Call the template files entry point for rendering content
-      $template_function($this);
+      $render_function($this);
       
-      // Stop performance counter
-      perf_stop('RouteRequest', 'RouteRequest_start');
-      
-      // Get site template footer
-      get_footer();
+      $this->end_output();
+    }
+    else
+    {
+      global $wp_query;
 
-      // We are DONE!
-      exit;
+      // Setup global $wp_query so it contains relevant data to handle this request failure...
+      if (!empty($this->request_params['type']['search']))
+      {
+        $wp_query->is_search = true;
+        $wp_query->query_vars['s'] = $this->route_request->query_params['s'];
+      }
+      else
+      {
+        $wp_query->set_404();
+        status_header(404);
+      }
+
+      $this->begin_output();
+      get_template_part('php/templates/content', 'none');
+      $this->end_output();
     }
   }
 }
