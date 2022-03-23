@@ -42,7 +42,7 @@ abstract class RequestHandler
     $this->route_request  = $route_request;
     $this->items_per_page = PLUGIN_ENV['list_per_page'];
 
-    $this->request_params['type'][$type_key] = true;
+    $this->request_params['get'][$type_key] = true;
     $this->request_params['data']  = [];
     $this->request_params['query'] = [
       'string' => $this->route_request->query_string,
@@ -93,7 +93,7 @@ abstract class RequestHandler
   {
     if ($this->parse_validate_set_params())
     {
-      if (!empty($this->request_params['type']['list_player']))
+      if (!empty($this->request_params['get']['list_player']))
       {
         $this->query_args['post_type']      = 'uf_track';
         $this->query_args['paged']          = $this->current_page;
@@ -105,7 +105,7 @@ abstract class RequestHandler
         $this->max_pages  = $this->get_max_pages($query_result->found_posts, $this->items_per_page);
         $this->is_valid_request = $query_result->have_posts();
       }
-      else if (!empty($this->request_params['type']['termlist']))
+      else if (!empty($this->request_params['get']['termlist']))
       {
         $this->query_args['hide_empty'] = true;
         
@@ -171,18 +171,23 @@ abstract class RequestHandler
     else
     {
       global $wp_query;
+      $response_params = array('response' => $this->request_params['get']);
 
       // Setup global $wp_query so it contains relevant data to handle this request failure...
-      if (!empty($this->request_params['type']['search']))
+      if (!empty($this->request_params['get']['search']))
       {
-        $wp_query->is_search = true;
+        $response_params['error']  = ['http_status' => 200, 'details' => 'No search matches'];
+        $wp_query->is_search       = true;
         $wp_query->query_vars['s'] = $this->route_request->query_params['s'];
       }
       else
       {
+        $response_params['error'] = ['http_status' => 404, 'details' => 'Page not found'];
         $wp_query->set_404();
         status_header(404);
       }
+
+      \Ultrafunk\Plugin\Globals\set_request_params($response_params);
 
       $this->begin_output();
       get_template_part('php/templates/content', 'none');

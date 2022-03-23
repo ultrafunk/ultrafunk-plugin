@@ -22,7 +22,7 @@ class ListPlayerSearch extends \Ultrafunk\Plugin\Request\RequestHandler
   {
     if (isset($this->route_request->query_params['s']))
     {
-      $this->request_params['type']['search'] = true;
+      $this->request_params['get']['search'] = true;
       $this->route_path   = 'list/search';
       $this->title_parts  = ['prefix' => 'Search', 'title' => esc_html($this->route_request->query_params['s'])];
       $this->current_page = $this->get_current_page($this->route_request->path_parts, 3);

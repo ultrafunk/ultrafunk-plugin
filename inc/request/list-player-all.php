@@ -20,7 +20,7 @@ class ListPlayerAll extends \Ultrafunk\Plugin\Request\RequestHandler
 
   protected function parse_validate_set_params() : bool
   {
-    $this->request_params['type']['all'] = true;
+    $this->request_params['get']['all'] = true;
     $this->route_path   = 'list';
     $this->title_parts  = ['prefix' => 'Channel', 'title' => 'All Tracks'];
     $this->current_page = $this->get_current_page($this->route_request->path_parts, 2);

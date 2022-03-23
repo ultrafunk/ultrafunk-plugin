@@ -104,22 +104,27 @@ function set_session_vars(array $session_vars) : void
   Globals::$session_vars = $session_vars;
 }
 
-function is_termlist(string $type_key = null) : bool
+//
+// is_request('get',   'termlist',    'artists')
+// is_request('error', 'list_player', 'search')
+//
+function is_request(string $request, string $type, ?string $category = null) : bool
 {
-  if ($type_key === null)
-    return !empty(Globals::$request_params['type']['termlist']);
+  if ($category === null)
+    return !empty(Globals::$request_params[$request][$type]);
 
-  return (!empty(Globals::$request_params['type']['termlist']) &&
-          !empty(Globals::$request_params['type'][$type_key]));
+  return (!empty(Globals::$request_params[$request][$type]) &&
+          !empty(Globals::$request_params[$request][$category]));
 }
 
-function is_list_player(string $type_key = null) : bool
+function is_termlist(string $category = null) : bool
 {
-  if ($type_key === null)
-    return !empty(Globals::$request_params['type']['list_player']);
+  return is_request('get', 'termlist', $category);
+}
 
-  return (!empty(Globals::$request_params['type']['list_player']) &&
-          !empty(Globals::$request_params['type'][$type_key]));
+function is_list_player(string $category = null) : bool
+{
+  return is_request('get', 'list_player', $category);
 }
 
 function is_shuffle(int $player_type = PLAYER_TYPE::NONE) : bool
@@ -128,7 +133,7 @@ function is_shuffle(int $player_type = PLAYER_TYPE::NONE) : bool
     return !empty(Globals::$request_params['is_shuffle']);
 
   if ($player_type === PLAYER_TYPE::LIST)
-    return !empty(Globals::$request_params['type']['shuffle']);
+    return !empty(Globals::$request_params['get']['shuffle']);
 
   return false;
 }

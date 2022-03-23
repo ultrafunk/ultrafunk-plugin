@@ -41,7 +41,7 @@ class TermlistArtists extends \Ultrafunk\Plugin\Request\RequestHandler
 
   protected function parse_validate_set_params() : bool
   {
-    $this->request_params['type']['artists'] = true;
+    $this->request_params['get']['artists'] = true;
     $this->route_path    = 'artists';
     $this->first_letter  = ($this->route_request->matched_route === 'artists') ? 'a' : $this->route_request->path_parts[1][0];
     $this->letters_range = range('a', 'z');

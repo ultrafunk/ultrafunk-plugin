@@ -23,7 +23,7 @@ class TermlistChannels extends \Ultrafunk\Plugin\Request\RequestHandler
 
   protected function parse_validate_set_params() : bool
   {
-    $this->request_params['type']['channels'] = true;
+    $this->request_params['get']['channels'] = true;
     $this->route_path = 'channels';
     $this->query_args = [ 'taxonomy' => 'uf_channel' ];
 

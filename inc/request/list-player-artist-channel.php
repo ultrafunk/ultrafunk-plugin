@@ -26,7 +26,7 @@ class ListPlayerArtistChannel extends \Ultrafunk\Plugin\Request\RequestHandler
     {
       case 'list_player_artist':
       case 'list_player_artist_page':
-        $this->request_params['type']['artist'] = true;
+        $this->request_params['get']['artist'] = true;
         $this->taxonomy     = 'uf_artist';
         $this->term_type    = 'artists';
         $this->title_prefix = 'Artist';
@@ -34,7 +34,7 @@ class ListPlayerArtistChannel extends \Ultrafunk\Plugin\Request\RequestHandler
 
       case 'list_player_channel':
       case 'list_player_channel_page':
-        $this->request_params['type']['channel'] = true;
+        $this->request_params['get']['channel'] = true;
         $this->taxonomy     = 'uf_channel';
         $this->term_type    = 'channels';
         $this->title_prefix = 'Channel';

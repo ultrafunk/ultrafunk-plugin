@@ -22,7 +22,7 @@ class ListPlayerDate extends \Ultrafunk\Plugin\Request\RequestHandler
   {
     if (checkdate(\intval($this->route_request->path_parts[2]), 1, \intval($this->route_request->path_parts[1])))
     {
-      $this->request_params['type']['date'] = true;
+      $this->request_params['get']['date'] = true;
       $date_params        = ['year' => \intval($this->route_request->path_parts[1]), 'month' => \intval($this->route_request->path_parts[2])];
       $this->route_path   = "list/{$this->route_request->path_parts[1]}/{$this->route_request->path_parts[2]}";
       $this->title_parts  = ['prefix' => 'Channel', 'title' => date('F Y', mktime(0, 0, 0, $date_params['month'], 1, $date_params['year']))];

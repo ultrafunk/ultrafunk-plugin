@@ -119,7 +119,7 @@ function set_list_session_vars(array $session_vars) : array
   $query  = $params['query'];
   $path   = isset($params['route_path']) ? $params['route_path'] : '';
   
-  $session_vars['requestType'] = $params['type'];
+  $session_vars['params']      = $params['get'];
   $session_vars['currentPage'] = $params['current_page'];
   $session_vars['maxPages']    = $params['max_pages'];
 
