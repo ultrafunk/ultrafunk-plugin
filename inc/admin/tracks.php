@@ -7,7 +7,12 @@
 namespace Ultrafunk\Plugin\Admin\Tracks;
 
 
+use DateInterval;
+use DateTime;
+
 use Ultrafunk\Plugin\Constants\TRACK_TYPE;
+
+use const Ultrafunk\Plugin\Constants\PLUGIN_ENV;
 
 
 /**************************************************************************************************************************/
@@ -32,6 +37,7 @@ function on_save_set_meta(int $post_id, object $post, bool $update) : void
 
   $track_source_data  = get_track_source_data($post->post_content);
   $track_artist_title = preg_split('/\s{1,}[\x{002D}\x{00B7}\x{2013}]\s{1,}/u', $post->post_title, 2);
+  $track_duration     = ($track_source_data[0] === TRACK_TYPE::YOUTUBE) ? get_youtube_video_duration($track_source_data[2]) : 0;
 
   if (($track_source_data  !== null)  &&
       ($track_artist_title !== false) &&
@@ -41,6 +47,7 @@ function on_save_set_meta(int $post_id, object $post, bool $update) : void
     update_post_meta($post->ID, 'track_title',       $track_artist_title[1]);
     update_post_meta($post->ID, 'track_source_type', $track_source_data[0]);
     update_post_meta($post->ID, 'track_source_data', $track_source_data[1]);
+    update_post_meta($post->ID, 'track_duration',    $track_duration);
 
     $track_artist_slug = sanitize_title($track_artist_title[0]);
     $track_artist_term = get_term_by('slug', $track_artist_slug, 'uf_artist');
@@ -76,13 +83,16 @@ function get_track_source_data(string $post_content) : ?array
     $find_pos = strripos($post_content, $find_string);
 
     if ($find_pos !== false)
-      return [TRACK_TYPE::YOUTUBE, 'youtube.com/watch?v=' . substr($post_content, ($find_pos + \strlen($find_string)), 11)];
+    {
+      $video_id = substr($post_content, ($find_pos + strlen($find_string)), 11);
+      return [TRACK_TYPE::YOUTUBE, "youtube.com/watch?v=$video_id", $video_id];
+    }
   }
 
   $find_pos = stripos($post_content, 'soundcloud.com/');
 
   if ($find_pos !== false)
-    return [TRACK_TYPE::SOUNDCLOUD, substr($post_content, $find_pos, (strpos($post_content, '"', $find_pos) - $find_pos))];
+    return [TRACK_TYPE::SOUNDCLOUD, substr($post_content, $find_pos, (strpos($post_content, '"', $find_pos) - $find_pos)), ''];
 
   return null;
 }
@@ -120,6 +130,29 @@ function validate_id_and_slug(object $post) : void
         set_admin_notice($post->ID, 'notice-error', "Invalid <b>track_artist_slug:</b> $post->track_artist_slug for track: <b>\"$post->post_title\"</b>");
     }
   }
+}
+
+//
+// Return YouTube video duration in seconds
+//
+function get_youtube_video_duration($video_id)
+{
+  $api_key = UF_YOUTUBE_DATA_API_KEY;
+  $referer = PLUGIN_ENV['site_url'];
+  $options = array('http' => array('header' => array("Referer: $referer\r\n")));
+  $context = stream_context_create($options);
+
+  $json_result = file_get_contents("https://www.googleapis.com/youtube/v3/videos?id=$video_id&key=$api_key&part=contentDetails&fields=items(contentDetails(duration))", false, $context);
+  $video_data  = json_decode($json_result, true);
+
+  if (!count($video_data['items']))
+      return 0;
+
+  $dateTime = new DateTime('@0');
+  $dateTime->add(new DateInterval($video_data['items'][0]['contentDetails']['duration']));
+  $duration_seconds = intval($dateTime->getTimestamp());
+
+  return $duration_seconds;
 }
 
 

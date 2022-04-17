@@ -54,7 +54,7 @@ class Globals
   {
     self::$cached_home_url  = esc_url(home_url());
     self::$preferred_player = get_cookie_value(COOKIE_KEY::UF_PREFERRED_PLAYER, 0, 2, PLAYER_TYPE::LIST);
-    self::$gallery_per_page = get_cookie_value(COOKIE_KEY::UF_GALLERY_PER_PAGE, 3, 24, \intval(get_option('posts_per_page', PLUGIN_ENV['gallery_per_page'])));
+    self::$gallery_per_page = get_cookie_value(COOKIE_KEY::UF_GALLERY_PER_PAGE, 3, 24, intval(get_option('posts_per_page', PLUGIN_ENV['gallery_per_page'])));
 
     /*
     $user_settings          = get_cookie_json(COOKIE_KEY::UF_USER_SETTINGS);
@@ -69,7 +69,7 @@ class Globals
 /**************************************************************************************************************************/
 
 
-function get_globals_prop($property) : mixed
+function get_globals_prop(string $property) : mixed
 {
   return Globals::$$property;
 }

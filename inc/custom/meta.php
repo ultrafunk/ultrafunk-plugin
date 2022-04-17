@@ -59,5 +59,14 @@ function register_fields()
       'show_in_rest' => true,
     ]
   );
+
+  register_post_meta('uf_track', 'track_duration',
+    [
+      'type'         => 'number',
+      'description'  => 'track_duration',
+      'single'       => true,
+      'show_in_rest' => true,
+    ]
+  );
 }
 add_action('rest_api_init', '\Ultrafunk\Plugin\Meta\register_fields');

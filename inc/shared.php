@@ -37,7 +37,7 @@ function get_cookie_value(string $cookie_name, int $min_val, int $max_val, int $
 {
   if (isset($_COOKIE[$cookie_name]))
   {
-    $cookie_val = \intval($_COOKIE[$cookie_name]);
+    $cookie_val = intval($_COOKIE[$cookie_name]);
 
     if (($cookie_val >= $min_val) && ($cookie_val <= $max_val))
       return $cookie_val;
@@ -151,7 +151,7 @@ function set_list_session_vars(array $session_vars) : array
     {
       $session_vars['nextPage'] = '/' . $path . '/b/';
     }
-    else if (($index + 1) < \count($letters))
+    else if (($index + 1) < count($letters))
     {
       $session_vars['prevPage'] = '/' . $path . '/' . $letters[$index - 1] . '/';
       $session_vars['nextPage'] = '/' . $path . '/' . $letters[$index + 1] . '/';
@@ -193,7 +193,7 @@ const DEFAULT_TRACK_DATA = [
 
 function get_track_data(object $track) : array
 {
-  if (\intval($track->track_source_type) === TRACK_TYPE::YOUTUBE)
+  if (intval($track->track_source_type) === TRACK_TYPE::YOUTUBE)
   {
     preg_match(YOUTUBE_VIDEO_ID_REGEX, $track->track_source_data, $source_uid);
 

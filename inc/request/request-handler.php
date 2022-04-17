@@ -64,7 +64,7 @@ abstract class RequestHandler
   protected function get_current_page(array $path_parts, int $path_part_index) : int
   {
     return (isset($path_parts[$path_part_index])
-             ? \intval($path_parts[$path_part_index])
+             ? intval($path_parts[$path_part_index])
              : 1);
   }
   

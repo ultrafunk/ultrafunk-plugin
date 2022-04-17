@@ -55,6 +55,14 @@ add_filter('dashboard_glance_items', '\Ultrafunk\Plugin\Admin\Customize\dashboar
 //
 function reusable_blocks_admin_menu() : void
 {
-  add_menu_page('Reusable Blocks', 'Reusable Blocks', 'edit_posts', 'edit.php?post_type=wp_block', '', 'dashicons-editor-table', 22);
+  add_menu_page(
+    'Reusable Blocks',
+    'Reusable Blocks',
+    'edit_posts',
+    'edit.php?post_type=wp_block',
+    '',
+    'dashicons-editor-table',
+    22
+  );
 }
 add_action('admin_menu', '\Ultrafunk\Plugin\Admin\Customize\reusable_blocks_admin_menu');

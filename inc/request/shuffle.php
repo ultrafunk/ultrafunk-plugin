@@ -56,7 +56,7 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
 
       case 'shuffle_all_page':
         $this->shuffle_all_page   = true;
-        $this->params['page_num'] = \intval($route_request->path_parts[3]);
+        $this->params['page_num'] = intval($route_request->path_parts[3]);
         break;
 
       case 'shuffle_slug':
@@ -67,7 +67,7 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
       case 'shuffle_slug_page':
         $this->shuffle_slug_page  = true;
         $this->params['slug']     = sanitize_title($route_request->path_parts[2]);
-        $this->params['page_num'] = \intval($route_request->path_parts[4]);
+        $this->params['page_num'] = intval($route_request->path_parts[4]);
         break;
     }
 
