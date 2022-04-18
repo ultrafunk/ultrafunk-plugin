@@ -48,7 +48,7 @@ add_action('init', '\Ultrafunk\Plugin\Front\Customize\cleanup_wp_header');
 // Remove Gutenberg Block Library stuff from header (CSS) + footer (SVGs)
 // https://github.com/WordPress/gutenberg/issues/38299
 //
-function remove_wp_block_library()
+function remove_wp_block_library() : void
 {
   remove_action('wp_enqueue_scripts', 'wp_enqueue_global_styles');
   remove_action('wp_body_open', 'wp_global_styles_render_svg_filters');

@@ -24,7 +24,7 @@ add_action('init', '\Ultrafunk\Plugin\Admin\Customize\cleanup_wp_header');
 //
 // Swap admin menu item positions for Posts and Tracks = Tracks first
 //
-function swap_menu_items()
+function swap_menu_items() : void
 {
   global $menu;
   

@@ -37,7 +37,6 @@ function on_save_set_meta(int $post_id, object $post, bool $update) : void
 
   $track_source_data  = get_track_source_data($post->post_content);
   $track_artist_title = preg_split('/\s{1,}[\x{002D}\x{00B7}\x{2013}]\s{1,}/u', $post->post_title, 2);
-  $track_duration     = ($track_source_data[0] === TRACK_TYPE::YOUTUBE) ? get_youtube_video_duration($track_source_data[2]) : 0;
 
   if (($track_source_data  !== null)  &&
       ($track_artist_title !== false) &&
@@ -47,7 +46,9 @@ function on_save_set_meta(int $post_id, object $post, bool $update) : void
     update_post_meta($post->ID, 'track_title',       $track_artist_title[1]);
     update_post_meta($post->ID, 'track_source_type', $track_source_data[0]);
     update_post_meta($post->ID, 'track_source_data', $track_source_data[1]);
-    update_post_meta($post->ID, 'track_duration',    $track_duration);
+    update_post_meta($post->ID, 'track_duration',    ($track_source_data[0] === TRACK_TYPE::YOUTUBE)
+                                                       ? get_youtube_duration($track_source_data[2])
+                                                       : 0);
 
     $track_artist_slug = sanitize_title($track_artist_title[0]);
     $track_artist_term = get_term_by('slug', $track_artist_slug, 'uf_artist');
@@ -135,8 +136,11 @@ function validate_id_and_slug(object $post) : void
 //
 // Return YouTube video duration in seconds
 //
-function get_youtube_video_duration($video_id)
+function get_youtube_duration(string $video_id) : int
 {
+  if (empty($video_id))
+    return 0;
+
   $api_key = UF_YOUTUBE_DATA_API_KEY;
   $referer = PLUGIN_ENV['site_url'];
   $options = array('http' => array('header' => array("Referer: $referer\r\n")));
@@ -172,7 +176,7 @@ function set_admin_notice(int $post_id, string $type = 'notice-error', string $t
 //
 // Show admin notice if transient is set and we are on the correct screen
 //
-function show_notice()
+function show_notice() : void
 {
   $screen = get_current_screen();
 

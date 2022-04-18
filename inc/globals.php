@@ -50,7 +50,7 @@ class Globals
 //public static $list_per_page    = 0;
 
   // Initialize global props here if needed
-  public static function construct()
+  public static function construct() : void
   {
     self::$cached_home_url  = esc_url(home_url());
     self::$preferred_player = get_cookie_value(COOKIE_KEY::UF_PREFERRED_PLAYER, 0, 2, PLAYER_TYPE::LIST);

@@ -13,7 +13,7 @@ namespace Ultrafunk\Plugin\Meta;
 //
 // Register meta fields for REST API fetch
 //
-function register_fields()
+function register_fields() : void
 {
   register_post_meta('uf_track', 'track_artist',
     [

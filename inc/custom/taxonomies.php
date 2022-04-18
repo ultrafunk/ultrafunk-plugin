@@ -13,7 +13,7 @@ namespace Ultrafunk\Plugin\Taxonomies;
 //
 // Register Ultrafunk custom taxonomies
 //
-function register_custom()
+function register_custom() : void
 {
   //
   // Register Artists custom taxonomy
