@@ -14,30 +14,30 @@ namespace Ultrafunk\Plugin\Request;
 const DEFAULT_ROUTES =
 [
   [
-    'route_uid'         => 'list',
-    'match_uid_exactly' => true,
-    'handler_file'      => 'inc/request/list-player-all.php',
-    'handler_class'     => '\Ultrafunk\Plugin\Request\ListPlayerAll',
-    'template_file'     => 'content-list-player.php',
-    'template_class'    => '\Ultrafunk\Theme\Templates\ListPlayer',
+    'route_uid'          => 'list',
+    'match_uid_exactly'  => true,
+    'handler_file'       => 'inc/request/handlers/list-player-all.php',
+    'handler_class'      => '\Ultrafunk\Plugin\RequestHandler\ListPlayerAll',
+    'template_file'      => 'content-list-player.php',
+    'template_namespace' => '\Ultrafunk\Theme\Templates\ListPlayer',
     'routes' => [
       'list_player_all' => '/^list$/',
     ]
   ],
   [
-    'route_uid'      => 'list/page/',
-    'handler_file'   => 'inc/request/list-player-all.php',
-    'handler_class'  => '\Ultrafunk\Plugin\Request\ListPlayerAll',
-    'template_file'  => 'content-list-player.php',
-    'template_class' => '\Ultrafunk\Theme\Templates\ListPlayer',
+    'route_uid'          => 'list/page/',
+    'handler_file'       => 'inc/request/handlers/list-player-all.php',
+    'handler_class'      => '\Ultrafunk\Plugin\RequestHandler\ListPlayerAll',
+    'template_file'      => 'content-list-player.php',
+    'template_namespace' => '\Ultrafunk\Theme\Templates\ListPlayer',
     'routes' => [
       'list_player_all_page' => '/^list\/page\/(?!0)\d{1,6}$/',
     ]
   ],
   [
     'route_uid'     => 'shuffle/',
-    'handler_file'  => 'inc/request/shuffle.php',
-    'handler_class' => '\Ultrafunk\Plugin\Request\Shuffle',
+    'handler_file'  => 'inc/request/handlers/shuffle.php',
+    'handler_class' => '\Ultrafunk\Plugin\RequestHandler\Shuffle',
     'routes' => [
       'shuffle_all'       => '/^shuffle\/all$/',
       'shuffle_all_page'  => '/^shuffle\/all\/page\/(?!0)\d{1,6}$/',
@@ -46,11 +46,11 @@ const DEFAULT_ROUTES =
     ]
   ],
   [
-    'route_uid'      => 'artists',
-    'handler_file'   => 'inc/request/termlist-artists.php',
-    'handler_class'  => '\Ultrafunk\Plugin\Request\TermlistArtists',
-    'template_file'  => 'content-termlist.php',
-    'template_class' => '\Ultrafunk\Theme\Templates\Termlist',
+    'route_uid'          => 'artists',
+    'handler_file'       => 'inc/request/handlers/termlist-artists.php',
+    'handler_class'      => '\Ultrafunk\Plugin\RequestHandler\TermlistArtists',
+    'template_file'      => 'content-termlist.php',
+    'template_namespace' => '\Ultrafunk\Theme\Templates\Termlist',
     'routes' => [
       'artists'             => '/^artists$/',
     //'artists_page'        => '/^artists\/page\/(?!0)\d{1,6}$/',
@@ -59,56 +59,56 @@ const DEFAULT_ROUTES =
     ]
   ],
   [
-    'route_uid'         => 'channels',
-    'match_uid_exactly' => true,
-    'handler_file'      => 'inc/request/termlist-channels.php',
-    'handler_class'     => '\Ultrafunk\Plugin\Request\TermlistChannels',
-    'template_file'     => 'content-termlist.php',
-    'template_class'    => '\Ultrafunk\Theme\Templates\Termlist',
+    'route_uid'          => 'channels',
+    'match_uid_exactly'  => true,
+    'handler_file'       => 'inc/request/handlers/termlist-channels.php',
+    'handler_class'      => '\Ultrafunk\Plugin\RequestHandler\TermlistChannels',
+    'template_file'      => 'content-termlist.php',
+    'template_namespace' => '\Ultrafunk\Theme\Templates\Termlist',
     'routes' => [
       'channels'      => '/^channels$/',
     //'channels_page' => '/^channels\/page\/(?!0)\d{1,6}$/',
     ]
   ],
   [
-    'route_uid'      => 'list/artist/',
-    'handler_file'   => 'inc/request/list-player-artist-channel.php',
-    'handler_class'  => '\Ultrafunk\Plugin\Request\ListPlayerArtistChannel',
-    'template_file'  => 'content-list-player.php',
-    'template_class' => '\Ultrafunk\Theme\Templates\ListPlayer',
+    'route_uid'          => 'list/artist/',
+    'handler_file'       => 'inc/request/handlers/list-player-artist-channel.php',
+    'handler_class'      => '\Ultrafunk\Plugin\RequestHandler\ListPlayerArtistChannel',
+    'template_file'      => 'content-list-player.php',
+    'template_namespace' => '\Ultrafunk\Theme\Templates\ListPlayer',
     'routes' => [
       'list_player_artist'      => '/^list\/artist\/[a-z0-9-]*$/',
       'list_player_artist_page' => '/^list\/artist\/[a-z0-9-]*\/page\/(?!0)\d{1,6}$/',
     ]
   ],
   [
-    'route_uid'      => 'list/channel/',
-    'handler_file'   => 'inc/request/list-player-artist-channel.php',
-    'handler_class'  => '\Ultrafunk\Plugin\Request\ListPlayerArtistChannel',
-    'template_file'  => 'content-list-player.php',
-    'template_class' => '\Ultrafunk\Theme\Templates\ListPlayer',
+    'route_uid'          => 'list/channel/',
+    'handler_file'       => 'inc/request/handlers/list-player-artist-channel.php',
+    'handler_class'      => '\Ultrafunk\Plugin\RequestHandler\ListPlayerArtistChannel',
+    'template_file'      => 'content-list-player.php',
+    'template_namespace' => '\Ultrafunk\Theme\Templates\ListPlayer',
     'routes' => [
       'list_player_channel'      => '/^list\/channel\/[a-z0-9-]*$/',
       'list_player_channel_page' => '/^list\/channel\/[a-z0-9-]*\/page\/(?!0)\d{1,6}$/',
     ]
   ],
   [
-    'route_uid'      => 'list/20',
-    'handler_file'   => 'inc/request/list-player-date.php',
-    'handler_class'  => '\Ultrafunk\Plugin\Request\ListPlayerDate',
-    'template_file'  => 'content-list-player.php',
-    'template_class' => '\Ultrafunk\Theme\Templates\ListPlayer',
+    'route_uid'          => 'list/20',
+    'handler_file'       => 'inc/request/handlers/list-player-date.php',
+    'handler_class'      => '\Ultrafunk\Plugin\RequestHandler\ListPlayerDate',
+    'template_file'      => 'content-list-player.php',
+    'template_namespace' => '\Ultrafunk\Theme\Templates\ListPlayer',
     'routes' => [
       'list_player_date'      => '/^list\/20[0-9]{2}\/[0-3][0-9]$/',
       'list_player_date_page' => '/^list\/20[0-9]{2}\/[0-3][0-9]\/page\/(?!0)\d{1,6}$/',
     ]
   ],
   [
-    'route_uid'      => 'list/shuffle/',
-    'handler_file'   => 'inc/request/list-player-shuffle.php',
-    'handler_class'  => '\Ultrafunk\Plugin\Request\ListPlayerShuffle',
-    'template_file'  => 'content-list-player.php',
-    'template_class' => '\Ultrafunk\Theme\Templates\ListPlayer',
+    'route_uid'          => 'list/shuffle/',
+    'handler_file'       => 'inc/request/handlers/list-player-shuffle.php',
+    'handler_class'      => '\Ultrafunk\Plugin\RequestHandler\ListPlayerShuffle',
+    'template_file'      => 'content-list-player.php',
+    'template_namespace' => '\Ultrafunk\Theme\Templates\ListPlayer',
     'routes' => [
       'shuffle_all'       => '/^list\/shuffle\/all$/',
       'shuffle_all_page'  => '/^list\/shuffle\/all\/page\/(?!0)\d{1,6}$/',
@@ -117,11 +117,11 @@ const DEFAULT_ROUTES =
     ]
   ],
   [
-    'route_uid'      => 'list/search',
-    'handler_file'   => 'inc/request/list-player-search.php',
-    'handler_class'  => '\Ultrafunk\Plugin\Request\ListPlayerSearch',
-    'template_file'  => 'content-list-player.php',
-    'template_class' => '\Ultrafunk\Theme\Templates\ListPlayer',
+    'route_uid'          => 'list/search',
+    'handler_file'       => 'inc/request/handlers/list-player-search.php',
+    'handler_class'      => '\Ultrafunk\Plugin\RequestHandler\ListPlayerSearch',
+    'template_file'      => 'content-list-player.php',
+    'template_namespace' => '\Ultrafunk\Theme\Templates\ListPlayer',
     'routes' => [
       'list_player_search'      => '/^list\/search$/',
       'list_player_search_page' => '/^list\/search\/page\/(?!0)\d{1,6}$/',

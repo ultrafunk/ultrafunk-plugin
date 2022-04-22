@@ -5,7 +5,7 @@
  */
 
 
-namespace Ultrafunk\Plugin\Request;
+namespace Ultrafunk\Plugin\RequestHandler;
 
 
 use Ultrafunk\Plugin\Constants\COOKIE_KEY;
@@ -111,15 +111,16 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
         set_request_params($this->params);
   
         $this->wp_env->query_vars = [
-          'orderby'   => 'post__in',
-          'post_type' => 'uf_track',
-          'post__in'  => $transient['post_ids'],
-          'paged'     => $paged, 
+          'orderby'          => 'post__in',
+          'post_type'        => 'uf_track',
+          'post__in'         => $transient['post_ids'],
+          'paged'            => $paged,
+          'suppress_filters' => true,
         ];
 
         // ToDo: Needs to be updated to work as all the list-nnn.php classes,
         // currently it is a mix of old and new...
-        if ($this->route_request->template_class === null)
+        if ($this->route_request->template_namespace === null)
           $this->is_valid_request = true;
 
         return true;
@@ -149,14 +150,15 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
   }
 
   //
-  // Create get_posts() args with optional ['tax_query']
+  // Create get_posts() query args with optional ['tax_query']
   //
-  private function get_posts_args() : array
+  private function get_posts_query_args() : array
   {
     $args = [
-      'fields'         => 'ids',
-      'post_type'      => 'uf_track',
-      'posts_per_page' => -1,
+      'fields'           => 'ids',
+      'post_type'        => 'uf_track',
+      'posts_per_page'   => -1,
+      'suppress_filters' => true,
     ];
     
     if ($this->shuffle_slug)
@@ -190,7 +192,7 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
   private function create_transient() : mixed
   {
     $posts_array['shuffle_path'] = $this->params['path'];
-    $posts_array['post_ids']     = get_posts($this->get_posts_args());
+    $posts_array['post_ids']     = get_posts($this->get_posts_query_args());
 
     if (!empty($posts_array['post_ids']) && (shuffle($posts_array['post_ids']) === true))
     {

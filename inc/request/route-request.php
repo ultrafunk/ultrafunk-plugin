@@ -5,7 +5,7 @@
  */
 
 
-namespace Ultrafunk\Plugin\Request\RouteRequest;
+namespace Ultrafunk\Plugin\Request;
 
 
 use const Ultrafunk\Plugin\Constants\PLUGIN_ENV;
@@ -22,16 +22,16 @@ use function Ultrafunk\Plugin\Globals\ {
 
 class RouteRequest
 {
-  private $server_url    = null;
-  public $request_path   = null;
-  public $path_parts     = null;
-  public $query_string   = null;
-  public $query_params   = null;
-  public $matched_route  = null;
-  public $handler_file   = null;
-  public $handler_class  = null;
-  public $template_file  = null;
-  public $template_class = null;
+  private $server_url        = null;
+  public $request_path       = null;
+  public $path_parts         = null;
+  public $query_string       = null;
+  public $query_params       = null;
+  public $matched_route      = null;
+  public $handler_file       = null;
+  public $handler_class      = null;
+  public $template_file      = null;
+  public $template_namespace = null;
 
   public function __construct() {}
 
@@ -128,11 +128,11 @@ class RouteRequest
             {
               if ($this->request_needs_redirect($url_parts[0]) === false)
               {
-                $this->matched_route  = $key;
-                $this->handler_file   = $routes[$route_key]['handler_file']   ?? null;
-                $this->handler_class  = $routes[$route_key]['handler_class']  ?? null;
-                $this->template_file  = $routes[$route_key]['template_file']  ?? null;
-                $this->template_class = $routes[$route_key]['template_class'] ?? null;
+                $this->matched_route      = $key;
+                $this->handler_file       = $routes[$route_key]['handler_file']       ?? null;
+                $this->handler_class      = $routes[$route_key]['handler_class']      ?? null;
+                $this->template_file      = $routes[$route_key]['template_file']      ?? null;
+                $this->template_namespace = $routes[$route_key]['template_namespace'] ?? null;
                 return true;
               }
             }
@@ -209,11 +209,11 @@ function parse_request(bool $do_parse, object $wp_env) : bool
       require ULTRAFUNK_PLUGIN_PATH . $route_request->handler_file;
       
       $request_handler = new $route_request->handler_class($wp_env, $route_request);
-      $request_handler->get_request_data();
+      $request_handler->get_request_response();
 
-      if (($route_request->template_file !== null) && ($route_request->template_class !== null))
+      if (($route_request->template_file !== null) && ($route_request->template_namespace !== null))
       {
-        $request_handler->render_content($route_request->template_file, $route_request->template_class . '\render_template');
+        $request_handler->render_content($route_request->template_file, $route_request->template_namespace . '\render_template');
       }
       else if ($request_handler->is_valid_request)
       {
@@ -230,4 +230,4 @@ function parse_request(bool $do_parse, object $wp_env) : bool
   
   return $do_parse;
 }
-add_filter('do_parse_request', '\Ultrafunk\Plugin\Request\RouteRequest\parse_request', 10, 2);
+add_filter('do_parse_request', '\Ultrafunk\Plugin\Request\parse_request', 10, 2);

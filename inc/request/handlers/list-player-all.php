@@ -5,7 +5,7 @@
  */
 
 
-namespace Ultrafunk\Plugin\Request;
+namespace Ultrafunk\Plugin\RequestHandler;
 
 
 /**************************************************************************************************************************/
@@ -24,7 +24,6 @@ class ListPlayerAll extends \Ultrafunk\Plugin\Request\RequestHandler
     $this->route_path   = 'list';
     $this->title_parts  = ['prefix' => 'Channel', 'title' => 'All Tracks'];
     $this->current_page = $this->get_current_page($this->route_request->path_parts, 2);
-    $this->query_args   = ['suppress_filters' => true ];
 
     return true;
   }

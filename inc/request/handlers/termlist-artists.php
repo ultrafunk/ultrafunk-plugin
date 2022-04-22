@@ -5,7 +5,7 @@
  */
 
 
-namespace Ultrafunk\Plugin\Request;
+namespace Ultrafunk\Plugin\RequestHandler;
 
 
 /**************************************************************************************************************************/

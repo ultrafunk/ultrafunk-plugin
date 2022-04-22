@@ -5,7 +5,7 @@ Plugin URI:   https://github.com/ultrafunk/ultrafunk-plugin
 Author:       Ultrafunk
 Author URI:   https://ultrafunk.com
 Description:  ultrafunk.com WordPress plugin
-Version:      1.42.2
+Version:      1.42.3
 Tested up to: 5.9
 Requires PHP: 8.0
 License:      MIT License
@@ -47,24 +47,24 @@ if (ULTRAFUNK_THEME_ACTIVE === false)
 }
 else
 {
-  require_once ULTRAFUNK_PLUGIN_PATH . 'inc/constants.php';
-  require_once ULTRAFUNK_PLUGIN_PATH . 'inc/custom/post_types.php';
-  require_once ULTRAFUNK_PLUGIN_PATH . 'inc/custom/taxonomies.php';
-  require_once ULTRAFUNK_PLUGIN_PATH . 'inc/custom/meta.php';
+  require ULTRAFUNK_PLUGIN_PATH . 'inc/constants.php';
+  require ULTRAFUNK_PLUGIN_PATH . 'inc/custom/post_types.php';
+  require ULTRAFUNK_PLUGIN_PATH . 'inc/custom/taxonomies.php';
+  require ULTRAFUNK_PLUGIN_PATH . 'inc/custom/meta.php';
   
   if (is_admin())
   {
-    require_once ULTRAFUNK_PLUGIN_PATH . 'inc/admin/customize.php';
-    require_once ULTRAFUNK_PLUGIN_PATH . 'inc/admin/tracks.php';
+    require ULTRAFUNK_PLUGIN_PATH . 'inc/admin/customize.php';
+    require ULTRAFUNK_PLUGIN_PATH . 'inc/admin/tracks.php';
   }
   else
   {
-    require_once ULTRAFUNK_PLUGIN_PATH . 'inc/shared.php';
-    require_once ULTRAFUNK_PLUGIN_PATH . 'inc/globals.php';
-    require_once ULTRAFUNK_PLUGIN_PATH . 'inc/request/default-routes.php';
-    require_once ULTRAFUNK_PLUGIN_PATH . 'inc/request/route-request.php';
-    require_once ULTRAFUNK_PLUGIN_PATH . 'inc/request/request-handler.php';
-    require_once ULTRAFUNK_PLUGIN_PATH . 'inc/front/customize.php';
+    require ULTRAFUNK_PLUGIN_PATH . 'inc/shared.php';
+    require ULTRAFUNK_PLUGIN_PATH . 'inc/globals.php';
+    require ULTRAFUNK_PLUGIN_PATH . 'inc/request/default-routes.php';
+    require ULTRAFUNK_PLUGIN_PATH . 'inc/request/route-request.php';
+    require ULTRAFUNK_PLUGIN_PATH . 'inc/request/request-handler.php';
+    require ULTRAFUNK_PLUGIN_PATH . 'inc/front/customize.php';
   }
 }
 

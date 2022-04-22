@@ -5,7 +5,7 @@
  */
 
 
-namespace Ultrafunk\Plugin\Request;
+namespace Ultrafunk\Plugin\RequestHandler;
 
 
 /**************************************************************************************************************************/
@@ -24,8 +24,8 @@ class ListPlayerShuffle extends \Ultrafunk\Plugin\Request\RequestHandler
     array_shift($this->route_request->path_parts);
 
     // Load shuffle.php and set params since it will not be done by RouteRequest in this case
-    require ULTRAFUNK_PLUGIN_PATH . 'inc/request/shuffle.php';
-    $shuffle_handler = new \Ultrafunk\Plugin\Request\Shuffle($this->wp_env, $this->route_request);
+    require ULTRAFUNK_PLUGIN_PATH . 'inc/request/handlers/shuffle.php';
+    $shuffle_handler = new \Ultrafunk\Plugin\RequestHandler\Shuffle($this->wp_env, $this->route_request);
     
     if ($shuffle_handler->parse_validate_set_params())
     {
@@ -39,9 +39,7 @@ class ListPlayerShuffle extends \Ultrafunk\Plugin\Request\RequestHandler
       $title              = ($shuffle_params['type'] === 'all') ? 'All Tracks' : $shuffle_params['slug_name'];
       $this->title_parts  = ['prefix' => 'Shuffle', 'title' => $title];
       $this->current_page = $this->wp_env->query_vars['paged'];
-      
-      $this->query_args = $this->wp_env->query_vars;
-      $this->query_args['suppress_filters'] = true;
+      $this->query_args   = $this->wp_env->query_vars;
 
       return true;
     }

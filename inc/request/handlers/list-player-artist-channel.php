@@ -5,7 +5,7 @@
  */
 
 
-namespace Ultrafunk\Plugin\Request;
+namespace Ultrafunk\Plugin\RequestHandler;
 
 
 /**************************************************************************************************************************/
@@ -55,8 +55,7 @@ class ListPlayerArtistChannel extends \Ultrafunk\Plugin\Request\RequestHandler
       $this->request_params['data']['wp_term'] = $this->wp_term;
 
       $this->query_args = [
-        'suppress_filters' => true,
-        'tax_query'        => [
+        'tax_query' => [
           [
             'taxonomy' => $this->taxonomy,
             'field'    => 'slug',

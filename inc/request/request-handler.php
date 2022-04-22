@@ -34,7 +34,7 @@ abstract class RequestHandler
   public $current_page     = 1;
   public $max_pages        = 1;
   public $query_args       = [];
-  public $query_data       = null;
+  public $query_result     = null;
   
   public function __construct(object $wp_env, object $route_request, string $type_key = 'UNKNOWN_REQUEST_TYPE')
   {
@@ -89,32 +89,33 @@ abstract class RequestHandler
     return $query_result;
   }
 
-  public function get_request_data() : void
+  public function get_request_response() : void
   {
     if ($this->parse_validate_set_params())
     {
       if (!empty($this->request_params['get']['list_player']))
       {
-        $this->query_args['post_type']      = 'uf_track';
-        $this->query_args['paged']          = $this->current_page;
-        $this->query_args['posts_per_page'] = $this->items_per_page;
+        $this->query_args['post_type']        = 'uf_track';
+        $this->query_args['paged']            = $this->current_page;
+        $this->query_args['posts_per_page']   = $this->items_per_page;
+        $this->query_args['suppress_filters'] = $this->query_args['suppress_filters'] ?? true;
 
-        $query_result = $this->request_query('WP_Query');
+        $wp_query_result = $this->request_query('WP_Query');
 
-        $this->query_data = $query_result->posts;
-        $this->max_pages  = $this->get_max_pages($query_result->found_posts, $this->items_per_page);
-        $this->is_valid_request = $query_result->have_posts();
+        $this->query_result     = $wp_query_result->posts;
+        $this->max_pages        = $this->get_max_pages($wp_query_result->found_posts, $this->items_per_page);
+        $this->is_valid_request = $wp_query_result->have_posts();
       }
       else if (!empty($this->request_params['get']['termlist']))
       {
         $this->query_args['hide_empty'] = true;
         
-        $query_result = $this->request_query('WP_Term_Query');
+        $wp_term_query_result = $this->request_query('WP_Term_Query');
 
-        if ($query_result->terms !== null)
+        if ($wp_term_query_result->terms !== null)
         {
-          $this->request_params['data']['item_count'] = count($query_result->terms);
-          $this->query_data = $query_result->terms;
+          $this->request_params['data']['item_count'] = count($wp_term_query_result->terms);
+          $this->query_result     = $wp_term_query_result->terms;
           $this->is_valid_request = true;
         }
       }
@@ -161,7 +162,7 @@ abstract class RequestHandler
       $this->begin_output();
 
       // Load template file for this request
-      require_once get_template_directory() . '/php/templates/' . $template_name;
+      require get_template_directory() . '/php/templates/' . $template_name;
 
       // Call the template files entry point for rendering content
       $render_function($this);
