@@ -5,7 +5,7 @@
  */
 
 
-namespace Ultrafunk\Plugin\RequestHandler;
+namespace Ultrafunk\Plugin\Request\Handler;
 
 
 use Ultrafunk\Plugin\Constants\COOKIE_KEY;

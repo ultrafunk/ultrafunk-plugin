@@ -5,7 +5,7 @@
  */
 
 
-namespace Ultrafunk\Plugin\RequestHandler;
+namespace Ultrafunk\Plugin\Request\Handler;
 
 
 /**************************************************************************************************************************/
@@ -25,7 +25,7 @@ class ListPlayerShuffle extends \Ultrafunk\Plugin\Request\RequestHandler
 
     // Load shuffle.php and set params since it will not be done by RouteRequest in this case
     require ULTRAFUNK_PLUGIN_PATH . 'inc/request/handlers/shuffle.php';
-    $shuffle_handler = new \Ultrafunk\Plugin\RequestHandler\Shuffle($this->wp_env, $this->route_request);
+    $shuffle_handler = new \Ultrafunk\Plugin\Request\Handler\Shuffle($this->wp_env, $this->route_request);
     
     if ($shuffle_handler->parse_validate_set_params())
     {
