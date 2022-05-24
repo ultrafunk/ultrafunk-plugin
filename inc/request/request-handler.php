@@ -23,18 +23,18 @@ use function Ultrafunk\Plugin\Globals\ {
 
 abstract class RequestHandler
 {
-  protected $wp_env        = null;
-  protected $route_request = null;
-
-  public $is_valid_request = false;
-  public $request_params   = [];
-  public $route_path       = null;
-  public $title_parts      = null;
-  public $items_per_page   = 0;
-  public $current_page     = 1;
-  public $max_pages        = 1;
-  public $query_args       = [];
-  public $query_result     = null;
+  protected $wp_env           = null;
+  protected $route_request    = null;
+  protected $is_valid_request = false;
+  
+  public $request_params = [];
+  public $route_path     = null;
+  public $title_parts    = null;
+  public $items_per_page = 0;
+  public $current_page   = 1;
+  public $max_pages      = 1;
+  public $query_args     = [];
+  public $query_result   = null;
   
   public function __construct(object $wp_env, object $route_request, string $type_key = 'UNKNOWN_REQUEST_TYPE')
   {
@@ -49,6 +49,8 @@ abstract class RequestHandler
       'params' => $this->route_request->query_params,
     ];
   }
+
+  abstract protected function parse_validate_set_params() : bool;
 
   protected function set_request_params() : void
   {
@@ -77,9 +79,11 @@ abstract class RequestHandler
              ? ((int)ceil($item_count / $items_per_page))
              : 1);
   }
+  
 
-  abstract protected function parse_validate_set_params() : bool;
+  /**************************************************************************************************************************/
 
+  
   private function request_query(string $query_class) : object
   {
     set_is_custom_query(true);
@@ -89,7 +93,7 @@ abstract class RequestHandler
     return $query_result;
   }
 
-  public function get_request_response() : void
+  public function get_response() : void
   {
     if ($this->parse_validate_set_params())
     {
@@ -124,10 +128,10 @@ abstract class RequestHandler
     }
   }
 
-  
+
   /**************************************************************************************************************************/
 
-  
+
   private function begin_output() : void
   {
     // Show debug info for this request
@@ -148,51 +152,80 @@ abstract class RequestHandler
     // Get site template footer
     get_footer();
 
-    // We are DONE!
+    // WE ARE DONE!!!
     exit;
   }
 
-  public function render_content(string $template_name, string $render_function) : void
+  private function render_valid_response() : void
   {
-    if ($this->is_valid_request)
+    // Set public parameters for this request
+    $this->set_request_params();
+
+    $this->begin_output();
+
+    // Load template file for this request
+    require get_template_directory() . '/php/templates/' . $this->route_request->template_file;
+
+    // Call the template files entry point for rendering content
+    $render_function = $this->route_request->template_namespace . '\render_template';
+    $render_function($this);
+    
+    $this->end_output();
+  }
+
+  private function render_error_response() : void
+  {
+    global $wp_query;
+    $response_params = array('response' => $this->request_params['get']);
+
+    // Setup global $wp_query so it contains relevant data to handle this request failure...
+    if (!empty($this->request_params['get']['search']))
     {
-      // Set public parameters for this request
-      $this->set_request_params();
-
-      $this->begin_output();
-
-      // Load template file for this request
-      require get_template_directory() . '/php/templates/' . $template_name;
-
-      // Call the template files entry point for rendering content
-      $render_function($this);
-      
-      $this->end_output();
+      $response_params['error']  = ['http_status' => 200, 'details' => 'No search matches'];
+      $wp_query->is_search       = true;
+      $wp_query->query_vars['s'] = $this->route_request->query_params['s'];
     }
     else
     {
-      global $wp_query;
-      $response_params = array('response' => $this->request_params['get']);
-
-      // Setup global $wp_query so it contains relevant data to handle this request failure...
-      if (!empty($this->request_params['get']['search']))
-      {
-        $response_params['error']  = ['http_status' => 200, 'details' => 'No search matches'];
-        $wp_query->is_search       = true;
-        $wp_query->query_vars['s'] = $this->route_request->query_params['s'];
-      }
-      else
-      {
-        $response_params['error'] = ['http_status' => 404, 'details' => 'Page not found'];
-        $wp_query->set_404();
-        status_header(404);
-      }
-
-      \Ultrafunk\Plugin\Globals\set_request_params($response_params);
-
-      $this->begin_output();
-      get_template_part('php/templates/content', 'none');
-      $this->end_output();
+      $response_params['error'] = ['http_status' => 404, 'details' => 'Page not found'];
+      $wp_query->set_404();
+      status_header(404);
     }
+
+    \Ultrafunk\Plugin\Globals\set_request_params($response_params);
+
+    $this->begin_output();
+    get_template_part('php/templates/content', 'none');
+    $this->end_output();
+  }
+
+  public function render_content() : bool
+  {
+    if (!empty($this->route_request->template_file) && !empty($this->route_request->template_namespace))
+    {
+      if ($this->is_valid_request)
+        $this->render_valid_response();
+      else
+        $this->render_error_response();
+    }
+    else if ($this->is_valid_request)
+    {
+      perf_stop('route_request', 'RouteRequest_start');
+
+      //
+      // WordPress 6.X changed do_parse_request behaviour: https://wp.me/p2AvED-oWf
+      //
+      // If we want WordPress to continue normally with our parsed request parameters,
+      // we have do to some of the WP-class => WP::main() heavy lifting for it...
+      //
+
+      $this->wp_env->query_posts();
+      $this->wp_env->handle_404();
+      $this->wp_env->register_globals();
+
+      return false;
+    }
+
+    return true;
   }
 }

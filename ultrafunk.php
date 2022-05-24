@@ -1,15 +1,16 @@
 <?php declare(strict_types=1);
 /*
-Plugin Name:  Ultrafunk
-Plugin URI:   https://github.com/ultrafunk/ultrafunk-plugin
-Author:       Ultrafunk
-Author URI:   https://ultrafunk.com
-Description:  ultrafunk.com WordPress plugin
-Version:      1.42.4
-Tested up to: 5.9
-Requires PHP: 8.0
-License:      MIT License
-License URI:  https://opensource.org/licenses/MIT
+Plugin Name:       Ultrafunk
+Plugin URI:        https://github.com/ultrafunk/ultrafunk-plugin
+Author:            Ultrafunk
+Author URI:        https://ultrafunk.com
+Description:       ultrafunk.com WordPress plugin
+Version:           1.43.4
+Requires at least: 6.0
+Tested up to:      6.0
+Requires PHP:      8.0
+License:           MIT License
+License URI:       https://opensource.org/licenses/MIT
 */
 
 
@@ -19,7 +20,7 @@ namespace Ultrafunk\Plugin;
 /**************************************************************************************************************************/
 
 
-if (!\defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) exit;
 
 define('ULTRAFUNK_PLUGIN_PATH',  plugin_dir_path(__FILE__));
 define('ULTRAFUNK_THEME_ACTIVE', str_starts_with(get_option('template'), 'ultrafunk'));

@@ -11,7 +11,7 @@ namespace Ultrafunk\Plugin\Constants;
 /**************************************************************************************************************************/
 
 
-const VERSION = '1.42.4';
+const VERSION = '1.43.4';
 
 const PLUGIN_ENV = [
   'gallery_per_page' => WP_DEBUG ? 12 : 12,

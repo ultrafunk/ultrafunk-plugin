@@ -24,11 +24,11 @@ use const Ultrafunk\Plugin\Constants\PLUGIN_ENV;
 function on_save_set_meta(int $post_id, object $post, bool $update) : void
 {
   // Don't update on REST requests to avoid save_post_uf_track triggering twice using the Gutenberg editor...
-  if (\defined('REST_REQUEST') && REST_REQUEST)
+  if (defined('REST_REQUEST') && REST_REQUEST)
     return;
 
   // Don't update meta fields on autosave...
-  if (\defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
+  if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
     return;
 
   // Don't update meta fields on creation or when trashed...
@@ -40,7 +40,7 @@ function on_save_set_meta(int $post_id, object $post, bool $update) : void
 
   if (($track_source_data  !== null)  &&
       ($track_artist_title !== false) &&
-      (\count($track_artist_title) === 2))
+      (count($track_artist_title) === 2))
   {
     update_post_meta($post->ID, 'track_artist',      $track_artist_title[0]);
     update_post_meta($post->ID, 'track_title',       $track_artist_title[1]);

@@ -71,7 +71,7 @@ function get_shuffle_transient_name() : string
   {
     $cookie = sanitize_user(wp_unslash($_COOKIE[COOKIE_KEY::UF_SHUFFLE_UID]), true);
     
-    if (\strlen($cookie) < 50)
+    if (strlen($cookie) < 50)
       return sprintf('random_shuffle_%s', $cookie);
   }
   

@@ -120,7 +120,7 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
 
         // ToDo: Needs to be updated to work as all the list-nnn.php classes,
         // currently it is a mix of old and new...
-        if ($this->route_request->template_namespace === null)
+        if (empty($this->route_request->template_namespace))
           $this->is_valid_request = true;
 
         return true;

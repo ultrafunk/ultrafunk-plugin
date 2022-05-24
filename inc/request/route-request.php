@@ -22,8 +22,9 @@ use function Ultrafunk\Plugin\Globals\ {
 
 class RouteRequest
 {
-  private $server_url        = null;
-  public $request_path       = null;
+  private $server_url   = null;
+  private $request_path = null;
+
   public $path_parts         = null;
   public $query_string       = null;
   public $query_params       = null;
@@ -70,9 +71,9 @@ class RouteRequest
     $url_params = ($this->query_string !== null) ? "?$this->query_string" : '';
 
     // Redirect when URL ends with /page/1 for WP + pretty permalinks behaviour
-    if (substr_compare($this->request_path, $page_1, -\strlen($page_1)) === 0)
+    if (substr_compare($this->request_path, $page_1, -strlen($page_1)) === 0)
     {
-      wp_redirect('/' . substr($this->request_path, 0, -\strlen($page_1)) . '/' . $url_params, 301);
+      wp_redirect('/' . substr($this->request_path, 0, -strlen($page_1)) . '/' . $url_params, 301);
       exit;
     }
 
@@ -143,6 +144,11 @@ class RouteRequest
 
     return false;
   }
+
+  public function has_request_handler() : bool
+  {
+    return (!empty($this->handler_file) && !empty($this->handler_class));
+  }
 }
 
 
@@ -201,28 +207,16 @@ function parse_request(bool $do_parse, object $wp_env) : bool
 
     $route_request = new RouteRequest();
 
-    if ($route_request->host_matches()          &&
-        $route_request->route_matches()         &&
-       ($route_request->handler_file  !== null) &&
-       ($route_request->handler_class !== null))
+    if ($route_request->host_matches()  &&
+        $route_request->route_matches() &&
+        $route_request->has_request_handler())
     {
       require ULTRAFUNK_PLUGIN_PATH . $route_request->handler_file;
       
       $request_handler = new $route_request->handler_class($wp_env, $route_request);
-      $request_handler->get_request_response();
+      $request_handler->get_response();
 
-      if (($route_request->template_file !== null) && ($route_request->template_namespace !== null))
-      {
-        $request_handler->render_content($route_request->template_file, $route_request->template_namespace . '\render_template');
-      }
-      else if ($request_handler->is_valid_request)
-      {
-        perf_stop('route_request', 'RouteRequest_start');
-
-        // return false = We have parsed / handled this request, continue with our query_vars
-        // https://developer.wordpress.org/reference/hooks/do_parse_request/        
-        return false;
-      }
+      return $request_handler->render_content();
     }
   }
 
