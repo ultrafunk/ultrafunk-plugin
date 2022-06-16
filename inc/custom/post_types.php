@@ -63,3 +63,23 @@ function register_custom() : void
 }
 add_action('init', '\Ultrafunk\Plugin\PostTypes\register_custom');
 
+
+/**************************************************************************************************************************/
+
+
+//
+// uf_track REST API response: Add full artists and channels links to tracks (not just IDs as per REST API defaults)
+//
+function register_track_rest_fields()
+{
+  register_rest_field('uf_track', 'artists_links', [
+    'get_callback' => function($post) { return get_the_term_list($post['id'], 'uf_artist', '', ', '); },
+    'schema'       => null,
+  ]);
+
+  register_rest_field('uf_track', 'channels_links', [
+    'get_callback' => function($post) { return get_the_term_list($post['id'], 'uf_channel', '', ', '); },
+    'schema'       => null,
+  ]);
+}
+add_action('rest_api_init', '\Ultrafunk\Plugin\PostTypes\register_track_rest_fields' );
