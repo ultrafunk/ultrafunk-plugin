@@ -11,7 +11,7 @@ namespace Ultrafunk\Plugin\Constants;
 /**************************************************************************************************************************/
 
 
-const VERSION = '1.44.0';
+const VERSION = '1.44.5';
 
 const PLUGIN_ENV = [
   'gallery_per_page' => WP_DEBUG ? 12 : 12,
@@ -43,3 +43,6 @@ abstract class COOKIE_KEY
   const UF_SHUFFLE_UID      = 'uf_shuffle_uid';
   const UF_RESHUFFLE        = 'uf_reshuffle';
 }
+
+// https://webapps.stackexchange.com/a/101153
+const YOUTUBE_VIDEO_ID_REGEX = '/[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]/';

@@ -12,7 +12,10 @@ use DateTime;
 
 use Ultrafunk\Plugin\Constants\TRACK_TYPE;
 
-use const Ultrafunk\Plugin\Constants\PLUGIN_ENV;
+use const Ultrafunk\Plugin\Constants\ {
+  PLUGIN_ENV,
+  YOUTUBE_VIDEO_ID_REGEX,
+};
 
 
 /**************************************************************************************************************************/
@@ -85,8 +88,10 @@ function get_track_source_data(string $post_content) : ?array
 
     if ($find_pos !== false)
     {
-      $video_id = substr($post_content, ($find_pos + strlen($find_string)), 11);
-      return [TRACK_TYPE::YOUTUBE, "youtube.com/watch?v=$video_id", $video_id];
+      $video_id_found = substr($post_content, ($find_pos + strlen($find_string)), 11);
+
+      if (1 === preg_match(YOUTUBE_VIDEO_ID_REGEX, $video_id_found, $video_id_validated))
+        return [TRACK_TYPE::YOUTUBE, "youtube.com/watch?v=$video_id_validated[0]", $video_id_validated[0]];
     }
   }
 

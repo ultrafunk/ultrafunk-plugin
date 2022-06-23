@@ -8,7 +8,10 @@
 namespace Ultrafunk\Plugin\Shared;
 
 
-use const Ultrafunk\Plugin\Constants\PLUGIN_ENV;
+use const Ultrafunk\Plugin\Constants\ {
+  PLUGIN_ENV,
+  YOUTUBE_VIDEO_ID_REGEX
+};
 
 use Ultrafunk\Plugin\Constants\ {
   COOKIE_KEY,
@@ -182,8 +185,6 @@ function set_list_session_vars(array $session_vars) : array
 /**************************************************************************************************************************/
 
 
-const YOUTUBE_VIDEO_ID_REGEX = '/[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]/';
-
 const DEFAULT_TRACK_DATA = [
   'track_type'   => TRACK_TYPE::SOUNDCLOUD,
   'thumnail_src' => '/wp-content/themes/ultrafunk/inc/img/sc_thumbnail_placeholder.png',
@@ -195,14 +196,15 @@ function get_track_data(object $track) : array
 {
   if (intval($track->track_source_type) === TRACK_TYPE::YOUTUBE)
   {
-    preg_match(YOUTUBE_VIDEO_ID_REGEX, $track->track_source_data, $source_uid);
-
-    return [
-      'track_type'   => TRACK_TYPE::YOUTUBE,
-      'thumnail_src' => "https://img.youtube.com/vi/$source_uid[0]/default.jpg",
-      'css_class'    => 'type-youtube',
-      'source_uid'   => $source_uid[0],
-    ];
+    if (1 === preg_match(YOUTUBE_VIDEO_ID_REGEX, $track->track_source_data, $source_uid))
+    {
+      return [
+        'track_type'   => TRACK_TYPE::YOUTUBE,
+        'thumnail_src' => "https://img.youtube.com/vi/$source_uid[0]/default.jpg",
+        'css_class'    => 'type-youtube',
+        'source_uid'   => $source_uid[0],
+      ];
+    }
   }
 
   return DEFAULT_TRACK_DATA;
