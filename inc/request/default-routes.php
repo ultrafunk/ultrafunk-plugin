@@ -13,6 +13,34 @@ namespace Ultrafunk\Plugin\Request;
 
 const DEFAULT_ROUTES =
 [
+
+/*
+* Redirects first (highest priority)
+*/
+
+  [
+    'route_uid'     => 'list/channel/soundcloud',
+    'handler_file'  => 'inc/request/handlers/redirect-route.php',
+    'handler_class' => '\Ultrafunk\Plugin\Request\Handler\RedirectRoute',
+    'routes' => [
+      'list_channel_soundcloud'      => '/^list\/channel\/soundcloud$/',
+      'list_channel_soundcloud_page' => '/^list\/channel\/soundcloud\/page\/(?!0)\d{1,6}$/',
+    ]
+  ],
+  [
+    'route_uid'     => 'list/shuffle/channel/soundcloud',
+    'handler_file'  => 'inc/request/handlers/redirect-route.php',
+    'handler_class' => '\Ultrafunk\Plugin\Request\Handler\RedirectRoute',
+    'routes' => [
+      'list_shuffle_channel_soundcloud'      => '/^list\/shuffle\/channel\/soundcloud$/',
+      'list_shuffle_channel_soundcloud_page' => '/^list\/shuffle\/channel\/soundcloud\/page\/(?!0)\d{1,6}$/',
+    ]
+  ],
+
+/*
+* Then all the normal routes...
+*/
+
   [
     'route_uid'          => 'list',
     'match_uid_exactly'  => true,
