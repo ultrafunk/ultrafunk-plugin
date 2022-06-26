@@ -36,26 +36,25 @@ class RouteRequest
 
   public function __construct() {}
 
+  private function match_route_uid(string $route_uid) : bool
+  {
+    // If $route_uid starts with '=', match exactly
+    if ($route_uid[0] === '=')
+      return (substr($route_uid, 1) === $this->request_path);
+    else if (str_starts_with($this->request_path, $route_uid))
+      return true;
+
+    return false;
+  }
+
   private function find_route_key(array $routes) : ?int
   {
-    foreach($routes as $key => $value)
+    foreach($routes as $key => $route)
     {
-      /*
-      if (!empty($value['match_uid_exactly']))
-      
-      *** EQUALS ***
-      
-      if (isset($value['match_uid_exactly']) && ($value['match_uid_exactly'] === true))
-      */
-  
-      if (!empty($value['match_uid_exactly']))
+      foreach($route['route_uids'] as $route_uid)
       {
-        if ($value['route_uid'] === $this->request_path)
+        if ($this->match_route_uid($route_uid))
           return $key;
-      }
-      else if (str_starts_with($this->request_path, $value['route_uid']))
-      {
-        return $key;
       }
     }
 
