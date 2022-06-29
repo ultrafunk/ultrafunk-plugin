@@ -46,7 +46,7 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
   //
   public function __construct(object $wp_env, object $route_request)
   {
-    parent::__construct($wp_env, $route_request, 'shuffle');
+    parent::__construct($wp_env, $route_request, 'shuffle', [ 'file' => '', 'class' => '' ]);
 
     switch ($route_request->matched_route)
     {
@@ -120,7 +120,7 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
 
         // ToDo: Needs to be updated to work as all the list-nnn.php classes,
         // currently it is a mix of old and new...
-        if (empty($this->route_request->template_namespace))
+        if (empty($this->template_file) && empty($this->template_class))
           $this->is_valid_request = true;
 
         return true;

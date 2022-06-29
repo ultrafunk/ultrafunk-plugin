@@ -25,14 +25,12 @@ class RouteRequest
   private $server_url   = null;
   private $request_path = null;
 
-  public $path_parts         = null;
-  public $query_string       = null;
-  public $query_params       = null;
-  public $matched_route      = null;
-  public $handler_file       = null;
-  public $handler_class      = null;
-  public $template_file      = null;
-  public $template_namespace = null;
+  public $path_parts    = null;
+  public $query_string  = null;
+  public $query_params  = null;
+  public $matched_route = null;
+  public $handler_file  = null;
+  public $handler_class = null;
 
   public function __construct() {}
 
@@ -128,11 +126,10 @@ class RouteRequest
             {
               if ($this->request_needs_redirect($url_parts[0]) === false)
               {
-                $this->matched_route      = $key;
-                $this->handler_file       = $routes[$route_key]['handler_file']       ?? null;
-                $this->handler_class      = $routes[$route_key]['handler_class']      ?? null;
-                $this->template_file      = $routes[$route_key]['template_file']      ?? null;
-                $this->template_namespace = $routes[$route_key]['template_namespace'] ?? null;
+                $this->matched_route = $key;
+                $this->handler_file  = $routes[$route_key]['handler_file']  ?? null;
+                $this->handler_class = $routes[$route_key]['handler_class'] ?? null;
+
                 return true;
               }
             }
@@ -147,6 +144,12 @@ class RouteRequest
   public function has_request_handler() : bool
   {
     return (!empty($this->handler_file) && !empty($this->handler_class));
+  }
+
+  public function new_request_handler($wp_env, $route_request)
+  {
+    $handler_class = PLUGIN_ENV['handler_class_path'] . $this->handler_class;
+    return new $handler_class($wp_env, $route_request);
   }
 }
 
@@ -210,9 +213,9 @@ function parse_request(bool $do_parse, object $wp_env) : bool
         $route_request->route_matches() &&
         $route_request->has_request_handler())
     {
-      require ULTRAFUNK_PLUGIN_PATH . $route_request->handler_file;
+      require ULTRAFUNK_PLUGIN_PATH . PLUGIN_ENV['handler_file_path'] . $route_request->handler_file;
       
-      $request_handler = new $route_request->handler_class($wp_env, $route_request);
+      $request_handler = $route_request->new_request_handler($wp_env, $route_request);
       $request_handler->get_response();
 
       return $request_handler->render_content();

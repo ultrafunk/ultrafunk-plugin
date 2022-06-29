@@ -8,17 +8,9 @@
 namespace Ultrafunk\Plugin\Shared;
 
 
-use const Ultrafunk\Plugin\Constants\ {
-  PLUGIN_ENV,
-  YOUTUBE_VIDEO_ID_REGEX
-};
+use const Ultrafunk\Plugin\Constants\PLUGIN_ENV;
 
-use Ultrafunk\Plugin\Constants\ {
-  COOKIE_KEY,
-  TRACK_TYPE,
-};
-
-use function Ultrafunk\Plugin\Globals\get_request_params;
+use Ultrafunk\Plugin\Constants\COOKIE_KEY;
 
 
 /**************************************************************************************************************************/
@@ -85,39 +77,9 @@ function get_shuffle_transient_name() : string
 /**************************************************************************************************************************/
 
 
-function request_pagination(object $request_handler) : void
-{
-  if (isset($request_handler->max_pages) && ($request_handler->max_pages > 1))
-  {
-    $args = [
-      'base'      => "/$request_handler->route_path/%_%",
-      'format'    => 'page/%#%/',
-      'total'     => $request_handler->max_pages,
-      'current'   => $request_handler->current_page,
-      'type'      => 'list',
-      'mid_size'  => 4,
-      'prev_text' => '&#10094;&#10094; Prev.',
-      'next_text' => 'Next &#10095;&#10095;',
-    ];
-
-    ?>
-    <nav class="navigation pagination" aria-label="Pagination">
-      <h2 class="screen-reader-text">Pagination</h2>
-      <div class="nav-links">
-        <?php echo paginate_links($args); ?>
-      </div>
-    </nav>
-    <?php
-  }
-}
-
-
-/**************************************************************************************************************************/
-
-
 function set_list_session_vars(array $session_vars) : array
 {
-  $params = get_request_params();
+  $params = \Ultrafunk\Plugin\Globals\get_request_params();
   $data   = $params['data'];
   $query  = $params['query'];
   $path   = isset($params['route_path']) ? $params['route_path'] : '';
@@ -179,33 +141,4 @@ function set_list_session_vars(array $session_vars) : array
   }
 
   return $session_vars;
-}
-
-
-/**************************************************************************************************************************/
-
-
-const DEFAULT_TRACK_DATA = [
-  'track_type'   => TRACK_TYPE::SOUNDCLOUD,
-  'thumnail_src' => '/wp-content/themes/ultrafunk/inc/img/sc_thumbnail_placeholder.png',
-  'css_class'    => 'type-soundcloud',
-  'source_uid'   => null,
-];
-
-function get_track_data(object $track) : array
-{
-  if (intval($track->track_source_type) === TRACK_TYPE::YOUTUBE)
-  {
-    if (1 === preg_match(YOUTUBE_VIDEO_ID_REGEX, $track->track_source_data, $source_uid))
-    {
-      return [
-        'track_type'   => TRACK_TYPE::YOUTUBE,
-        'thumnail_src' => "https://img.youtube.com/vi/$source_uid[0]/default.jpg",
-        'css_class'    => 'type-youtube',
-        'source_uid'   => $source_uid[0],
-      ];
-    }
-  }
-
-  return DEFAULT_TRACK_DATA;
 }

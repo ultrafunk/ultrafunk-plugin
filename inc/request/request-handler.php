@@ -25,6 +25,8 @@ abstract class RequestHandler
 {
   protected $wp_env           = null;
   protected $route_request    = null;
+  protected $template_file    = null;
+  protected $template_class   = null;
   protected $is_valid_request = false;
   
   public $request_params = [];
@@ -36,11 +38,19 @@ abstract class RequestHandler
   public $query_args     = [];
   public $query_result   = null;
   
-  public function __construct(object $wp_env, object $route_request, string $type_key = 'UNKNOWN_REQUEST_TYPE')
+  public function __construct(
+    object $wp_env,
+    object $route_request,
+    string $type_key = 'UNKNOWN_REQUEST_TYPE',
+    array $template = null,
+  )
   {
     $this->wp_env         = $wp_env;
     $this->route_request  = $route_request;
     $this->items_per_page = PLUGIN_ENV['list_per_page'];
+
+    $this->template_file  = isset($template['file'])  ? $template['file']  : PLUGIN_ENV['template_file'];
+    $this->template_class = isset($template['class']) ? $template['class'] : PLUGIN_ENV['template_class'];
 
     $this->request_params['get'][$type_key] = true;
     $this->request_params['data']  = [];
@@ -123,8 +133,6 @@ abstract class RequestHandler
           $this->is_valid_request = true;
         }
       }
-
-    //console_log($this);
     }
   }
 
@@ -163,13 +171,13 @@ abstract class RequestHandler
 
     $this->begin_output();
 
-    // Load template file for this request
-    require get_template_directory() . '/php/templates/' . $this->route_request->template_file;
+    // Load template class file for this request
+    require get_template_directory() . PLUGIN_ENV['template_file_path'] . $this->template_file;
 
-    // Call the template files entry point for rendering content
-    $render_function = $this->route_request->template_namespace . '\render_template';
-    $render_function($this);
-    
+    $template_class = PLUGIN_ENV['template_class_path'] . $this->template_class;
+    $template = new $template_class($this);
+    $template->render();
+
     $this->end_output();
   }
 
@@ -201,7 +209,7 @@ abstract class RequestHandler
 
   public function render_content() : bool
   {
-    if (!empty($this->route_request->template_file) && !empty($this->route_request->template_namespace))
+    if (!empty($this->template_file) && !empty($this->template_class))
     {
       if ($this->is_valid_request)
         $this->render_valid_response();

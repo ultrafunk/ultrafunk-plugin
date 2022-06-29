@@ -11,12 +11,18 @@ namespace Ultrafunk\Plugin\Constants;
 /**************************************************************************************************************************/
 
 
-const VERSION = '1.44.7';
+const VERSION = '1.44.8';
 
 const PLUGIN_ENV = [
-  'gallery_per_page' => WP_DEBUG ? 12 : 12,
-  'list_per_page'    => WP_DEBUG ? 25 : 25,
-  'site_url'         => WP_DEBUG ? 'https://wordpress.ultrafunk.com' : 'https://ultrafunk.com',
+  'gallery_per_page'    => WP_DEBUG ? 12 : 12,
+  'list_per_page'       => WP_DEBUG ? 25 : 25,
+  'site_url'            => WP_DEBUG ? 'https://wordpress.ultrafunk.com'     : 'https://ultrafunk.com',
+  'handler_file_path'   => WP_DEBUG ? 'inc/request/handlers/'               : 'inc/request/handlers/',
+  'handler_class_path'  => WP_DEBUG ? '\Ultrafunk\Plugin\Request\Handler\\' : '\Ultrafunk\Plugin\Request\Handler\\',
+  'template_file_path'  => WP_DEBUG ? '/php/templates/'                     : '/php/templates/',
+  'template_file'       => WP_DEBUG ? 'content-list-player.php'             : 'content-list-player.php',
+  'template_class_path' => WP_DEBUG ? '\Ultrafunk\Theme\Templates\\'        : '\Ultrafunk\Theme\Templates\\',
+  'template_class'      => WP_DEBUG ? 'ListPlayer'                          : 'ListPlayer',
 ];
 
 // ToDo: Use PHP enum when v8.1 is ready for use

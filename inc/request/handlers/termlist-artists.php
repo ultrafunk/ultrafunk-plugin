@@ -20,7 +20,11 @@ class TermlistArtists extends \Ultrafunk\Plugin\Request\RequestHandler
 
   public function __construct(object $wp_env, object $route_request)
   {
-    parent::__construct($wp_env, $route_request, 'termlist');
+    parent::__construct($wp_env, $route_request, 'termlist', [
+      'file'  => 'content-termlist.php',
+      'class' => 'Termlist',
+    ]);
+    
     $this->add_terms_clauses_filter();
   }
 
