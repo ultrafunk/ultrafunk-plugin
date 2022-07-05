@@ -146,7 +146,7 @@ class RouteRequest
     return (!empty($this->handler_file) && !empty($this->handler_class));
   }
 
-  public function new_request_handler($wp_env, $route_request)
+  public function new_request_handler(object $wp_env, object $route_request) : object
   {
     $handler_class = PLUGIN_ENV['handler_class_path'] . $this->handler_class;
     return new $handler_class($wp_env, $route_request);

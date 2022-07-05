@@ -70,7 +70,7 @@ add_action('init', '\Ultrafunk\Plugin\PostTypes\register_custom');
 //
 // uf_track REST API response: Add full artists and channels links to tracks (not just IDs as per REST API defaults)
 //
-function register_track_rest_fields()
+function register_track_rest_fields() : void
 {
   register_rest_field('uf_track', 'artists_links', [
     'get_callback' => function($post) { return get_the_term_list($post['id'], 'uf_artist', '', ', '); },

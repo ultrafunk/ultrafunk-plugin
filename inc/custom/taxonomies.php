@@ -7,6 +7,10 @@
 namespace Ultrafunk\Plugin\Taxonomies;
 
 
+use WP_REST_Request;
+use WP_Term_Query;
+
+
 /**************************************************************************************************************************/
 
 
@@ -81,4 +85,56 @@ function register_custom() : void
 
   register_taxonomy('uf_channel', ['uf_track'], $args);
 }
-add_action('init', 'Ultrafunk\Plugin\Taxonomies\register_custom');
+add_action('init', '\Ultrafunk\Plugin\Taxonomies\register_custom');
+
+
+/**************************************************************************************************************************/
+
+
+//
+// REST Get Channel Top Artists data 
+//
+function get_top_artists(WP_REST_Request $request) : ?array
+{
+  $top_artists = get_transient('uf_channels_top_artists');
+  $channel_id  = isset($request['channelId']) ? intval($request['channelId']) : -1;
+
+  if (($top_artists !== false) && isset($top_artists[$channel_id]))
+  {
+    $channel_artists = $top_artists[$channel_id];
+    $request_result  = [];
+
+    $query_result = new WP_Term_Query([
+      'taxonomy'   => 'uf_artist',
+      'include'    => array_keys($channel_artists),
+      'orderby'    => 'include',
+      'hide_empty' => true,
+    ]);
+  
+    foreach($query_result->terms as $term)
+    {
+      $request_result[] = [
+        'artist_name' => $term->name,
+        'artist_slug' => $term->slug,
+        'track_count' => $channel_artists[$term->term_id],
+      ];
+    }
+    
+    return $request_result;
+  }
+
+  return null;
+}
+
+//
+// Adding custom REST endpoint for Top Artists in All Channels view
+//
+function register_custom_rest_route() : void
+{
+  register_rest_route('ultrafunk/v1', '/top-artists', [
+    'methods'             => 'GET',
+    'callback'            => '\Ultrafunk\Plugin\Taxonomies\get_top_artists',
+    'permission_callback' => '__return_true',
+  ]);
+}
+add_action('rest_api_init', '\Ultrafunk\Plugin\Taxonomies\register_custom_rest_route');

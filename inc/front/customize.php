@@ -65,4 +65,4 @@ function add_tracks_to_feed(array $query_vars) : array
 
   return $query_vars;
 }
-add_filter('request', 'Ultrafunk\Plugin\Front\Customize\add_tracks_to_feed');
+add_filter('request', '\Ultrafunk\Plugin\Front\Customize\add_tracks_to_feed');

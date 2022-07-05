@@ -139,7 +139,8 @@ function validate_id_and_slug(object $post) : void
 }
 
 //
-// Return YouTube video duration in seconds
+// Return YouTube video duration in seconds using the YouTube Data API:
+// https://developers.google.com/youtube/v3
 //
 function get_youtube_duration(string $video_id) : int
 {

@@ -19,7 +19,7 @@ use Ultrafunk\Plugin\Constants\COOKIE_KEY;
 //
 // Output debug info to the browser console, this will not always work and may cause strange side effects...
 //
-function console_log($output) : void
+function console_log(mixed $output) : void
 {
   if (WP_DEBUG)
     echo '<script>console.log(' . json_encode($output, JSON_HEX_TAG) . ');</script>';
