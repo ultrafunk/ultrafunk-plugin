@@ -45,11 +45,11 @@ function register_custom() : void
     'show_admin_column' => true,
     'show_in_rest'      => true,
     'rest_base'         => 'artists',
-    'query_var'         => true,
+    'query_var'         => 'artist',
     'rewrite'           => ['slug' => 'artist'],
   ];
 
-  register_taxonomy('uf_artist', ['uf_track'], $args);
+  register_taxonomy('uf_artist', 'uf_track', $args);
 
   //
   // Register Channels custom taxonomy
@@ -79,11 +79,11 @@ function register_custom() : void
     'show_admin_column' => true,
     'show_in_rest'      => true,
     'rest_base'         => 'channels',
-    'query_var'         => true,
+    'query_var'         => 'channel',
     'rewrite'           => ['slug' => 'channel'],
   ];
 
-  register_taxonomy('uf_channel', ['uf_track'], $args);
+  register_taxonomy('uf_channel', 'uf_track', $args);
 }
 add_action('init', '\Ultrafunk\Plugin\Taxonomies\register_custom');
 

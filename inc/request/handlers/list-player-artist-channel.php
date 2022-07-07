@@ -13,6 +13,8 @@ namespace Ultrafunk\Plugin\Request\Handler;
 
 class ListPlayerArtistChannel extends \Ultrafunk\Plugin\Request\RequestHandler
 {
+  private $AND_term_slug = null;
+  
   public $taxonomy     = null;
   public $term_type    = null;
   public $title_prefix = null;
@@ -27,9 +29,10 @@ class ListPlayerArtistChannel extends \Ultrafunk\Plugin\Request\RequestHandler
       case 'list_player_artist':
       case 'list_player_artist_page':
         $this->request_params['get']['artist'] = true;
-        $this->taxonomy     = 'uf_artist';
-        $this->term_type    = 'artists';
-        $this->title_prefix = 'Artist';
+        $this->taxonomy      = 'uf_artist';
+        $this->term_type     = 'artists';
+        $this->title_prefix  = 'Artist';
+        $this->AND_term_slug = $this->route_request->query_params['channel'] ?? null;
         break;
 
       case 'list_player_channel':
@@ -63,6 +66,17 @@ class ListPlayerArtistChannel extends \Ultrafunk\Plugin\Request\RequestHandler
           ],
         ],
       ];
+
+      // Append AND second taxonomy term(s) if present
+      if ($this->AND_term_slug !== null)
+      {
+        $this->query_args['tax_query']    += [ 'relation' => 'AND' ];
+        $this->query_args['tax_query'][1]  = [
+          'taxonomy' => 'uf_channel', // ToDo: This also needs to handle uf_artist...
+          'field'    => 'slug',
+          'terms'    => sanitize_title($this->AND_term_slug),
+        ];
+      }
 
       return true;
     }

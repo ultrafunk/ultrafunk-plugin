@@ -8,6 +8,9 @@
 namespace Ultrafunk\Plugin\Admin\Settings;
 
 
+use function Ultrafunk\Plugin\Admin\TopArtists\set_channels_top_artists;
+
+
 /**************************************************************************************************************************/
 
 
@@ -26,12 +29,19 @@ function plugin_settings() : void
 	if (current_user_can('delete_users') === false)
 		wp_die('You do not have sufficient permissions to access this page.');
 
+  $uf_settings = get_settings();
+
 	if (isset($_POST['uf-update-settings']))
   {
     // Nonce check
     if (check_admin_referer('_uf_update_settings_', '_uf_nonce_'))
     {
-      $result = set_channels_top_artists(true);
+      $uf_settings['channel_max_top_artists'] = get_post_value('channel_max_top_artists');
+      $uf_settings['show_top_artists_log']    = get_post_value('show_top_artists_log');
+      
+      update_option("uf_settings", $uf_settings);
+      
+      $result = set_channels_top_artists(absint($uf_settings['channel_max_top_artists']), ($uf_settings['show_top_artists_log'] === '1'))
 
       ?>
       <div class="updated"><p>Top Artists for all Channels created / updated in <?php echo $result['time']; ?> seconds.</p></div>
@@ -41,12 +51,22 @@ function plugin_settings() : void
 
   ?>
   <div class="wrap">
+  
   <h2>Ultrafunk Settings</h2>
+
   <form method="post" action="<?php echo esc_attr($_SERVER["REQUEST_URI"]); ?>">
   <?php wp_nonce_field('_uf_update_settings_', '_uf_nonce_'); ?>
-  <p><input type="submit" class="button button-primary" name="uf-update-settings" value="Update Top Artists for Channels" /></p>
+
+  <h3>Top Artists for <a href="/channels/">All Channels</a></h3>
+  <p>Number of top artists to generate for each channel (min: 5 => max: 15).<br>The result is stored as a transient (uf_channels_top_artists) with no expiration.</p>
+  <p><input type="number" name="channel_max_top_artists" min="5" max="15" value="<?php echo esc_attr($uf_settings['channel_max_top_artists']); ?>" /></p>
+  <p><label><input type="checkbox" name="show_top_artists_log" value="1" <?php checked(1, $uf_settings['show_top_artists_log'], true); ?> />Show create / update log</label></p>
+  
+  <p><input type="submit" class="button button-primary" name="uf-update-settings" value="Update Top Artists for All Channels" /></p>
   </form>
-  <pre><?php echo isset($result) ? $result['log'] : ''; ?></pre>
+
+  <?php echo isset($result['log']) ? '<br><hr><br><pre>' . $result['log'] . '</pre>' : ''; ?>
+  
   </div>
   <?php 
 }
@@ -55,91 +75,25 @@ function plugin_settings() : void
 /**************************************************************************************************************************/
 
 
-function set_channels_top_artists(bool $create_log = false) : array
+function get_settings() : array
 {
-  $start_time  = microtime(true);
-  $interval    = $start_time;
-  $top_artists = [];
-  $log_entries = '';
+	$settings = array(
+    'channel_max_top_artists' => 10,
+    'show_top_artists_log'    => '1',
+	);
 
-  $tracks = get_posts([
-    'post_type'        => 'uf_track',
-    'posts_per_page'   => -1,
-    'suppress_filters' => true,
-  ]);
+	$stored_settings = get_option("uf_settings");
 
-  if ($create_log)
+  if (!empty($stored_settings))
   {
-    $log_entries .= 'Get All Tracks..: ' . round((microtime(true) - $interval), 4) . ' seconds <br>';
-    $log_entries .= 'All Tracks Count: ' . count($tracks) . '<br>';
-    $interval     = microtime(true);
+    foreach ($stored_settings as $key => $stored_setting)
+      $settings[$key] = $stored_setting;
   }
 
-  foreach($tracks as $track)
-  {
-    $artists  = get_object_term_cache($track->ID, 'uf_artist');
-    $channels = get_object_term_cache($track->ID, 'uf_channel');
-
-    foreach($channels as $channel)
-    {
-      foreach($artists as $artist)
-      {
-        $top_artists[$channel->term_id][$artist->term_id] = isset($top_artists[$channel->term_id][$artist->term_id])
-          ? ($top_artists[$channel->term_id][$artist->term_id] + 1)
-          : 1;
-      }
-    }
-  }
-
-  if ($create_log)
-  {
-    $log_entries .= 'Create List.....: ' . round((microtime(true) - $interval), 4) . ' seconds <br>';
-    $interval     = microtime(true);
-  }
-
-  foreach($top_artists as &$artists)
-  {
-    arsort($artists, SORT_NUMERIC);
-    $artists = \array_slice($artists, 0, 13, true);
-  }
-
-  if ($create_log)
-  {
-    $log_entries .= 'Sort + Trim list: ' . round((microtime(true) - $interval), 4) . ' seconds <br>';
-  }
-
-  set_transient('uf_channels_top_artists', $top_artists, 0);
-
-  $end_time = microtime(true);
-
-  if ($create_log)
-  {
-    $log_entries .= 'Channels Count..: ' . count($top_artists) . '<br>';
-    $log_entries .= 'All tracks size.: ' . strlen(serialize($tracks)) . ' bytes<br>';
-    $log_entries .= 'Transient size..: ' . strlen(serialize($top_artists)) . ' bytes<br>';
-    $log_entries .= log_transient_data($top_artists);
-  }
-
-  return [ 'time' => round(($end_time - $start_time), 4), 'log' => $log_entries ];
+  return $settings;
 }
 
-
-/**************************************************************************************************************************/
-
-
-function log_transient_data(array $top_artists) : string
+function get_post_value(string $post_key) : string
 {
-  $log_html = '';
-  
-  foreach($top_artists as $channel => $artists)
-  {
-    $log_html .= '<br>' . get_term_by('id', $channel, 'uf_channel')->name . ' => ' . $channel . '<br>';
-    
-    foreach($artists as $artist => $count)
-    {
-      $log_html .= $count . ' => '. get_term_by('id', $artist, 'uf_artist')->name . '<br>';
-    }
-  }
-
-  return $log_html;
+  return (isset($_POST[$post_key]) ? $_POST[$post_key] : '');
 }
