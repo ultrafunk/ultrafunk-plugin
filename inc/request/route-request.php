@@ -27,7 +27,7 @@ class RouteRequest
 
   public $path_parts    = null;
   public $query_string  = null;
-  public $query_params  = null;
+  public $query_params  = [];
   public $matched_route = null;
   public $handler_file  = null;
   public $handler_class = null;

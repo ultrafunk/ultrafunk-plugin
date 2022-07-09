@@ -37,6 +37,8 @@ abstract class RequestHandler
   public $max_pages      = 1;
   public $query_args     = [];
   public $query_result   = null;
+  public $filter_slug    = null;
+  public $filter_tax     = null;
   
   public function __construct(
     object $wp_env,
@@ -70,7 +72,22 @@ abstract class RequestHandler
     $this->request_params['current_page']   = $this->current_page;
     $this->request_params['max_pages']      = $this->max_pages;
 
+    if ($this->filter_slug !== null)
+    {
+      $this->request_params['filter']['slug']     = $this->filter_slug;
+      $this->request_params['filter']['taxonomy'] = $this->filter_tax;
+    }
+
     \Ultrafunk\Plugin\Globals\set_request_params($this->request_params);
+  }
+
+  protected function set_filter_params(string $key, string $taxonomy)
+  {
+    if (isset($this->route_request->query_params[$key]))
+    {
+      $this->filter_slug = sanitize_title($this->route_request->query_params[$key]);
+      $this->filter_tax  = $taxonomy;
+    }
   }
 
   protected function get_current_page(array $path_parts, int $path_part_index) : int
