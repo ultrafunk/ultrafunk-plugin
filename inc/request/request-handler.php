@@ -72,7 +72,7 @@ abstract class RequestHandler
     $this->request_params['current_page']   = $this->current_page;
     $this->request_params['max_pages']      = $this->max_pages;
 
-    if ($this->filter_slug !== null)
+    if (($this->filter_slug !== null) && ($this->filter_tax !== null))
     {
       $this->request_params['filter']['slug']     = $this->filter_slug;
       $this->request_params['filter']['taxonomy'] = $this->filter_tax;
@@ -81,7 +81,7 @@ abstract class RequestHandler
     \Ultrafunk\Plugin\Globals\set_request_params($this->request_params);
   }
 
-  protected function set_filter_params(string $key, string $taxonomy)
+  protected function set_filter_params(string $key, string $taxonomy = null) : void
   {
     if (isset($this->route_request->query_params[$key]))
     {
@@ -113,11 +113,27 @@ abstract class RequestHandler
   
   private function request_query(string $query_class) : object
   {
+    $this->add_filter_query_args();
+
     set_is_custom_query(true);
     $query_result = new $query_class($this->query_args);
     set_is_custom_query(false);
 
     return $query_result;
+  }
+
+  private function add_filter_query_args() : void
+  {
+    // Append filter (AND) second taxonomy term(s) if present
+    if (($this->filter_slug !== null) && ($this->filter_tax !== null))
+    {
+      $this->query_args['tax_query']    += [ 'relation' => 'AND' ];
+      $this->query_args['tax_query'][1]  = [
+        'taxonomy' => $this->filter_tax,
+        'field'    => 'slug',
+        'terms'    => $this->filter_slug,
+      ];
+    }
   }
 
   public function get_response() : void

@@ -65,17 +65,6 @@ class ListPlayerArtistChannel extends \Ultrafunk\Plugin\Request\RequestHandler
         ],
       ];
 
-      // Append AND second taxonomy term(s) if present
-      if ($this->filter_slug !== null)
-      {
-        $this->query_args['tax_query']    += [ 'relation' => 'AND' ];
-        $this->query_args['tax_query'][1]  = [
-          'taxonomy' => $this->filter_tax,
-          'field'    => 'slug',
-          'terms'    => $this->filter_slug,
-        ];
-      }
-
       return true;
     }
 
