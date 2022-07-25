@@ -13,8 +13,8 @@ namespace Ultrafunk\Plugin\Request\Handler;
 
 class TermlistChannels extends \Ultrafunk\Plugin\Request\RequestHandler
 {
-  public $term_type = 'channels';
-  public $term_path = 'channel';
+  public string $term_type = 'channels';
+  public string $term_path = 'channel';
 
   public function __construct(object $wp_env, object $route_request)
   {

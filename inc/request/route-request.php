@@ -22,15 +22,15 @@ use function Ultrafunk\Plugin\Globals\ {
 
 class RouteRequest
 {
-  private $server_url   = null;
-  private $request_path = null;
+  private ?string $server_url   = null;
+  private ?string $request_path = null;
 
-  public $path_parts    = null;
-  public $query_string  = null;
-  public $query_params  = [];
-  public $matched_route = null;
-  public $handler_file  = null;
-  public $handler_class = null;
+  public ?array  $path_parts    = null;
+  public ?string $query_string  = null;
+  public array   $query_params  = [];
+  public ?string $matched_route = null;
+  public ?string $handler_file  = null;
+  public ?string $handler_class = null;
 
   public function __construct() {}
 

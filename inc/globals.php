@@ -31,13 +31,13 @@ Globals::construct();
 class Globals
 {
   // Each prop has getter function for fast access
-  public static $is_custom_query = false;
-  public static $request_params  = [];
-  public static $session_vars    = [];
-  public static $cached_title    = null;
-  public static $cached_home_url = null;
+  public static bool    $is_custom_query = false;
+  public static array   $request_params  = [];
+  public static array   $session_vars    = [];
+  public static ?string $cached_title    = null;
+  public static ?string $cached_home_url = null;
 
-  public static $perf_data = [
+  public static array $perf_data = [
     'display_perf_results' => true,
     'create_rnd_transient' => 0,
     'get_rnd_transient'    => 0,
@@ -45,9 +45,9 @@ class Globals
   ];
 
   // Use get_globals_prop('prop_name') for these
-  public static $preferred_player = 0;
-  public static $gallery_per_page = 0;
-//public static $list_per_page    = 0;
+  public static int $preferred_player = 0;
+  public static int $gallery_per_page = 0;
+//public static int $list_per_page    = 0;
 
   // Initialize global props here if needed
   public static function construct() : void

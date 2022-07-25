@@ -13,10 +13,10 @@ namespace Ultrafunk\Plugin\Request\Handler;
 
 class ListPlayerArtistChannel extends \Ultrafunk\Plugin\Request\RequestHandler
 {
-  public $taxonomy     = null;
-  public $term_type    = null;
-  public $title_prefix = null;
-  public $wp_term      = null;
+  public ?string $taxonomy     = null;
+  public ?string $term_type    = null;
+  public ?string $title_prefix = null;
+  public ?object $wp_term      = null;
 
   public function __construct(object $wp_env, object $route_request)
   {

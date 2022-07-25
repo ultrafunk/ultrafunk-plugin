@@ -13,10 +13,10 @@ namespace Ultrafunk\Plugin\Request\Handler;
 
 class TermlistArtists extends \Ultrafunk\Plugin\Request\RequestHandler
 {
-  public $first_letter  = null;
-  public $letters_range = [];
-  public $term_type     = 'artists';
-  public $term_path     = 'artist';
+  public ?string $first_letter  = null;
+  public array   $letters_range = [];
+  public string  $term_type     = 'artists';
+  public string  $term_path     = 'artist';
 
   public function __construct(object $wp_env, object $route_request)
   {

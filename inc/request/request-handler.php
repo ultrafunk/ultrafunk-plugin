@@ -23,32 +23,28 @@ use function Ultrafunk\Plugin\Globals\ {
 
 abstract class RequestHandler
 {
-  protected $wp_env           = null;
-  protected $route_request    = null;
-  protected $template_file    = null;
-  protected $template_class   = null;
-  protected $is_valid_request = false;
+  protected ?string $template_file    = null;
+  protected ?string $template_class   = null;
+  protected bool    $is_valid_request = false;
   
-  public $request_params = [];
-  public $route_path     = null;
-  public $title_parts    = null;
-  public $items_per_page = 0;
-  public $current_page   = 1;
-  public $max_pages      = 1;
-  public $query_args     = [];
-  public $query_result   = null;
-  public $filter_slug    = null;
-  public $filter_tax     = null;
+  public array   $request_params = [];
+  public ?string $route_path     = null;
+  public ?array  $title_parts    = null;
+  public int     $items_per_page = 0;
+  public int     $current_page   = 1;
+  public int     $max_pages      = 1;
+  public array   $query_args     = [];
+  public mixed   $query_result   = null;
+  public ?string $filter_slug    = null;
+  public ?string $filter_tax     = null;
   
   public function __construct(
-    object $wp_env,
-    object $route_request,
+    protected object $wp_env,
+    protected object $route_request,
     string $type_key = 'UNKNOWN_REQUEST_TYPE',
     array $template = null,
   )
   {
-    $this->wp_env         = $wp_env;
-    $this->route_request  = $route_request;
     $this->items_per_page = PLUGIN_ENV['list_per_page'];
 
     $this->template_file  = isset($template['file'])  ? $template['file']  : PLUGIN_ENV['template_file'];

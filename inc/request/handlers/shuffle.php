@@ -27,12 +27,12 @@ use function Ultrafunk\Plugin\Globals\ {
 
 class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
 {
-  private $shuffle_all       = false;
-  private $shuffle_all_page  = false;
-  private $shuffle_slug      = false;
-  private $shuffle_slug_page = false;
+  private bool $shuffle_all       = false;
+  private bool $shuffle_all_page  = false;
+  private bool $shuffle_slug      = false;
+  private bool $shuffle_slug_page = false;
 
-  public $params = [
+  public array $params = [
     'is_shuffle' => true,
     'type'       => 'all',
     'slug'       => null,
