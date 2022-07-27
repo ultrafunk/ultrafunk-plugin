@@ -24,7 +24,7 @@ class TermlistArtists extends \Ultrafunk\Plugin\Request\RequestHandler
       'file'  => 'content-termlist.php',
       'class' => 'Termlist',
     ]);
-    
+
     $this->add_terms_clauses_filter();
   }
 
@@ -34,11 +34,11 @@ class TermlistArtists extends \Ultrafunk\Plugin\Request\RequestHandler
     {
       if (!isset($args['first_letter']))
         return $clauses;
-    
+
       global $wpdb;
-    
+
       $clauses['where'] .= ' AND ' . $wpdb->prepare("t.name LIKE %s", $wpdb->esc_like($args['first_letter']) . '%');
-    
+
       return $clauses;
     }, 10, 3);
   }

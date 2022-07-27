@@ -65,11 +65,11 @@ function get_shuffle_transient_name() : string
   if (isset($_COOKIE[COOKIE_KEY::UF_SHUFFLE_UID]))
   {
     $cookie = sanitize_user(wp_unslash($_COOKIE[COOKIE_KEY::UF_SHUFFLE_UID]), true);
-    
+
     if (strlen($cookie) < 50)
       return sprintf('random_shuffle_%s', $cookie);
   }
-  
+
   return '';
 }
 
@@ -83,7 +83,7 @@ function set_list_session_vars(array $session_vars) : array
   $data   = $params['data'];
   $query  = $params['query'];
   $path   = isset($params['route_path']) ? $params['route_path'] : '';
-  
+
   $session_vars['params']      = $params['get'];
   $session_vars['currentPage'] = $params['current_page'];
   $session_vars['maxPages']    = $params['max_pages'];
@@ -103,7 +103,7 @@ function set_list_session_vars(array $session_vars) : array
     {
       $session_vars['prevPage'] = '/' . $path . '/page/' . ($params['current_page'] - 1) . '/';
     }
-  
+
     if ($params['current_page'] === 2)
       $session_vars['prevPage'] = '/' . $path . '/';
   }

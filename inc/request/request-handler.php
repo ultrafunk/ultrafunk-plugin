@@ -26,7 +26,7 @@ abstract class RequestHandler
   protected ?string $template_file    = null;
   protected ?string $template_class   = null;
   protected bool    $is_valid_request = false;
-  
+
   public array   $request_params = [];
   public ?string $route_path     = null;
   public ?array  $title_parts    = null;
@@ -37,7 +37,7 @@ abstract class RequestHandler
   public mixed   $query_result   = null;
   public ?string $filter_slug    = null;
   public ?string $filter_tax     = null;
-  
+
   public function __construct(
     protected object $wp_env,
     protected object $route_request,
@@ -92,21 +92,21 @@ abstract class RequestHandler
              ? intval($path_parts[$path_part_index])
              : 1);
   }
-  
+
   protected function get_max_pages(int $item_count, int $items_per_page) : int
   {
     if ($item_count === 0)
       return 0;
-      
+
     return (($item_count > $items_per_page)
              ? ((int)ceil($item_count / $items_per_page))
              : 1);
   }
-  
+
 
   /**************************************************************************************************************************/
 
-  
+
   private function request_query(string $query_class) : object
   {
     $this->add_filter_query_args();
@@ -152,7 +152,7 @@ abstract class RequestHandler
       else if (!empty($this->request_params['get']['termlist']))
       {
         $this->query_args['hide_empty'] = true;
-        
+
         $wp_term_query_result = $this->request_query('WP_Term_Query');
 
         if ($wp_term_query_result->terms !== null)
@@ -176,7 +176,7 @@ abstract class RequestHandler
 
     // Output HTTP headers
     $this->wp_env->send_headers();
-    
+
     // Get site template header
     get_header();
   }
@@ -185,7 +185,7 @@ abstract class RequestHandler
   {
     // Stop performance counter
     perf_stop('route_request', 'RouteRequest_start');
-    
+
     // Get site template footer
     get_footer();
 

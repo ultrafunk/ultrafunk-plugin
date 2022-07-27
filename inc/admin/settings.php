@@ -38,9 +38,9 @@ function plugin_settings() : void
     {
       $uf_settings['channel_max_top_artists'] = get_post_value('channel_max_top_artists');
       $uf_settings['show_top_artists_log']    = get_post_value('show_top_artists_log');
-      
+
       update_option("uf_settings", $uf_settings);
-      
+
       $result = set_channels_top_artists(absint($uf_settings['channel_max_top_artists']), ($uf_settings['show_top_artists_log'] === '1'))
 
       ?>
@@ -51,7 +51,7 @@ function plugin_settings() : void
 
   ?>
   <div class="wrap">
-  
+
   <h2>Ultrafunk Settings</h2>
 
   <form method="post" action="<?php echo esc_attr($_SERVER["REQUEST_URI"]); ?>">
@@ -61,14 +61,14 @@ function plugin_settings() : void
   <p>Number of top artists to generate for each channel (min: 5 => max: 15).<br>The result is stored as a transient (uf_channels_top_artists) with no expiration.</p>
   <p><input type="number" name="channel_max_top_artists" min="5" max="15" value="<?php echo esc_attr($uf_settings['channel_max_top_artists']); ?>" /></p>
   <p><label><input type="checkbox" name="show_top_artists_log" value="1" <?php checked(1, $uf_settings['show_top_artists_log'], true); ?> />Show create / update log</label></p>
-  
+
   <p><input type="submit" class="button button-primary" name="uf-update-settings" value="Update Top Artists for All Channels" /></p>
   </form>
 
   <?php echo isset($result['log']) ? '<br><hr><br><pre>' . $result['log'] . '</pre>' : ''; ?>
-  
+
   </div>
-  <?php 
+  <?php
 }
 
 

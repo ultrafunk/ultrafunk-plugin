@@ -20,7 +20,7 @@ function cleanup_wp_header() : void
 
   // Remove WP generator meta tag
   remove_action('wp_head', 'wp_generator');
-  
+
   // Remove WP-Emoji for visitors
   remove_action('wp_head', 'print_emoji_detection_script', 7);
   remove_action('wp_print_styles', 'print_emoji_styles');

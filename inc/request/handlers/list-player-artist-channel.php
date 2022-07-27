@@ -21,7 +21,7 @@ class ListPlayerArtistChannel extends \Ultrafunk\Plugin\Request\RequestHandler
   public function __construct(object $wp_env, object $route_request)
   {
     parent::__construct($wp_env, $route_request, 'list_player');
-    
+
     switch ($route_request->matched_route)
     {
       case 'list_player_artist':

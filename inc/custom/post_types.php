@@ -44,7 +44,7 @@ function register_custom() : void
     'uploaded_to_this_item'    => 'Uploaded to this Track',
     'view_item'                => 'View Track',
     'view_items'               => 'View Tracks',
-  ];     
+  ];
 
   $args = [
     'description'   => 'Track custom post type.',
@@ -58,7 +58,7 @@ function register_custom() : void
     'rest_base'     => 'tracks',
     'rewrite'       => ['slug' => 'track'],
   ];
-    
+
   register_post_type('uf_track', $args);
 }
 add_action('init', '\Ultrafunk\Plugin\PostTypes\register_custom');

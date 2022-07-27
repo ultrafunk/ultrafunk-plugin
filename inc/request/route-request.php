@@ -100,7 +100,7 @@ class RouteRequest
   {
     if ($request_url === null)
       $request_url = $_SERVER['REQUEST_URI'];
-    
+
     if (isset($request_url) && isset($routes))
     {
       $esc_request_url    = esc_url_raw($request_url);
@@ -159,7 +159,7 @@ class RouteRequest
 
 //
 // wp_is_rest_request() does not work until AFTER do_parse_request(): https://core.trac.wordpress.org/ticket/42061
-// 
+//
 function is_rest_request() : bool
 {
   return (isset($_SERVER['REQUEST_URI']) && (strpos($_SERVER['REQUEST_URI'], rest_get_url_prefix()) !== false));
@@ -214,7 +214,7 @@ function parse_request(bool $do_parse, object $wp_env) : bool
         $route_request->has_request_handler())
     {
       require ULTRAFUNK_PLUGIN_PATH . PLUGIN_ENV['handler_file_path'] . $route_request->handler_file;
-      
+
       $request_handler = $route_request->new_request_handler($wp_env, $route_request);
       $request_handler->get_response();
 
@@ -223,7 +223,7 @@ function parse_request(bool $do_parse, object $wp_env) : bool
   }
 
   perf_stop('route_request', 'RouteRequest_start');
-  
+
   return $do_parse;
 }
 add_filter('do_parse_request', '\Ultrafunk\Plugin\Request\parse_request', 10, 2);

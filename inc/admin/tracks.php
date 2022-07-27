@@ -110,7 +110,7 @@ function validate_id_and_slug(object $post) : void
 {
   if (empty($post->track_artist_id))
     update_post_meta($post->ID, 'track_artist_id', -1);
-    
+
   if (empty($post->track_artist_slug))
     update_post_meta($post->ID, 'track_artist_slug', 'N/A');
 

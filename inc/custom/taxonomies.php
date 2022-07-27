@@ -36,7 +36,7 @@ function register_custom() : void
     'back_to_items' => 'Back to Artists',
     'menu_name'     => 'Artists',
   ];
-   
+
   $args = [
     'labels'            => $labels,
     'hierarchical'      => false,
@@ -70,7 +70,7 @@ function register_custom() : void
     'back_to_items'     => 'Back to Channels',
     'menu_name'         => 'Channels',
   ];
-   
+
   $args = [
     'labels'            => $labels,
     'hierarchical'      => true,
@@ -92,7 +92,7 @@ add_action('init', '\Ultrafunk\Plugin\Taxonomies\register_custom');
 
 
 //
-// REST Get Channel Top Artists data 
+// REST Get Channel Top Artists data
 //
 function get_top_artists(WP_REST_Request $request) : ?array
 {
@@ -110,7 +110,7 @@ function get_top_artists(WP_REST_Request $request) : ?array
       'orderby'    => 'include',
       'hide_empty' => true,
     ]);
-  
+
     foreach($query_result->terms as $term)
     {
       $request_result[] = [
@@ -119,7 +119,7 @@ function get_top_artists(WP_REST_Request $request) : ?array
         'track_count' => $channel_artists[$term->term_id],
       ];
     }
-    
+
     return $request_result;
   }
 

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /*
- * 
+ *
  *
  */
 
@@ -82,11 +82,11 @@ function set_channels_top_artists(int $max_entries = 10, bool $create_log = fals
 function log_transient_data(array $top_artists) : string
 {
   $log_html = '';
-  
+
   foreach($top_artists as $channel => $artists)
   {
     $log_html .= '<br>' . get_term_by('id', $channel, 'uf_channel')->name . ' (Channel ID: ' . $channel . ')<br>';
-    
+
     foreach($artists as $artist => $count)
     {
       $log_html .= get_term_by('id', $artist, 'uf_artist')->name . ' (' . $count . ' tracks)<br>';

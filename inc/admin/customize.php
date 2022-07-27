@@ -27,7 +27,7 @@ add_action('init', '\Ultrafunk\Plugin\Admin\Customize\cleanup_wp_header');
 function swap_menu_items() : void
 {
   global $menu;
-  
+
   if ($menu[5][5] === 'menu-posts')
   {
     $posts_menu  = $menu[5];
@@ -40,7 +40,7 @@ add_action('admin_menu', '\Ultrafunk\Plugin\Admin\Customize\swap_menu_items');
 
 //
 // Show number of published tracks in the Dashboard "At a Glance" widget
-// 
+//
 function dashboard_tracks_count(array $data) : array
 {
 	$count  = wp_count_posts('uf_track');

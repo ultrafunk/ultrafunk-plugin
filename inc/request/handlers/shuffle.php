@@ -80,15 +80,15 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
   protected function parse_validate_set_params() : bool
   {
     $paged = $this->get_page_num(999999);
-    
+
     if ($paged !== 0)
     {
       $transient = false;
-  
+
       if (($paged === 1) && isset($_COOKIE[COOKIE_KEY::UF_RESHUFFLE]))
       {
         setcookie(COOKIE_KEY::UF_RESHUFFLE, '', time() - 3600, '/');
-  
+
         perf_start('create_rnd_transient_start');
         $transient = $this->create_transient();
         perf_stop('create_rnd_transient', 'create_rnd_transient_start');
@@ -97,19 +97,19 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
       {
         perf_start('get_rnd_transient_start');
         $transient = get_transient(get_shuffle_transient_name());
-    
+
         // We got a stored transient, check if it is the correct one for this request (path match)
         if (($transient !== false) && ($this->params['path'] !== $transient['shuffle_path']))
           $transient = false;
-    
+
         perf_stop('get_rnd_transient', 'get_rnd_transient_start');
       }
-    
+
       if ($transient !== false)
       {
         $this->set_slug_name();
         set_request_params($this->params);
-  
+
         $this->wp_env->query_vars = [
           'orderby'          => 'post__in',
           'post_type'        => 'uf_track',
@@ -144,7 +144,7 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
         'httponly' => false,
         'samesite' => 'Strict',
       ];
-      
+
       setcookie(COOKIE_KEY::UF_SHUFFLE_UID, $uid, $options);
     }
   }
@@ -160,7 +160,7 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
       'posts_per_page'   => -1,
       'suppress_filters' => true,
     ];
-    
+
     if ($this->shuffle_slug)
     {
       $args['tax_query'] = [
@@ -197,20 +197,20 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
     if (!empty($posts_array['post_ids']) && (shuffle($posts_array['post_ids']) === true))
     {
       $transient_name = get_shuffle_transient_name();
-      
+
       if (empty($transient_name))
       {
         $uid            = uniqid('', true);
         $transient_name = sprintf('random_shuffle_%s', $uid);
         $this->set_cookie($uid);
       }
-  
+
       delete_transient($transient_name);
-      
+
       if (set_transient($transient_name, $posts_array, WEEK_IN_SECONDS) === true)
         return $posts_array;
-    }  
-    
+    }
+
     return false;
   }
 
@@ -220,7 +220,7 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
   private function get_page_num(int $max_page_num) : int
   {
     $page_num = 0;
-    
+
     if ($this->shuffle_all || $this->shuffle_slug)
       return 1;
 

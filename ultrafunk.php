@@ -5,7 +5,7 @@ Plugin URI:        https://github.com/ultrafunk/ultrafunk-plugin
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress plugin
-Version:           1.44.19
+Version:           1.44.21
 Requires at least: 6.0
 Tested up to:      6.0
 Requires PHP:      8.0
@@ -52,7 +52,7 @@ else
   require ULTRAFUNK_PLUGIN_PATH . 'inc/custom/post_types.php';
   require ULTRAFUNK_PLUGIN_PATH . 'inc/custom/taxonomies.php';
   require ULTRAFUNK_PLUGIN_PATH . 'inc/custom/meta.php';
-  
+
   if (is_admin())
   {
     require ULTRAFUNK_PLUGIN_PATH . 'inc/admin/customize.php';
@@ -79,11 +79,11 @@ else
 // Activate the plugin
 //
 function activate() : void
-{ 
+{
   if (ULTRAFUNK_THEME_ACTIVE)
-    \Ultrafunk\Plugin\PostTypes\register_custom(); 
+    \Ultrafunk\Plugin\PostTypes\register_custom();
 
-  flush_rewrite_rules(); 
+  flush_rewrite_rules();
 }
 register_activation_hook(__FILE__, '\Ultrafunk\Plugin\activate');
 
