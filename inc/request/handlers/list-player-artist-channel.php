@@ -16,7 +16,7 @@ class ListPlayerArtistChannel extends \Ultrafunk\Plugin\Request\RequestHandler
   public ?string $taxonomy     = null;
   public ?string $term_type    = null;
   public ?string $title_prefix = null;
-  public ?object $wp_term      = null;
+  public mixed   $wp_term      = false;
 
   public function __construct(object $wp_env, object $route_request)
   {
