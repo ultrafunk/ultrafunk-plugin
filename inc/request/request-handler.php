@@ -30,6 +30,7 @@ abstract class RequestHandler
   public array   $request_params = [];
   public ?string $route_path     = null;
   public ?array  $title_parts    = null;
+  public int     $found_items    = 0;
   public int     $items_per_page = 0;
   public int     $current_page   = 1;
   public int     $max_pages      = 1;
@@ -64,6 +65,7 @@ abstract class RequestHandler
   {
     $this->request_params['route_path']     = $this->route_path;
     $this->request_params['title_parts']    = $this->title_parts;
+    $this->request_params['found_items']    = $this->found_items;
     $this->request_params['items_per_page'] = $this->items_per_page;
     $this->request_params['current_page']   = $this->current_page;
     $this->request_params['max_pages']      = $this->max_pages;
@@ -146,6 +148,7 @@ abstract class RequestHandler
         $wp_query_result = $this->request_query('WP_Query');
 
         $this->query_result     = $wp_query_result->posts;
+        $this->found_items      = $wp_query_result->found_posts;
         $this->max_pages        = $this->get_max_pages($wp_query_result->found_posts, $this->items_per_page);
         $this->is_valid_request = $wp_query_result->have_posts();
       }
@@ -157,7 +160,7 @@ abstract class RequestHandler
 
         if ($wp_term_query_result->terms !== null)
         {
-          $this->request_params['data']['item_count'] = count($wp_term_query_result->terms);
+          $this->found_items      = count($wp_term_query_result->terms);
           $this->query_result     = $wp_term_query_result->terms;
           $this->is_valid_request = true;
         }
