@@ -53,13 +53,13 @@ class Globals
   public static function construct() : void
   {
     self::$cached_home_url  = esc_url(home_url());
-    self::$preferred_player = get_cookie_value(COOKIE_KEY::UF_PREFERRED_PLAYER, 0, 2, PLAYER_TYPE::LIST);
-    self::$gallery_per_page = get_cookie_value(COOKIE_KEY::UF_GALLERY_PER_PAGE, 3, 24, intval(get_option('posts_per_page', PLUGIN_ENV['gallery_per_page'])));
+    self::$preferred_player = get_cookie_value(COOKIE_KEY::UF_PREFERRED_PLAYER, 0,  2, PLAYER_TYPE::LIST);
+    self::$gallery_per_page = get_cookie_value(COOKIE_KEY::UF_GALLERY_PER_PAGE, 4, 24, intval(get_option('posts_per_page', PLUGIN_ENV['gallery_per_page'])));
 
     /*
     $user_settings          = get_cookie_json(COOKIE_KEY::UF_USER_SETTINGS);
-    self::$preferred_player = $user_settings->preferred_player  ?? 2;
-    self::$gallery_per_page = $user_settings->$gallery_per_page ?? 12;
+    self::$preferred_player = $user_settings->preferred_player  ??  2;
+    self::$gallery_per_page = $user_settings->gallery_per_page  ?? 12;
     self::$list_per_page    = $user_settings->list_per_page     ?? 25;
     */
   }

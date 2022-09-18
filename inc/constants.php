@@ -11,7 +11,7 @@ namespace Ultrafunk\Plugin\Constants;
 /**************************************************************************************************************************/
 
 
-const VERSION = '1.44.36';
+const VERSION = '1.44.44';
 
 const PLUGIN_ENV = [
   'gallery_per_page'    => WP_DEBUG ? 12 : 12,
@@ -43,7 +43,7 @@ abstract class TRACK_TYPE
 
 abstract class COOKIE_KEY
 {
-  const UF_USER_SETTINGS    = 'uf_user_settings';
+//const UF_USER_SETTINGS    = 'uf_user_settings';
   const UF_GALLERY_PER_PAGE = 'uf_gallery_per_page';
   const UF_PREFERRED_PLAYER = 'uf_preferred_player';
   const UF_SHUFFLE_UID      = 'uf_shuffle_uid';
