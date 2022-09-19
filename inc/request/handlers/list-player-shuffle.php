@@ -38,11 +38,12 @@ class ListPlayerShuffle extends \Ultrafunk\Plugin\Request\RequestHandler
       $this->request_params['get']['shuffle_type'] = $shuffle_params['type'];
       $this->request_params['get']['shuffle_slug'] = $shuffle_params['slug'];
 
-      $this->route_path   = 'list/shuffle/' . $shuffle_params['path'];
-      $title              = ($shuffle_params['type'] === 'all') ? 'All Tracks' : $shuffle_params['slug_name'];
-      $this->title_parts  = ['prefix' => 'Shuffle', 'title' => $title];
-      $this->current_page = $this->wp_env->query_vars['paged'];
-      $this->query_args   = $this->wp_env->query_vars;
+      $this->items_per_page = \Ultrafunk\Plugin\Globals\get_globals_prop('list_per_page');
+      $this->route_path     = 'list/shuffle/' . $shuffle_params['path'];
+      $title                = ($shuffle_params['type'] === 'all') ? 'All Tracks' : $shuffle_params['slug_name'];
+      $this->title_parts    = ['prefix' => 'Shuffle', 'title' => $title];
+      $this->current_page   = $this->wp_env->query_vars['paged'];
+      $this->query_args     = $this->wp_env->query_vars;
 
       return true;
     }

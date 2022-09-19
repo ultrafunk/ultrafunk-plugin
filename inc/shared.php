@@ -41,6 +41,7 @@ function get_cookie_value(string $cookie_name, int $min_val, int $max_val, int $
   return $default_val;
 }
 
+/*
 //
 // Get named cookie json data if it exists
 //
@@ -56,6 +57,7 @@ function get_cookie_json(string $cookie_name) : ?object
 
   return null;
 }
+*/
 
 //
 // Get UID cookie for random shuffle transient name
