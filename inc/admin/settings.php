@@ -8,9 +8,6 @@
 namespace Ultrafunk\Plugin\Admin\Settings;
 
 
-use function Ultrafunk\Plugin\Admin\TopArtists\set_channels_top_artists;
-
-
 /**************************************************************************************************************************/
 
 
@@ -26,49 +23,33 @@ add_action('admin_menu', '\Ultrafunk\Plugin\Admin\Settings\add_menu_item');
 
 function plugin_settings() : void
 {
-	if (current_user_can('delete_users') === false)
-		wp_die('You do not have sufficient permissions to access this page.');
+  if (current_user_can('delete_users') === false)
+    wp_die('You do not have sufficient permissions to access this page.');
 
   $uf_settings = get_settings();
 
-	if (isset($_POST['uf-update-settings']))
+  if (isset($_POST['uf-save-general-settings']) && is_valid_nonce('general_settings'))
   {
-    // Nonce check
-    if (check_admin_referer('_uf_update_settings_', '_uf_nonce_'))
-    {
-      $uf_settings['channel_max_top_artists'] = get_post_value('channel_max_top_artists');
-      $uf_settings['show_top_artists_log']    = get_post_value('show_top_artists_log');
+    $uf_settings['list_tracks_per_page']    = get_post_value('list_tracks_per_page');
+    $uf_settings['gallery_tracks_per_page'] = get_post_value('gallery_tracks_per_page');
 
-      update_option("uf_settings", $uf_settings);
+    update_option("uf_settings", $uf_settings);
 
-      $result = set_channels_top_artists(absint($uf_settings['channel_max_top_artists']), ($uf_settings['show_top_artists_log'] === '1'))
-
-      ?>
-      <div class="updated"><p>Top Artists for all Channels created / updated in <?php echo $result['time']; ?> seconds.</p></div>
-      <?php
-    }
+    ?><div class="updated"><p>General settings updated</p></div><?php
   }
 
-  ?>
-  <div class="wrap">
+	if (isset($_POST['uf-save-top-artists']) && is_valid_nonce('top_artists'))
+  {
+    $uf_settings['channel_num_top_artists'] = get_post_value('channel_num_top_artists');
+    $uf_settings['show_top_artists_log']    = get_post_string('show_top_artists_log');
 
-  <h2>Ultrafunk Settings</h2>
+    update_option("uf_settings", $uf_settings);
 
-  <form method="post" action="<?php echo esc_attr($_SERVER["REQUEST_URI"]); ?>">
-  <?php wp_nonce_field('_uf_update_settings_', '_uf_nonce_'); ?>
+    $result = \Ultrafunk\Plugin\Admin\TopArtists\set_data(absint($uf_settings['channel_num_top_artists']), ($uf_settings['show_top_artists_log'] === '1'))
+    ?><div class="updated"><p>Top Artists for all Channels created / updated in <?php echo $result['time']; ?> seconds.</p></div><?php
+  }
 
-  <h3>Top Artists for <a href="/channels/">All Channels</a></h3>
-  <p>Number of top artists to generate for each channel (min: 5 => max: 15).<br>The result is stored as a transient (uf_channels_top_artists) with no expiration.</p>
-  <p><input type="number" name="channel_max_top_artists" min="5" max="15" value="<?php echo esc_attr($uf_settings['channel_max_top_artists']); ?>" /></p>
-  <p><label><input type="checkbox" name="show_top_artists_log" value="1" <?php checked(1, $uf_settings['show_top_artists_log'], true); ?> />Show create / update log</label></p>
-
-  <p><input type="submit" class="button button-primary" name="uf-update-settings" value="Update Top Artists for All Channels" /></p>
-  </form>
-
-  <?php echo isset($result['log']) ? '<br><hr><br><pre>' . $result['log'] . '</pre>' : ''; ?>
-
-  </div>
-  <?php
+  \Ultrafunk\Plugin\Admin\Settings\settings_template($uf_settings, (isset($result) ? $result : null));
 }
 
 
@@ -77,11 +58,7 @@ function plugin_settings() : void
 
 function get_settings() : array
 {
-	$settings = array(
-    'channel_max_top_artists' => 10,
-    'show_top_artists_log'    => '1',
-	);
-
+	$settings        = \Ultrafunk\Plugin\Constants\DEFAULT_SETTINGS;
 	$stored_settings = get_option("uf_settings");
 
   if (!empty($stored_settings))
@@ -93,7 +70,17 @@ function get_settings() : array
   return $settings;
 }
 
-function get_post_value(string $post_key) : string
+function get_post_value(string $key, int $default_value = -1) : int
 {
-  return (isset($_POST[$post_key]) ? $_POST[$post_key] : '');
+  return (isset($_POST[$key]) ? intval($_POST[$key]) : $default_value);
+}
+
+function get_post_string(string $key, string $default_string = '') : string
+{
+  return (isset($_POST[$key]) ? sanitize_title($_POST[$key]) : $default_string);
+}
+
+function is_valid_nonce(string $uid) : bool
+{
+  return (check_admin_referer("_uf_{$uid}_", "_uf_nonce_{$uid}_") === 1);
 }

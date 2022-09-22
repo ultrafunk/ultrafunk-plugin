@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /*
- *
+ * Set Top Artists transient for All Channels
  *
  */
 
@@ -11,7 +11,7 @@ namespace Ultrafunk\Plugin\Admin\TopArtists;
 /**************************************************************************************************************************/
 
 
-function set_channels_top_artists(int $max_entries = 10, bool $create_log = false) : array
+function set_data(int $max_entries = 10, bool $create_log = false) : array
 {
   $start_time  = microtime(true);
   $interval    = $start_time;

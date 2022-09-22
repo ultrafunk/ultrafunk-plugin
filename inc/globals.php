@@ -8,8 +8,6 @@
 namespace Ultrafunk\Plugin\Globals;
 
 
-use const Ultrafunk\Plugin\Constants\PLUGIN_ENV;
-
 use Ultrafunk\Plugin\Constants\ {
   PLAYER_TYPE,
   COOKIE_KEY,
@@ -31,6 +29,7 @@ Globals::construct();
 class Globals
 {
   // Each prop has getter function for fast access
+  public static array   $settings        = [];
   public static bool    $is_custom_query = false;
   public static array   $request_params  = [];
   public static array   $session_vars    = [];
@@ -46,16 +45,17 @@ class Globals
 
   // Use get_globals_prop('prop_name') for these
   public static int $preferred_player = 0;
-  public static int $gallery_per_page = 0;
   public static int $list_per_page    = 0;
+  public static int $gallery_per_page = 0;
 
   // Initialize global props here if needed
   public static function construct() : void
   {
+    self::$settings         = get_option('uf_settings', \Ultrafunk\Plugin\Constants\DEFAULT_SETTINGS);
     self::$cached_home_url  = esc_url(home_url());
     self::$preferred_player = get_cookie_value(COOKIE_KEY::UF_PREFERRED_PLAYER,  0,  2, PLAYER_TYPE::LIST);
-    self::$gallery_per_page = get_cookie_value(COOKIE_KEY::UF_GALLERY_PER_PAGE,  4, 24, intval(get_option('posts_per_page', PLUGIN_ENV['gallery_per_page'])));
-    self::$list_per_page    = get_cookie_value(COOKIE_KEY::UF_LIST_PER_PAGE,    10, 50, PLUGIN_ENV['list_per_page']);
+    self::$list_per_page    = get_cookie_value(COOKIE_KEY::UF_LIST_PER_PAGE,    10, 50, get_settings_value('list_tracks_per_page'));
+    self::$gallery_per_page = get_cookie_value(COOKIE_KEY::UF_GALLERY_PER_PAGE,  4, 24, get_settings_value('gallery_tracks_per_page'));
   }
 }
 
@@ -66,6 +66,11 @@ class Globals
 function get_globals_prop(string $property) : mixed
 {
   return Globals::$$property;
+}
+
+function get_settings_value(string $key) : int
+{
+  return Globals::$settings[$key];
 }
 
 function is_custom_query() : bool

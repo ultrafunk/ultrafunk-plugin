@@ -10,11 +10,10 @@ namespace Ultrafunk\Plugin\Request;
 
 use const Ultrafunk\Plugin\Constants\PLUGIN_ENV;
 
-use function Ultrafunk\Plugin\Shared\console_log;
-
 use function Ultrafunk\Plugin\Globals\ {
   perf_stop,
   set_is_custom_query,
+  get_settings_value,
 };
 
 
@@ -46,7 +45,7 @@ abstract class RequestHandler
     array $template = null,
   )
   {
-    $this->items_per_page = PLUGIN_ENV['list_per_page'];
+    $this->items_per_page = get_settings_value('list_tracks_per_page');
 
     $this->template_file  = isset($template['file'])  ? $template['file']  : PLUGIN_ENV['template_file'];
     $this->template_class = isset($template['class']) ? $template['class'] : PLUGIN_ENV['template_class'];

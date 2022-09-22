@@ -8,9 +8,6 @@
 namespace Ultrafunk\Plugin\Request\Handler;
 
 
-use const Ultrafunk\Plugin\Constants\PLUGIN_ENV;
-
-
 /**************************************************************************************************************************/
 
 
@@ -27,7 +24,7 @@ class ListPlayerShuffle extends \Ultrafunk\Plugin\Request\RequestHandler
     array_shift($this->route_request->path_parts);
 
     // Load shuffle.php and set params since it will not be done by RouteRequest in this case
-    require ULTRAFUNK_PLUGIN_PATH . PLUGIN_ENV['handler_file_path'] . 'shuffle.php';
+    require ULTRAFUNK_PLUGIN_PATH . \Ultrafunk\Plugin\Constants\PLUGIN_ENV['handler_file_path'] . 'shuffle.php';
     $shuffle_handler = new \Ultrafunk\Plugin\Request\Handler\Shuffle($this->wp_env, $this->route_request);
 
     if ($shuffle_handler->parse_validate_set_params())
