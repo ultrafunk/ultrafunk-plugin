@@ -5,7 +5,7 @@ Plugin URI:        https://github.com/ultrafunk/ultrafunk-plugin
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress plugin
-Version:           1.44.46
+Version:           1.44.47
 Requires at least: 6.0
 Tested up to:      6.0
 Requires PHP:      8.0
@@ -97,3 +97,12 @@ function deactivate() : void
   flush_rewrite_rules();
 }
 register_deactivation_hook(__FILE__, '\Ultrafunk\Plugin\deactivate');
+
+//
+// Uninstall the plugin
+//
+function uninstall() : void
+{
+  delete_option('uf_settings');
+}
+register_uninstall_hook(__FILE__, '\Ultrafunk\Plugin\uninstall');

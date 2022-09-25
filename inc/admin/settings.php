@@ -13,7 +13,15 @@ namespace Ultrafunk\Plugin\Admin\Settings;
 
 function add_menu_item() : void
 {
-	add_options_page('Ultrafunk', 'Ultrafunk', 'manage_options', 'settings', '\Ultrafunk\Plugin\Admin\Settings\plugin_settings');
+	add_menu_page(
+    'Ultrafunk',
+    'Ultrafunk',
+    'manage_options',
+    'uf_settings',
+    '\Ultrafunk\Plugin\Admin\Settings\plugin_settings',
+    'dashicons-admin-generic',
+    999
+  );
 }
 add_action('admin_menu', '\Ultrafunk\Plugin\Admin\Settings\add_menu_item');
 
@@ -28,24 +36,24 @@ function plugin_settings() : void
 
   $uf_settings = get_settings();
 
-  if (isset($_POST['uf-save-general-settings']) && is_valid_nonce('general_settings'))
+  if (isset($_POST['uf-save-settings']) && is_valid_nonce('settings'))
   {
     $uf_settings['list_tracks_per_page']    = get_post_value('list_tracks_per_page');
     $uf_settings['gallery_tracks_per_page'] = get_post_value('gallery_tracks_per_page');
 
     update_option("uf_settings", $uf_settings);
 
-    ?><div class="updated"><p>General settings updated</p></div><?php
+    ?><div class="updated"><p>Settings updated</p></div><?php
   }
 
 	if (isset($_POST['uf-save-top-artists']) && is_valid_nonce('top_artists'))
   {
-    $uf_settings['channel_num_top_artists'] = get_post_value('channel_num_top_artists');
-    $uf_settings['show_top_artists_log']    = get_post_string('show_top_artists_log');
+    $uf_settings['channels_num_top_artists'] = get_post_value('channels_num_top_artists');
+    $uf_settings['show_top_artists_log']     = get_post_string('show_top_artists_log');
 
     update_option("uf_settings", $uf_settings);
 
-    $result = \Ultrafunk\Plugin\Admin\TopArtists\set_data(absint($uf_settings['channel_num_top_artists']), ($uf_settings['show_top_artists_log'] === '1'))
+    $result = \Ultrafunk\Plugin\Admin\TopArtists\set_data(absint($uf_settings['channels_num_top_artists']), ($uf_settings['show_top_artists_log'] === '1'))
     ?><div class="updated"><p>Top Artists for all Channels created / updated in <?php echo $result['time']; ?> seconds.</p></div><?php
   }
 
@@ -64,7 +72,10 @@ function get_settings() : array
   if (!empty($stored_settings))
   {
     foreach ($stored_settings as $key => $stored_setting)
-      $settings[$key] = $stored_setting;
+    {
+      if (isset($settings[$key]))
+        $settings[$key] = $stored_setting;
+    }
   }
 
   return $settings;

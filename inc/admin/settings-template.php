@@ -16,10 +16,10 @@ function settings_template(array $uf_settings, array $result = null) : void
   ?>
   <div class="wrap">
 
-  <h2>General Ultrafunk Settings</h2>
+  <h2>Ultrafunk Settings</h2>
 
   <form method="post" action="<?php echo esc_attr($_SERVER["REQUEST_URI"]); ?>">
-  <?php wp_nonce_field('_uf_general_settings_', '_uf_nonce_general_settings_'); ?>
+  <?php wp_nonce_field('_uf_settings_', '_uf_nonce_settings_'); ?>
 
   <table>
   <tr><td><h3>List Player</h3></td></tr>
@@ -34,12 +34,10 @@ function settings_template(array $uf_settings, array $result = null) : void
   </tr>
   </table>
 
-  <p><input type="submit" class="button button-primary" name="uf-save-general-settings" value="Save Settings" /></p>
+  <p><input type="submit" class="button button-primary" name="uf-save-settings" value="Save Settings" /></p>
   </form>
 
   <br>
-  <h1>Other Ultrafunk Settings</h1>
-
   <form method="post" action="<?php echo esc_attr($_SERVER["REQUEST_URI"]); ?>">
   <?php wp_nonce_field('_uf_top_artists_', '_uf_nonce_top_artists_'); ?>
 
@@ -47,7 +45,7 @@ function settings_template(array $uf_settings, array $result = null) : void
   <table>
   <tr>
   <td>Number of top artists to generate for each channel (min: 5, max: 15, default: 10).<br>The result is stored as a transient (uf_channels_top_artists) with no expiration.</td>
-  <td><input type="number" name="channel_num_top_artists" min="5" max="15" value="<?php echo esc_attr($uf_settings['channel_num_top_artists']); ?>" /></td>
+  <td><input type="number" name="channels_num_top_artists" min="5" max="15" value="<?php echo esc_attr($uf_settings['channels_num_top_artists']); ?>" /></td>
   </tr>
   </table>
   <p><label><input type="checkbox" name="show_top_artists_log" value="1" <?php checked(1, $uf_settings['show_top_artists_log'], true); ?> />Show create / update log</label></p>

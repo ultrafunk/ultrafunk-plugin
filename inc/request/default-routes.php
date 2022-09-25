@@ -35,7 +35,7 @@ const DEFAULT_ROUTES =
 */
 
   [
-    'route_uids'    => [ '=list', 'list/page/' ],
+    'route_uids'    => [ '===list', 'list/page/' ],
     'handler_file'  => 'list-player-all.php',
     'handler_class' => 'ListPlayerAll',
     'routes' => [
@@ -64,7 +64,7 @@ const DEFAULT_ROUTES =
     ]
   ],
   [
-    'route_uids'    => [ '=channels' ],
+    'route_uids'    => [ '===channels' ],
     'handler_file'  => 'termlist-channels.php',
     'handler_class' => 'TermlistChannels',
     'routes' => [

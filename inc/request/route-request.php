@@ -36,9 +36,9 @@ class RouteRequest
 
   private function match_route_uid(string $route_uid) : bool
   {
-    // If $route_uid starts with '=', match exactly
-    if ($route_uid[0] === '=')
-      return (substr($route_uid, 1) === $this->request_path);
+    // If $route_uid starts with '===', match exactly
+    if (str_starts_with($route_uid, '==='))
+      return (substr($route_uid, 3) === $this->request_path);
     else if (str_starts_with($this->request_path, $route_uid))
       return true;
 
