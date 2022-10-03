@@ -75,11 +75,30 @@ function get_shuffle_transient_name() : string
   return '';
 }
 
+//
+//
+//
+function get_term_links(array $terms, string $path, string $separator = '',  int $primary_id = -1) : string
+{
+  $term_links = [];
+
+  foreach ($terms as $term)
+  {
+    $class = (($primary_id !== -1) && ($term->term_id === $primary_id)) ? 'primary' : 'secondary';
+    $term_links[] = "<a class=\"$class\" href=\"$path$term->slug/\">$term->name</a>";
+  }
+
+  return implode($separator, $term_links);
+}
+
 
 /**************************************************************************************************************************/
 
 
-function set_list_session_vars(array $session_vars) : array
+//
+// Set request session variables for client side use (JavaScript)
+//
+function set_request_session_vars(array $session_vars) : array
 {
   $params = \Ultrafunk\Plugin\Globals\get_request_params();
   $data   = $params['data'];

@@ -7,6 +7,9 @@
 namespace Ultrafunk\Plugin\PostTypes;
 
 
+use function Ultrafunk\Plugin\Shared\get_term_links;
+
+
 /**************************************************************************************************************************/
 
 
@@ -73,13 +76,21 @@ add_action('init', '\Ultrafunk\Plugin\PostTypes\register_custom');
 function register_track_rest_fields() : void
 {
   register_rest_field('uf_track', 'artists_links', [
-    'get_callback' => function($post) { return get_the_term_list($post['id'], 'uf_artist', '', ', '); },
-    'schema'       => null,
+    'get_callback' => function($post)
+    {
+      $artists = get_object_term_cache($post['id'], 'uf_artist');
+      return get_term_links($artists, '/artist/', ', ', (int)get_post_meta($post['id'], 'track_artist_id', true));
+    },
+    'schema' => null,
   ]);
 
   register_rest_field('uf_track', 'channels_links', [
-    'get_callback' => function($post) { return get_the_term_list($post['id'], 'uf_channel', '', ', '); },
-    'schema'       => null,
+    'get_callback' => function($post)
+    {
+      $channels = get_object_term_cache($post['id'], 'uf_channel');
+      return get_term_links($channels, '/channel/', ', ');
+    },
+    'schema' => null,
   ]);
 }
 add_action('rest_api_init', '\Ultrafunk\Plugin\PostTypes\register_track_rest_fields' );
