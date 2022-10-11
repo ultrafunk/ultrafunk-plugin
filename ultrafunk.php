@@ -5,7 +5,7 @@ Plugin URI:        https://github.com/ultrafunk/ultrafunk-plugin
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress plugin
-Version:           1.44.51
+Version:           1.44.52
 Requires at least: 6.0
 Tested up to:      6.0
 Requires PHP:      8.0
@@ -50,9 +50,7 @@ else
 {
   require ULTRAFUNK_PLUGIN_PATH . 'inc/constants.php';
   require ULTRAFUNK_PLUGIN_PATH . 'inc/shared.php';
-  require ULTRAFUNK_PLUGIN_PATH . 'inc/custom/post_types.php';
-  require ULTRAFUNK_PLUGIN_PATH . 'inc/custom/taxonomies.php';
-  require ULTRAFUNK_PLUGIN_PATH . 'inc/custom/meta.php';
+  require ULTRAFUNK_PLUGIN_PATH . 'inc/custom/types.php';
 
   if (is_admin())
   {
@@ -68,6 +66,9 @@ else
     require ULTRAFUNK_PLUGIN_PATH . 'inc/request/default-routes.php';
     require ULTRAFUNK_PLUGIN_PATH . 'inc/request/route-request.php';
     require ULTRAFUNK_PLUGIN_PATH . 'inc/request/request-handler.php';
+    require ULTRAFUNK_PLUGIN_PATH . 'inc/request/session.php';
+    require ULTRAFUNK_PLUGIN_PATH . 'inc/custom/rest.php';
+    require ULTRAFUNK_PLUGIN_PATH . 'inc/custom/filters-actions.php';
     require ULTRAFUNK_PLUGIN_PATH . 'inc/front/customize.php';
   }
 }
@@ -82,7 +83,7 @@ else
 function activate() : void
 {
   if (ULTRAFUNK_THEME_ACTIVE)
-    \Ultrafunk\Plugin\PostTypes\register_custom();
+    \Ultrafunk\Plugin\Custom\Types\register_custom_post_types();
 
   flush_rewrite_rules();
 }
