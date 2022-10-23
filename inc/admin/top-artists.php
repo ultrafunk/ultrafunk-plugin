@@ -85,7 +85,7 @@ function log_transient_data(array $top_artists) : string
 
   foreach($top_artists as $channel => $artists)
   {
-    $log_html .= '<br>' . get_term_by('id', $channel, 'uf_channel')->name . ' (Channel ID: ' . $channel . ')<br>';
+    $log_html .= '<br><b style="text-transform: uppercase; font-size: 16px;">' . get_term_by('id', $channel, 'uf_channel')->name . '</b> (Channel ID: ' . $channel . ')<br>';
 
     foreach($artists as $artist => $count)
     {

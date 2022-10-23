@@ -5,13 +5,12 @@ This is the source code for the [ultrafunk.com](https://ultrafunk.com) WordPress
 Tested on servers running LAMP: Linux, Apache, MariaDB / MySQL and PHP.
 
 # Dependencies
-**Required:**  
-PHP version 8.0 or greater  
-[WordPress](https://wordpress.org/download/) version 6.0 or greater  
-[Ultrafunk Theme](https://github.com/ultrafunk/ultrafunk-theme/) version 1.44.X or greater  
+**Required:**
+PHP version 8.0 or greater
+[WordPress](https://wordpress.org/download/) version 6.0 or greater
+[Ultrafunk Theme](https://github.com/ultrafunk/ultrafunk-theme/) version 1.44.X or greater
 
-**Optional:**  
-[PHP Intelephense](https://intelephense.com/) (PHP code intelligence for Visual Studio Code)  
-[Theme Check](https://wordpress.org/plugins/theme-check/) (WordPress Plugin from The WordPress Theme Review Team)  
-[WP Extended Search](https://wordpress.org/plugins/wp-extended-search/) (WordPress Plugin)  
+**Optional:**
+[PHP Intelephense](https://intelephense.com/) (PHP code intelligence for Visual Studio Code)
+[WP Extended Search](https://wordpress.org/plugins/wp-extended-search/) (WordPress Plugin)
 [WP Fastest Cache](https://wordpress.org/plugins/wp-fastest-cache/) (WordPress Plugin)
