@@ -107,23 +107,23 @@ function set_session_vars(array $session_vars) : void
 // is_request('get',   'termlist',    'artists')
 // is_request('error', 'list_player', 'search')
 //
-function is_request(string $request, string $type, ?string $category = null) : bool
+function is_request(string $request, string $type, ?string $query = null) : bool
 {
-  if ($category === null)
-    return !empty(Globals::$request_params[$request][$type]);
+  if ($query === null)
+    return isset(Globals::$request_params[$request][$type]);
 
   return (!empty(Globals::$request_params[$request][$type]) &&
-          !empty(Globals::$request_params[$request][$category]));
+         (Globals::$request_params[$request][$type] === $query));
 }
 
-function is_termlist(string $category = null) : bool
+function is_termlist(string $query = null) : bool
 {
-  return is_request('get', 'termlist', $category);
+  return is_request('get', 'termlist', $query);
 }
 
-function is_list_player(string $category = null) : bool
+function is_list_player(string $query = null) : bool
 {
-  return is_request('get', 'list_player', $category);
+  return is_request('get', 'list_player', $query);
 }
 
 function is_shuffle(int $player_type = PLAYER_TYPE::NONE) : bool
@@ -132,7 +132,7 @@ function is_shuffle(int $player_type = PLAYER_TYPE::NONE) : bool
     return !empty(Globals::$request_params['is_shuffle']);
 
   if ($player_type === PLAYER_TYPE::LIST)
-    return !empty(Globals::$request_params['get']['shuffle']);
+    return is_request('get', 'list_player', 'shuffle');
 
   return false;
 }

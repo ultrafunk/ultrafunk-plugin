@@ -22,9 +22,9 @@ use function Ultrafunk\Plugin\Globals\ {
 
 abstract class RequestHandler
 {
-  protected ?string $template_file    = null;
-  protected ?string $template_class   = null;
-  protected bool    $is_valid_request = false;
+  protected string $template_file    = PLUGIN_ENV['template_file'];
+  protected string $template_class   = PLUGIN_ENV['template_class'];
+  protected bool   $is_valid_request = false;
 
   public array   $request_params = [];
   public ?string $route_path     = null;
@@ -38,19 +38,9 @@ abstract class RequestHandler
   public ?string $filter_slug    = null;
   public ?string $filter_tax     = null;
 
-  public function __construct(
-    protected object $wp_env,
-    protected object $route_request,
-    string $type_key = 'UNKNOWN_REQUEST_TYPE',
-    array $template = null,
-  )
+  public function __construct(protected object $wp_env, protected object $route_request)
   {
     $this->items_per_page = get_settings_value('list_tracks_per_page');
-
-    $this->template_file  = isset($template['file'])  ? $template['file']  : PLUGIN_ENV['template_file'];
-    $this->template_class = isset($template['class']) ? $template['class'] : PLUGIN_ENV['template_class'];
-
-    $this->request_params['get'][$type_key] = true;
     $this->request_params['data']  = [];
     $this->request_params['query'] = [
       'string' => $this->route_request->query_string,
@@ -58,7 +48,7 @@ abstract class RequestHandler
     ];
   }
 
-  abstract protected function parse_validate_set_params() : bool;
+  abstract protected function has_valid_request_params() : bool;
 
   protected function set_request_params() : void
   {
@@ -135,9 +125,9 @@ abstract class RequestHandler
 
   public function get_response() : void
   {
-    if ($this->parse_validate_set_params())
+    if ($this->has_valid_request_params())
     {
-      if (!empty($this->request_params['get']['list_player']))
+      if (isset($this->request_params['get']['list_player']))
       {
         $this->query_args['post_type']        = 'uf_track';
         $this->query_args['paged']            = $this->current_page;
@@ -151,7 +141,7 @@ abstract class RequestHandler
         $this->max_pages        = $this->get_max_pages($wp_query_result->found_posts, $this->items_per_page);
         $this->is_valid_request = $wp_query_result->have_posts();
       }
-      else if (!empty($this->request_params['get']['termlist']))
+      else if (isset($this->request_params['get']['termlist']))
       {
         $this->query_args['hide_empty'] = true;
 
@@ -218,7 +208,7 @@ abstract class RequestHandler
     $response_params = array('response' => $this->request_params['get']);
 
     // Setup global $wp_query so it contains relevant data to handle this request failure...
-    if (!empty($this->request_params['get']['search']))
+    if (current($this->request_params['get']) === 'search')
     {
       $response_params['error']  = ['http_status' => 200, 'details' => 'No search matches'];
       $wp_query->is_search       = true;
@@ -240,7 +230,7 @@ abstract class RequestHandler
 
   public function render_content() : bool
   {
-    if (!empty($this->template_file) && !empty($this->template_class))
+    if (!empty($this->request_params['get']))
     {
       if ($this->is_valid_request)
         $this->render_valid_response();

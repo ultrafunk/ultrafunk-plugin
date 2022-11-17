@@ -13,19 +13,34 @@ namespace Ultrafunk\Plugin\Request\Handler;
 
 class TermlistArtists extends \Ultrafunk\Plugin\Request\RequestHandler
 {
-  public ?string $first_letter  = null;
   public array   $letters_range = [];
+  public ?string $first_letter  = null;
   public string  $term_type     = 'artists';
   public string  $term_path     = 'artist';
 
-  public function __construct(object $wp_env, object $route_request)
+  protected function has_valid_request_params() : bool
   {
-    parent::__construct($wp_env, $route_request, 'termlist', [
-      'file'  => 'content-termlist.php',
-      'class' => 'Termlist',
-    ]);
+    $this->request_params['get'] = ['termlist' => 'artists'];
+    $this->template_file  = 'content-termlist.php';
+    $this->template_class = 'Termlist';
+
+    $this->route_path    = 'artists';
+    $this->letters_range = range('a', 'z');
+    $this->first_letter  = ($this->route_request->matched_route === 'artists')
+                             ? 'a'
+                             : $this->route_request->path_parts[1][0];
+
+    $this->request_params['data']['letters_range'] = $this->letters_range;
+    $this->request_params['data']['first_letter']  = $this->first_letter;
+
+    $this->query_args = [
+      'taxonomy'     => 'uf_artist',
+      'first_letter' => $this->first_letter,
+    ];
 
     $this->add_terms_clauses_filter();
+
+    return true;
   }
 
   private function add_terms_clauses_filter() : void
@@ -41,25 +56,5 @@ class TermlistArtists extends \Ultrafunk\Plugin\Request\RequestHandler
 
       return $clauses;
     }, 10, 3);
-  }
-
-  protected function parse_validate_set_params() : bool
-  {
-    $this->request_params['get']['artists'] = true;
-    $this->route_path    = 'artists';
-    $this->first_letter  = ($this->route_request->matched_route === 'artists')
-                             ? 'a'
-                             : $this->route_request->path_parts[1][0];
-    $this->letters_range = range('a', 'z');
-
-    $this->request_params['data']['first_letter']  = $this->first_letter;
-    $this->request_params['data']['letters_range'] = $this->letters_range;
-
-    $this->query_args = [
-      'taxonomy'     => 'uf_artist',
-      'first_letter' => $this->first_letter,
-    ];
-
-    return true;
   }
 }

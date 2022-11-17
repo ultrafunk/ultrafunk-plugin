@@ -11,7 +11,7 @@ namespace Ultrafunk\Plugin\Constants;
 /**************************************************************************************************************************/
 
 
-const VERSION = '1.44.60';
+const VERSION = '1.44.68';
 
 const PLUGIN_ENV = [
   'site_url'            => WP_DEBUG ? 'https://wordpress.ultrafunk.com'     : 'https://ultrafunk.com',

@@ -13,12 +13,7 @@ namespace Ultrafunk\Plugin\Request\Handler;
 
 class RedirectRoute extends \Ultrafunk\Plugin\Request\RequestHandler
 {
-  public function __construct(object $wp_env, object $route_request)
-  {
-    parent::__construct($wp_env, $route_request, 'redirect_route');
-  }
-
-  protected function parse_validate_set_params() : bool
+  protected function has_valid_request_params() : bool
   {
     switch ($this->route_request->matched_route)
     {
@@ -37,7 +32,7 @@ class RedirectRoute extends \Ultrafunk\Plugin\Request\RequestHandler
       case 'shuffle_channel_soundcloud_page':
         wp_redirect("/shuffle/channel/soundcloud/page/{$this->get_current_page($this->route_request->path_parts, 5)}/", 302);
         exit;
-      }
+    }
 
     return false;
   }

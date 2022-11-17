@@ -18,15 +18,13 @@ class ListPlayerArtistChannel extends \Ultrafunk\Plugin\Request\RequestHandler
   public ?string $title_prefix = null;
   public mixed   $wp_term      = false;
 
-  public function __construct(object $wp_env, object $route_request)
+  protected function has_valid_request_params() : bool
   {
-    parent::__construct($wp_env, $route_request, 'list_player');
-
-    switch ($route_request->matched_route)
+    switch ($this->route_request->matched_route)
     {
       case 'list_player_artist':
       case 'list_player_artist_page':
-        $this->request_params['get']['artist'] = true;
+        $this->request_params['get'] = ['list_player' => 'artist'];
         $this->taxonomy     = 'uf_artist';
         $this->term_type    = 'artists';
         $this->title_prefix = 'Artist';
@@ -35,16 +33,13 @@ class ListPlayerArtistChannel extends \Ultrafunk\Plugin\Request\RequestHandler
 
       case 'list_player_channel':
       case 'list_player_channel_page':
-        $this->request_params['get']['channel'] = true;
+        $this->request_params['get'] = ['list_player' => 'channel'];
         $this->taxonomy     = 'uf_channel';
         $this->term_type    = 'channels';
         $this->title_prefix = 'Channel';
         break;
     }
-  }
 
-  protected function parse_validate_set_params() : bool
-  {
     $slug          = sanitize_title($this->route_request->path_parts[2]);
     $this->wp_term = get_term_by('slug', $slug, $this->taxonomy);
 

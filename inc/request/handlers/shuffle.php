@@ -46,7 +46,7 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
   //
   public function __construct(object $wp_env, object $route_request)
   {
-    parent::__construct($wp_env, $route_request, 'shuffle', [ 'file' => '', 'class' => '' ]);
+    parent::__construct($wp_env, $route_request);
 
     switch ($route_request->matched_route)
     {
@@ -77,7 +77,7 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
       $this->params['path'] = ($this->params['type'] . '/' . $this->params['slug']);
   }
 
-  protected function parse_validate_set_params() : bool
+  protected function has_valid_request_params() : bool
   {
     $paged = $this->get_page_num(999999);
 
@@ -120,7 +120,7 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
 
         // ToDo: Needs to be updated to work as all the list-nnn.php classes,
         // currently it is a mix of old and new...
-        if (empty($this->template_file) && empty($this->template_class))
+        if (!isset($this->request_params['get']))
           $this->is_valid_request = true;
 
         return true;

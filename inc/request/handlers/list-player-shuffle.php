@@ -13,13 +13,10 @@ namespace Ultrafunk\Plugin\Request\Handler;
 
 class ListPlayerShuffle extends \Ultrafunk\Plugin\Request\RequestHandler
 {
-  public function __construct(object $wp_env, object $route_request)
+  protected function has_valid_request_params() : bool
   {
-    parent::__construct($wp_env, $route_request, 'list_player');
-  }
+    $this->request_params['get'] = ['list_player' => 'shuffle'];
 
-  protected function parse_validate_set_params() : bool
-  {
     // Shift array to fit request-shuffle format = remove the first 'player' url part
     array_shift($this->route_request->path_parts);
 
@@ -27,11 +24,10 @@ class ListPlayerShuffle extends \Ultrafunk\Plugin\Request\RequestHandler
     require ULTRAFUNK_PLUGIN_PATH . \Ultrafunk\Plugin\Constants\PLUGIN_ENV['handler_file_path'] . 'shuffle.php';
     $shuffle_handler = new \Ultrafunk\Plugin\Request\Handler\Shuffle($this->wp_env, $this->route_request);
 
-    if ($shuffle_handler->parse_validate_set_params())
+    if ($shuffle_handler->has_valid_request_params())
     {
       $shuffle_params = \Ultrafunk\Plugin\Globals\get_request_params();
 
-      $this->request_params['get']['shuffle']      = true;
       $this->request_params['get']['shuffle_type'] = $shuffle_params['type'];
       $this->request_params['get']['shuffle_slug'] = $shuffle_params['slug'];
 

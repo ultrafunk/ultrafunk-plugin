@@ -16,17 +16,12 @@ class TermlistChannels extends \Ultrafunk\Plugin\Request\RequestHandler
   public string $term_type = 'channels';
   public string $term_path = 'channel';
 
-  public function __construct(object $wp_env, object $route_request)
+  protected function has_valid_request_params() : bool
   {
-    parent::__construct($wp_env, $route_request, 'termlist', [
-      'file'  => 'content-termlist.php',
-      'class' => 'Termlist',
-    ]);
-  }
+    $this->request_params['get'] = ['termlist' => 'channels'];
+    $this->template_file  = 'content-termlist.php';
+    $this->template_class = 'Termlist';
 
-  protected function parse_validate_set_params() : bool
-  {
-    $this->request_params['get']['channels'] = true;
     $this->route_path = 'channels';
     $this->query_args = [ 'taxonomy' => 'uf_channel' ];
 
