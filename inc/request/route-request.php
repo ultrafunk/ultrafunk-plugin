@@ -32,8 +32,6 @@ class RouteRequest
   public ?string $handler_file  = null;
   public ?string $handler_class = null;
 
-  public function __construct() {}
-
   private function match_route_uid(string $route_uid) : bool
   {
     // If $route_uid starts with '===', match exactly

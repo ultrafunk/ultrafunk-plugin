@@ -22,26 +22,24 @@ use function Ultrafunk\Plugin\Globals\ {
 
 abstract class RequestHandler
 {
-  protected string $template_file    = PLUGIN_ENV['template_file'];
-  protected string $template_class   = PLUGIN_ENV['template_class'];
-  protected bool   $is_valid_request = false;
-
-  public array   $request_params = [];
-  public ?string $route_path     = null;
-  public ?array  $title_parts    = null;
-  public int     $found_items    = 0;
-  public int     $items_per_page = 0;
-  public int     $current_page   = 1;
-  public int     $max_pages      = 1;
-  public array   $query_args     = [];
-  public mixed   $query_result   = null;
-  public ?string $filter_slug    = null;
-  public ?string $filter_tax     = null;
+  protected string  $template_file    = PLUGIN_ENV['template_file'];
+  protected string  $template_class   = PLUGIN_ENV['template_class'];
+  protected bool    $is_valid_request = false;
+  protected array   $request_params   = [];
+  protected ?string $route_path       = null;
+  protected ?array  $title_parts      = null;
+  protected int     $found_items      = 0;
+  protected int     $items_per_page   = 0;
+  protected int     $current_page     = 1;
+  protected int     $max_pages        = 1;
+  protected array   $query_args       = [];
+  protected mixed   $query_result     = null;
+  protected ?string $filter_slug      = null;
+  protected ?string $filter_tax       = null;
 
   public function __construct(protected object $wp_env, protected object $route_request)
   {
     $this->items_per_page = get_settings_value('list_tracks_per_page');
-    $this->request_params['data']  = [];
     $this->request_params['query'] = [
       'string' => $this->route_request->query_string,
       'params' => $this->route_request->query_params,
@@ -77,10 +75,10 @@ abstract class RequestHandler
     }
   }
 
-  protected function get_current_page(array $path_parts, int $path_part_index) : int
+  protected function get_current_page(int $path_part_index) : int
   {
-    return (isset($path_parts[$path_part_index])
-             ? intval($path_parts[$path_part_index])
+    return (isset($this->route_request->path_parts[$path_part_index])
+             ? intval($this->route_request->path_parts[$path_part_index])
              : 1);
   }
 
@@ -196,7 +194,7 @@ abstract class RequestHandler
     require get_template_directory() . PLUGIN_ENV['template_file_path'] . $this->template_file;
 
     $template_class = PLUGIN_ENV['template_class_path'] . $this->template_class;
-    $template = new $template_class($this);
+    $template = new $template_class($this->request_params, $this->query_result);
     $template->render();
 
     $this->end_output();

@@ -33,7 +33,6 @@ use function Ultrafunk\Plugin\Globals\ {
 function set_request_session_vars(array $session_vars) : array
 {
   $params = get_request_params();
-  $data   = $params['data'];
   $query  = $params['query'];
   $path   = isset($params['route_path']) ? $params['route_path'] : '';
 
@@ -60,10 +59,10 @@ function set_request_session_vars(array $session_vars) : array
     if ($params['current_page'] === 2)
       $session_vars['prevPage'] = '/' . $path . '/';
   }
-  else if (isset($data['first_letter']))
+  else if (isset($query['first_letter']))
   {
-    $letters = $data['letters_range'];
-    $index   = array_search($data['first_letter'], $letters);
+    $letters = $query['letters_range'];
+    $index   = array_search($query['first_letter'], $letters);
 
     if ($index === 0)
     {

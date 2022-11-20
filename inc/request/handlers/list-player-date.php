@@ -24,7 +24,7 @@ class ListPlayerDate extends \Ultrafunk\Plugin\Request\RequestHandler
     {
       $this->route_path   = "list/$year/{$this->route_request->path_parts[2]}";
       $this->title_parts  = ['prefix' => 'Channel', 'title' => date('F Y', mktime(0, 0, 0, $month, 1, $year))];
-      $this->current_page = $this->get_current_page($this->route_request->path_parts, 4);
+      $this->current_page = $this->get_current_page(4);
       $this->query_args   = ['date_query' => ['year' => $year, 'month' => $month]];
 
       return true;
