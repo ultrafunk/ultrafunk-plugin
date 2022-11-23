@@ -15,7 +15,7 @@ class ListPlayerShuffle extends \Ultrafunk\Plugin\Request\RequestHandler
 {
   protected function has_valid_request_params() : bool
   {
-    $this->request_params['get'] = ['list_player' => 'shuffle'];
+    $this->params->get = ['list_player' => 'shuffle'];
 
     // Shift array to fit request-shuffle format = remove the first 'player' url part
     array_shift($this->route_request->path_parts);
@@ -28,15 +28,15 @@ class ListPlayerShuffle extends \Ultrafunk\Plugin\Request\RequestHandler
     {
       $shuffle_params = \Ultrafunk\Plugin\Globals\get_request_params();
 
-      $this->request_params['get']['shuffle_type'] = $shuffle_params['type'];
-      $this->request_params['get']['shuffle_slug'] = $shuffle_params['slug'];
+      $this->params->get['shuffle_type'] = $shuffle_params->type;
+      $this->params->get['shuffle_slug'] = $shuffle_params->slug;
 
-      $this->items_per_page = \Ultrafunk\Plugin\Globals\get_globals_prop('list_per_page');
-      $this->route_path     = 'list/shuffle/' . $shuffle_params['path'];
-      $title                = ($shuffle_params['type'] === 'all') ? 'All Tracks' : $shuffle_params['slug_name'];
-      $this->title_parts    = ['prefix' => 'Shuffle', 'title' => $title];
-      $this->current_page   = $this->wp_env->query_vars['paged'];
-      $this->query_args     = $this->wp_env->query_vars;
+      $this->params->items_per_page = \Ultrafunk\Plugin\Globals\get_globals_prop('list_per_page');
+      $this->params->route_path     = 'list/shuffle/' . $shuffle_params->path;
+      $title                        = ($shuffle_params->type === 'all') ? 'All Tracks' : $shuffle_params->slug_name;
+      $this->params->title_parts    = ['prefix' => 'Shuffle', 'title' => $title];
+      $this->params->current_page   = $this->wp_env->query_vars['paged'];
+      $this->query_args             = $this->wp_env->query_vars;
 
       return true;
     }

@@ -76,7 +76,7 @@ function set_data(int $max_entries = 10, bool $create_log = false) : array
     $log_entries .= log_transient_data($top_artists);
   }
 
-  return [ 'time' => round(($end_time - $start_time), 3), 'log' => $log_entries ];
+  return ['time' => round(($end_time - $start_time), 3), 'log' => $log_entries];
 }
 
 function log_transient_data(array $top_artists) : string

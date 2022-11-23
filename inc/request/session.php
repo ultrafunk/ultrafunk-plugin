@@ -33,30 +33,30 @@ use function Ultrafunk\Plugin\Globals\ {
 function set_request_session_vars(array $session_vars) : array
 {
   $params = get_request_params();
-  $query  = $params['query'];
-  $path   = isset($params['route_path']) ? $params['route_path'] : '';
+  $query  = $params->query;
+  $path   = isset($params->route_path) ? $params->route_path : '';
 
-  $session_vars['params']      = $params['get'];
-  $session_vars['currentPage'] = $params['current_page'];
-  $session_vars['maxPages']    = $params['max_pages'];
+  $session_vars['params']      = $params->get;
+  $session_vars['currentPage'] = $params->current_page;
+  $session_vars['maxPages']    = $params->max_pages;
 
-  if (isset($params['max_pages']) && ($params['max_pages'] > 1))
+  if ($params->max_pages > 1)
   {
-    if ($params['current_page'] === 1)
+    if ($params->current_page === 1)
     {
-      $session_vars['nextPage'] = '/' . $path . '/page/' . ($params['current_page'] + 1) . '/';
+      $session_vars['nextPage'] = '/' . $path . '/page/' . ($params->current_page + 1) . '/';
     }
-    else if ($params['current_page'] < $params['max_pages'])
+    else if ($params->current_page < $params->max_pages)
     {
-      $session_vars['prevPage'] = '/' . $path . '/page/' . ($params['current_page'] - 1) . '/';
-      $session_vars['nextPage'] = '/' . $path . '/page/' . ($params['current_page'] + 1) . '/';
+      $session_vars['prevPage'] = '/' . $path . '/page/' . ($params->current_page - 1) . '/';
+      $session_vars['nextPage'] = '/' . $path . '/page/' . ($params->current_page + 1) . '/';
     }
     else
     {
-      $session_vars['prevPage'] = '/' . $path . '/page/' . ($params['current_page'] - 1) . '/';
+      $session_vars['prevPage'] = '/' . $path . '/page/' . ($params->current_page - 1) . '/';
     }
 
-    if ($params['current_page'] === 2)
+    if ($params->current_page === 2)
       $session_vars['prevPage'] = '/' . $path . '/';
   }
   else if (isset($query['first_letter']))
@@ -162,9 +162,9 @@ function get_shuffle_path() : string
     $request_path = '/list/shuffle/all/';
 
     if (is_shuffle(PLAYER_TYPE::LIST))
-      $request_path = '/' . $params['route_path'] . '/';
+      $request_path = '/' . $params->route_path . '/';
     else if (is_list_player('channel') || is_list_player('artist'))
-      $request_path = '/' . str_ireplace('list/', 'list/shuffle/', $params['route_path']) . '/';
+      $request_path = '/' . str_ireplace('list/', 'list/shuffle/', $params->route_path) . '/';
 
     return $request_path;
   }
@@ -173,7 +173,7 @@ function get_shuffle_path() : string
 
   if (is_shuffle(PLAYER_TYPE::GALLERY))
   {
-    $request_path = '/shuffle/' . $params['path'] . '/';
+    $request_path = '/shuffle/' . $params->path . '/';
   }
   else
   {

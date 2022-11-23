@@ -31,7 +31,7 @@ class Globals
   // Each prop has getter function for fast access
   public static array   $settings        = [];
   public static bool    $is_custom_query = false;
-  public static array   $request_params  = [];
+  public static ?object $request_params  = null;
   public static array   $session_vars    = [];
   public static ?string $cached_title    = null;
   public static ?string $cached_home_url = null;
@@ -83,12 +83,12 @@ function set_is_custom_query(bool $value = true) : void
   Globals::$is_custom_query = $value;
 }
 
-function get_request_params() : array
+function get_request_params() : ?object
 {
   return Globals::$request_params;
 }
 
-function set_request_params(array $params) : void
+function set_request_params(object $params) : void
 {
   Globals::$request_params = $params;
 }
@@ -110,10 +110,10 @@ function set_session_vars(array $session_vars) : void
 function is_request(string $request, string $type, ?string $query = null) : bool
 {
   if ($query === null)
-    return isset(Globals::$request_params[$request][$type]);
+    return isset(Globals::$request_params->$request[$type]);
 
-  return (!empty(Globals::$request_params[$request][$type]) &&
-         (Globals::$request_params[$request][$type] === $query));
+  return (!empty(Globals::$request_params->$request[$type]) &&
+         (Globals::$request_params->$request[$type] === $query));
 }
 
 function is_termlist(string $query = null) : bool
@@ -129,7 +129,7 @@ function is_list_player(string $query = null) : bool
 function is_shuffle(int $player_type = PLAYER_TYPE::NONE) : bool
 {
   if ($player_type === PLAYER_TYPE::GALLERY)
-    return !empty(Globals::$request_params['is_shuffle']);
+    return !empty(Globals::$request_params->is_shuffle);
 
   if ($player_type === PLAYER_TYPE::LIST)
     return is_request('get', 'list_player', 'shuffle');

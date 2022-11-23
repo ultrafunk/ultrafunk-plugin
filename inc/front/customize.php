@@ -61,7 +61,7 @@ add_action('after_setup_theme', '\Ultrafunk\Plugin\Front\Customize\remove_wp_blo
 function add_tracks_to_feed(array $query_vars) : array
 {
   if (isset($query_vars['feed']))
-    $query_vars['post_type'] = [ 'post', 'uf_track' ];
+    $query_vars['post_type'] = ['post', 'uf_track'];
 
   return $query_vars;
 }

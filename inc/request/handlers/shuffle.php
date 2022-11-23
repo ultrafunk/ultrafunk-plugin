@@ -32,14 +32,7 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
   private bool $shuffle_slug      = false;
   private bool $shuffle_slug_page = false;
 
-  public array $params = [
-    'is_shuffle' => true,
-    'type'       => 'all',
-    'slug'       => null,
-    'slug_name'  => null,
-    'path'       => 'all',
-    'page_num'   => 0,
-  ];
+  public ?object $params = null;
 
   //
   // Constructor -- Set all private class data / variables
@@ -47,6 +40,15 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
   public function __construct(object $wp_env, object $route_request)
   {
     parent::__construct($wp_env, $route_request);
+
+    $this->params = (object) [
+      'is_shuffle' => true,
+      'type'       => 'all',
+      'slug'       => null,
+      'slug_name'  => null,
+      'path'       => 'all',
+      'page_num'   => 0,
+    ];
 
     switch ($route_request->matched_route)
     {
@@ -56,25 +58,25 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
 
       case 'shuffle_all_page':
         $this->shuffle_all_page   = true;
-        $this->params['page_num'] = intval($route_request->path_parts[3]);
+        $this->params->page_num = intval($route_request->path_parts[3]);
         break;
 
       case 'shuffle_slug':
         $this->shuffle_slug   = true;
-        $this->params['slug'] = sanitize_title($route_request->path_parts[2]);
+        $this->params->slug = sanitize_title($route_request->path_parts[2]);
         break;
 
       case 'shuffle_slug_page':
         $this->shuffle_slug_page  = true;
-        $this->params['slug']     = sanitize_title($route_request->path_parts[2]);
-        $this->params['page_num'] = intval($route_request->path_parts[4]);
+        $this->params->slug     = sanitize_title($route_request->path_parts[2]);
+        $this->params->page_num = intval($route_request->path_parts[4]);
         break;
     }
 
-    $this->params['type'] = sanitize_title($route_request->path_parts[1]);
+    $this->params->type = sanitize_title($route_request->path_parts[1]);
 
     if ($this->shuffle_slug || $this->shuffle_slug_page)
-      $this->params['path'] = ($this->params['type'] . '/' . $this->params['slug']);
+      $this->params->path = ($this->params->type . '/' . $this->params->slug);
   }
 
   protected function has_valid_request_params() : bool
@@ -99,7 +101,7 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
         $transient = get_transient(get_shuffle_transient_name());
 
         // We got a stored transient, check if it is the correct one for this request (path match)
-        if (($transient !== false) && ($this->params['path'] !== $transient['shuffle_path']))
+        if (($transient !== false) && ($this->params->path !== $transient['shuffle_path']))
           $transient = false;
 
         perf_stop('get_rnd_transient', 'get_rnd_transient_start');
@@ -120,7 +122,7 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
 
         // ToDo: Needs to be updated to work as all the list-nnn.php classes,
         // currently it is a mix of old and new...
-        if (!isset($this->request_params['get']))
+        if (!isset($this->params->get))
           $this->is_valid_request = true;
 
         return true;
@@ -165,9 +167,9 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
     {
       $args['tax_query'] = [
         [
-          'taxonomy' => 'uf_' . $this->params['type'],
+          'taxonomy' => 'uf_' . $this->params->type,
           'field'    => 'slug',
-          'terms'    => $this->params['slug'],
+          'terms'    => $this->params->slug,
         ]
       ];
     }
@@ -180,10 +182,10 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
   //
   private function set_slug_name() : void
   {
-    $wp_term = get_term_by('slug', $this->params['slug'], 'uf_' . $this->params['type']);
+    $wp_term = get_term_by('slug', $this->params->slug, 'uf_' . $this->params->type);
 
     if ($wp_term !== false)
-      $this->params['slug_name'] = $wp_term->name;
+      $this->params->slug_name = $wp_term->name;
   }
 
   //
@@ -191,7 +193,7 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
   //
   private function create_transient() : mixed
   {
-    $posts_array['shuffle_path'] = $this->params['path'];
+    $posts_array['shuffle_path'] = $this->params->path;
     $posts_array['post_ids']     = get_posts($this->get_posts_query_args());
 
     if (!empty($posts_array['post_ids']) && (shuffle($posts_array['post_ids']) === true))
@@ -225,7 +227,7 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
       return 1;
 
     if ($this->shuffle_all_page || $this->shuffle_slug_page)
-      $page_num = $this->params['page_num'];
+      $page_num = $this->params->page_num;
 
     if (($page_num >= 1) && ($page_num < $max_page_num))
       return $page_num;

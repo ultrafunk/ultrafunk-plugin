@@ -8,6 +8,8 @@
 namespace Ultrafunk\Plugin\Request;
 
 
+use stdClass;
+
 use const Ultrafunk\Plugin\Constants\PLUGIN_ENV;
 
 use function Ultrafunk\Plugin\Globals\ {
@@ -20,58 +22,51 @@ use function Ultrafunk\Plugin\Globals\ {
 /**************************************************************************************************************************/
 
 
+class RequestParams
+{
+  public ?string $route_path       = null;
+  public ?array  $title_parts      = null;
+  public int     $found_items      = 0;
+  public int     $items_per_page   = 0;
+  public int     $current_page     = 1;
+  public int     $max_pages        = 1;
+  public ?array  $get              = null;
+  public ?array  $query            = null;
+  public array   $filter           = ['slug' => null, 'taxonomy' => null];
+
+  public function __construct(?string $query_string, ?array $query_params)
+  {
+    $this->items_per_page = get_settings_value('list_tracks_per_page');
+    $this->query = ['string' => $query_string, 'params' => $query_params];
+  }
+}
+
+
+/**************************************************************************************************************************/
+
+
 abstract class RequestHandler
 {
+  protected bool    $is_valid_request = false;
   protected string  $template_file    = PLUGIN_ENV['template_file'];
   protected string  $template_class   = PLUGIN_ENV['template_class'];
-  protected bool    $is_valid_request = false;
-  protected array   $request_params   = [];
-  protected ?string $route_path       = null;
-  protected ?array  $title_parts      = null;
-  protected int     $found_items      = 0;
-  protected int     $items_per_page   = 0;
-  protected int     $current_page     = 1;
-  protected int     $max_pages        = 1;
   protected array   $query_args       = [];
   protected mixed   $query_result     = null;
-  protected ?string $filter_slug      = null;
-  protected ?string $filter_tax       = null;
+  public    ?object $params           = null;
 
   public function __construct(protected object $wp_env, protected object $route_request)
   {
-    $this->items_per_page = get_settings_value('list_tracks_per_page');
-    $this->request_params['query'] = [
-      'string' => $this->route_request->query_string,
-      'params' => $this->route_request->query_params,
-    ];
+    $this->params = new RequestParams($route_request->query_string, $route_request->query_params);
   }
 
   abstract protected function has_valid_request_params() : bool;
-
-  protected function set_request_params() : void
-  {
-    $this->request_params['route_path']     = $this->route_path;
-    $this->request_params['title_parts']    = $this->title_parts;
-    $this->request_params['found_items']    = $this->found_items;
-    $this->request_params['items_per_page'] = $this->items_per_page;
-    $this->request_params['current_page']   = $this->current_page;
-    $this->request_params['max_pages']      = $this->max_pages;
-
-    if (($this->filter_slug !== null) && ($this->filter_tax !== null))
-    {
-      $this->request_params['filter']['slug']     = $this->filter_slug;
-      $this->request_params['filter']['taxonomy'] = $this->filter_tax;
-    }
-
-    \Ultrafunk\Plugin\Globals\set_request_params($this->request_params);
-  }
 
   protected function set_filter_params(string $key, string $taxonomy = null) : void
   {
     if (isset($this->route_request->query_params[$key]))
     {
-      $this->filter_slug = sanitize_title($this->route_request->query_params[$key]);
-      $this->filter_tax  = $taxonomy;
+      $this->params->filter['slug']     = sanitize_title($this->route_request->query_params[$key]);
+      $this->params->filter['taxonomy'] = $taxonomy;
     }
   }
 
@@ -110,13 +105,13 @@ abstract class RequestHandler
   private function add_filter_query_args() : void
   {
     // Append filter (AND) second taxonomy term(s) if present
-    if (($this->filter_slug !== null) && ($this->filter_tax !== null))
+    if (($this->params->filter['slug'] !== null) && ($this->params->filter['taxonomy'] !== null))
     {
-      $this->query_args['tax_query']    += [ 'relation' => 'AND' ];
+      $this->query_args['tax_query']    += ['relation' => 'AND'];
       $this->query_args['tax_query'][1]  = [
-        'taxonomy' => $this->filter_tax,
         'field'    => 'slug',
-        'terms'    => $this->filter_slug,
+        'terms'    => $this->params->filter['slug'],
+        'taxonomy' => $this->params->filter['taxonomy'],
       ];
     }
   }
@@ -125,21 +120,21 @@ abstract class RequestHandler
   {
     if ($this->has_valid_request_params())
     {
-      if (isset($this->request_params['get']['list_player']))
+      if (isset($this->params->get['list_player']))
       {
         $this->query_args['post_type']        = 'uf_track';
-        $this->query_args['paged']            = $this->current_page;
-        $this->query_args['posts_per_page']   = $this->items_per_page;
+        $this->query_args['paged']            = $this->params->current_page;
+        $this->query_args['posts_per_page']   = $this->params->items_per_page;
         $this->query_args['suppress_filters'] = $this->query_args['suppress_filters'] ?? true;
 
         $wp_query_result = $this->request_query('WP_Query');
 
-        $this->query_result     = $wp_query_result->posts;
-        $this->found_items      = $wp_query_result->found_posts;
-        $this->max_pages        = $this->get_max_pages($wp_query_result->found_posts, $this->items_per_page);
-        $this->is_valid_request = $wp_query_result->have_posts();
+        $this->query_result        = $wp_query_result->posts;
+        $this->params->found_items = $wp_query_result->found_posts;
+        $this->params->max_pages   = $this->get_max_pages($wp_query_result->found_posts, $this->params->items_per_page);
+        $this->is_valid_request    = $wp_query_result->have_posts();
       }
-      else if (isset($this->request_params['get']['termlist']))
+      else if (isset($this->params->get['termlist']))
       {
         $this->query_args['hide_empty'] = true;
 
@@ -147,9 +142,9 @@ abstract class RequestHandler
 
         if ($wp_term_query_result->terms !== null)
         {
-          $this->found_items      = count($wp_term_query_result->terms);
-          $this->query_result     = $wp_term_query_result->terms;
-          $this->is_valid_request = true;
+          $this->params->found_items = count($wp_term_query_result->terms);
+          $this->query_result        = $wp_term_query_result->terms;
+          $this->is_valid_request    = true;
         }
       }
     }
@@ -162,7 +157,7 @@ abstract class RequestHandler
   private function begin_output() : void
   {
     // Show debug info for this request
-    //console_log($this->request_params);
+    //console_log(\Ultrafunk\Plugin\Globals\get_request_params());
 
     // Output HTTP headers
     $this->wp_env->send_headers();
@@ -186,7 +181,7 @@ abstract class RequestHandler
   private function render_valid_response() : void
   {
     // Set public parameters for this request
-    $this->set_request_params();
+    \Ultrafunk\Plugin\Globals\set_request_params($this->params);
 
     $this->begin_output();
 
@@ -194,7 +189,7 @@ abstract class RequestHandler
     require get_template_directory() . PLUGIN_ENV['template_file_path'] . $this->template_file;
 
     $template_class = PLUGIN_ENV['template_class_path'] . $this->template_class;
-    $template = new $template_class($this->request_params, $this->query_result);
+    $template = new $template_class($this->params, $this->query_result);
     $template->render();
 
     $this->end_output();
@@ -203,18 +198,20 @@ abstract class RequestHandler
   private function render_error_response() : void
   {
     global $wp_query;
-    $response_params = array('response' => $this->request_params['get']);
+    $response_params = new stdClass();
+    $response_params->response = $this->params->get;
+    $response_params->query    = $this->params->query;
 
     // Setup global $wp_query so it contains relevant data to handle this request failure...
-    if (current($this->request_params['get']) === 'search')
+    if (current($this->params->get) === 'search')
     {
-      $response_params['error']  = ['http_status' => 200, 'details' => 'No search matches'];
+      $response_params->error    = ['http_status' => 200, 'details' => 'No search matches'];
       $wp_query->is_search       = true;
       $wp_query->query_vars['s'] = $this->route_request->query_params['s'];
     }
     else
     {
-      $response_params['error'] = ['http_status' => 404, 'details' => 'Page not found'];
+      $response_params->error = ['http_status' => 404, 'details' => 'Page not found'];
       $wp_query->set_404();
       status_header(404);
     }
@@ -228,7 +225,7 @@ abstract class RequestHandler
 
   public function render_content() : bool
   {
-    if (!empty($this->request_params['get']))
+    if (isset($this->params->get))
     {
       if ($this->is_valid_request)
         $this->render_valid_response();

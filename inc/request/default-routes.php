@@ -19,7 +19,7 @@ const DEFAULT_ROUTES =
 */
 
   [
-    'route_uids'    => [ 'list/channel/soundcloud', 'list/shuffle/channel/soundcloud' ],
+    'route_uids'    => ['list/channel/soundcloud', 'list/shuffle/channel/soundcloud'],
     'handler_file'  => 'redirect-route.php',
     'handler_class' => 'RedirectRoute',
     'routes' => [
@@ -35,7 +35,7 @@ const DEFAULT_ROUTES =
 */
 
   [
-    'route_uids'    => [ '===list', 'list/page/' ],
+    'route_uids'    => ['===list', 'list/page/'],
     'handler_file'  => 'list-player-all.php',
     'handler_class' => 'ListPlayerAll',
     'routes' => [
@@ -44,7 +44,7 @@ const DEFAULT_ROUTES =
     ]
   ],
   [
-    'route_uids'    => [ 'shuffle/' ],
+    'route_uids'    => ['shuffle/'],
     'handler_file'  => 'shuffle.php',
     'handler_class' => 'Shuffle',
     'routes' => [
@@ -55,7 +55,7 @@ const DEFAULT_ROUTES =
     ]
   ],
   [
-    'route_uids'    => [ 'artists' ],
+    'route_uids'    => ['artists'],
     'handler_file'  => 'termlist-artists.php',
     'handler_class' => 'TermlistArtists',
     'routes' => [
@@ -64,7 +64,7 @@ const DEFAULT_ROUTES =
     ]
   ],
   [
-    'route_uids'    => [ '===channels' ],
+    'route_uids'    => ['===channels'],
     'handler_file'  => 'termlist-channels.php',
     'handler_class' => 'TermlistChannels',
     'routes' => [
@@ -72,7 +72,7 @@ const DEFAULT_ROUTES =
     ]
   ],
   [
-    'route_uids'    => [ 'list/artist/', 'list/channel/' ],
+    'route_uids'    => ['list/artist/', 'list/channel/'],
     'handler_file'  => 'list-player-artist-channel.php',
     'handler_class' => 'ListPlayerArtistChannel',
     'routes' => [
@@ -83,7 +83,7 @@ const DEFAULT_ROUTES =
     ]
   ],
   [
-    'route_uids'    => [ 'list/20' ],
+    'route_uids'    => ['list/20'],
     'handler_file'  => 'list-player-date.php',
     'handler_class' => 'ListPlayerDate',
     'routes' => [
@@ -92,7 +92,7 @@ const DEFAULT_ROUTES =
     ]
   ],
   [
-    'route_uids'    => [ 'list/shuffle/' ],
+    'route_uids'    => ['list/shuffle/'],
     'handler_file'  => 'list-player-shuffle.php',
     'handler_class' => 'ListPlayerShuffle',
     'routes' => [
@@ -103,7 +103,7 @@ const DEFAULT_ROUTES =
     ]
   ],
   [
-    'route_uids'    => [ 'list/search' ],
+    'route_uids'    => ['list/search'],
     'handler_file'  => 'list-player-search.php',
     'handler_class' => 'ListPlayerSearch',
     'routes' => [
