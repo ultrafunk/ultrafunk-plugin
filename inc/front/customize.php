@@ -56,6 +56,15 @@ function remove_wp_block_library() : void
 add_action('after_setup_theme', '\Ultrafunk\Plugin\Front\Customize\remove_wp_block_library', 10, 0);
 
 //
+// Remove /wp-includes/css/classic-themes.min.css that is added by default in WP 6.1
+//
+function remove_classic_theme_styles()
+{
+  wp_dequeue_style('classic-theme-styles');
+}
+add_action('wp_enqueue_scripts', '\Ultrafunk\Plugin\Front\Customize\remove_classic_theme_styles');
+
+//
 // Show Tracks in site RSS feed
 //
 function add_tracks_to_feed(array $query_vars) : array
