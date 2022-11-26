@@ -22,7 +22,7 @@ class RedirectRoute extends \Ultrafunk\Plugin\Request\RequestHandler
         exit;
 
       case 'channel_soundcloud_page':
-        wp_redirect("/channel/soundcloud/page/{$this->get_current_page(4)}/", 302);
+        wp_redirect("/channel/soundcloud/page/{$this->params->current_page}/", 302);
         exit;
 
       case 'shuffle_channel_soundcloud':
@@ -30,7 +30,7 @@ class RedirectRoute extends \Ultrafunk\Plugin\Request\RequestHandler
         exit;
 
       case 'shuffle_channel_soundcloud_page':
-        wp_redirect("/shuffle/channel/soundcloud/page/{$this->get_current_page(5)}/", 302);
+        wp_redirect("/shuffle/channel/soundcloud/page/{$this->params->current_page}/", 302);
         exit;
     }
 

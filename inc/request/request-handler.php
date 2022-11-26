@@ -57,6 +57,7 @@ abstract class RequestHandler
   public function __construct(protected object $wp_env, protected object $route_request)
   {
     $this->params = new RequestParams($route_request->query_string, $route_request->query_params);
+    $this->params->current_page = $this->get_current_page();
   }
 
   abstract protected function has_valid_request_params() : bool;
@@ -70,11 +71,12 @@ abstract class RequestHandler
     }
   }
 
-  protected function get_current_page(int $path_part_index) : int
+  protected function get_current_page() : int
   {
-    return (isset($this->route_request->path_parts[$path_part_index])
-             ? intval($this->route_request->path_parts[$path_part_index])
-             : 1);
+    if (1 === preg_match('/\/page\/(?!0)\d{1,6}$/', $this->route_request->request_path, $matches))
+      return (int)(explode('/', $matches[0])[2]);
+
+    return 1;
   }
 
   protected function get_max_pages(int $item_count, int $items_per_page) : int

@@ -22,9 +22,9 @@ use function Ultrafunk\Plugin\Globals\ {
 
 class RouteRequest
 {
-  private ?string $server_url   = null;
-  private ?string $request_path = null;
+  private ?string $server_url = null;
 
+  public ?string $request_path  = null;
   public ?array  $path_parts    = null;
   public ?string $query_string  = null;
   public array   $query_params  = [];

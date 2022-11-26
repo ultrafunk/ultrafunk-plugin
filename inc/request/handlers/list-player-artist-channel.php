@@ -48,10 +48,8 @@ class ListPlayerArtistChannel extends \Ultrafunk\Plugin\Request\RequestHandler
     if (($wp_term !== false) && ($wp_term->count > 0))
     {
       $this->params->query['term_id'] = $wp_term->term_id;
-
-      $this->params->route_path   = 'list/' . strtolower($title_prefix) . '/' . $slug;
-      $this->params->title_parts  = ['prefix' => $title_prefix, 'title' => $wp_term->name];
-      $this->params->current_page = $this->get_current_page(4);
+      $this->params->route_path  = 'list/' . strtolower($title_prefix) . '/' . $slug;
+      $this->params->title_parts = ['prefix' => $title_prefix, 'title' => $wp_term->name];
 
       $this->query_args = [
         'tax_query' => [
