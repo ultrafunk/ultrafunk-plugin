@@ -1,7 +1,8 @@
 <?php declare(strict_types=1);
 /*
-* Ultrafunk custom REST functions, actions and filters
-*/
+ * Ultrafunk custom REST functions, actions and filters
+ *
+ */
 
 
 namespace Ultrafunk\Plugin\Custom\Rest;

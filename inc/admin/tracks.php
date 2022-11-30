@@ -1,7 +1,8 @@
 <?php declare(strict_types=1);
 /*
-* Track admin functions (On new, update & save)
-*/
+ * Track admin functions (On new, update & save)
+ *
+ */
 
 
 namespace Ultrafunk\Plugin\Admin\Tracks;

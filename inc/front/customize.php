@@ -1,7 +1,8 @@
 <?php declare(strict_types=1);
 /*
-* Customize frontend stuff
-*/
+ * Customize frontend stuff
+ *
+ */
 
 
 namespace Ultrafunk\Plugin\Front\Customize;

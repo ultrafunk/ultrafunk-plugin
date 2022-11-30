@@ -1,7 +1,8 @@
 <?php declare(strict_types=1);
 /*
-* Ultrafunk custom post and taxonomy types
-*/
+ * Ultrafunk custom post and taxonomy types
+ *
+ */
 
 
 namespace Ultrafunk\Plugin\Custom\Types;

@@ -1,9 +1,8 @@
 <?php declare(strict_types=1);
 /*
-*
-* Customize admin interface
-*
-*/
+ * Customize admin interface
+ *
+ */
 
 
 namespace Ultrafunk\Plugin\Admin\Customize;

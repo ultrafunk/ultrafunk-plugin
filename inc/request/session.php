@@ -15,7 +15,7 @@ use Ultrafunk\Plugin\Constants\PLAYER_TYPE;
 use const Ultrafunk\Plugin\Constants\PLUGIN_ENV;
 
 use function Ultrafunk\Plugin\Globals\ {
-  get_globals_prop,
+  get_global,
   get_settings_value,
   is_list_player,
   is_shuffle,
@@ -106,8 +106,8 @@ function get_session_vars() : array
     'prevPage'       => null,
     'nextPage'       => null,
     'shufflePath'    => esc_url(PLUGIN_ENV['site_url'] . get_shuffle_path()),
-    'listPerPage'    => $is_user_per_page ? get_globals_prop('list_per_page')    : get_settings_value('list_tracks_per_page'),
-    'galleryPerPage' => $is_user_per_page ? get_globals_prop('gallery_per_page') : get_settings_value('gallery_tracks_per_page'),
+    'listPerPage'    => $is_user_per_page ? get_global('list_per_page')    : get_settings_value('list_tracks_per_page'),
+    'galleryPerPage' => $is_user_per_page ? get_global('gallery_per_page') : get_settings_value('gallery_tracks_per_page'),
   ];
 
   // Return defaults because get_next_posts_link() returns results even when a 404 happens

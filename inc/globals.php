@@ -43,7 +43,7 @@ class Globals
     'route_request'        => 0,
   ];
 
-  // Use get_globals_prop('prop_name') for these
+  // Use get_global('prop_name') for these
   public static int $preferred_player = 0;
   public static int $list_per_page    = 0;
   public static int $gallery_per_page = 0;
@@ -63,7 +63,7 @@ class Globals
 /**************************************************************************************************************************/
 
 
-function get_globals_prop(string $property) : mixed
+function get_global(string $property) : mixed
 {
   return Globals::$$property;
 }
