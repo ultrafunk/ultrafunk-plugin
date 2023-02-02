@@ -205,7 +205,7 @@ abstract class RequestHandler
     $response_params->query    = $this->params->query;
 
     // Setup global $wp_query so it contains relevant data to handle this request failure...
-    if (current($this->params->get) === 'search')
+    if ((current($this->params->get) === 'search') && !empty($this->route_request->query_params['s']))
     {
       $response_params->error    = ['http_status' => 200, 'details' => 'No search matches'];
       $wp_query->is_search       = true;
