@@ -13,7 +13,7 @@ namespace Ultrafunk\Plugin\Admin\Settings;
 
 function add_menu_item() : void
 {
-	add_menu_page(
+  add_menu_page(
     'Ultrafunk',
     'Ultrafunk',
     'manage_options',
@@ -46,7 +46,7 @@ function plugin_settings() : void
     ?><div class="updated"><p>Settings updated</p></div><?php
   }
 
-	if (isset($_POST['uf-save-top-artists']) && is_valid_nonce('top_artists'))
+  if (isset($_POST['uf-save-top-artists']) && is_valid_nonce('top_artists'))
   {
     $uf_settings['channels_num_top_artists'] = get_post_value('channels_num_top_artists');
     $uf_settings['show_top_artists_log']     = get_post_string('show_top_artists_log');
@@ -66,8 +66,8 @@ function plugin_settings() : void
 
 function get_settings() : array
 {
-	$settings        = \Ultrafunk\Plugin\Constants\DEFAULT_SETTINGS;
-	$stored_settings = get_option("uf_settings");
+  $settings        = \Ultrafunk\Plugin\Constants\DEFAULT_SETTINGS;
+  $stored_settings = get_option("uf_settings");
 
   if (!empty($stored_settings))
   {

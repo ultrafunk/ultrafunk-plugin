@@ -44,10 +44,10 @@ add_action('admin_menu', '\Ultrafunk\Plugin\Admin\Customize\swap_menu_items');
 //
 function dashboard_tracks_count(array $data) : array
 {
-	$count  = wp_count_posts('uf_track');
-	$data[] = "<a href='/wp-admin/edit.php?post_type=uf_track'>$count->publish Tracks</a>";
+  $count  = wp_count_posts('uf_track');
+  $data[] = "<a href='/wp-admin/edit.php?post_type=uf_track'>$count->publish Tracks</a>";
 
-	return $data;
+  return $data;
 }
 add_filter('dashboard_glance_items', '\Ultrafunk\Plugin\Admin\Customize\dashboard_tracks_count');
 

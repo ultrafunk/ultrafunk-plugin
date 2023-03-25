@@ -157,10 +157,16 @@ class RouteRequest
 
 //
 // wp_is_rest_request() does not work until AFTER do_parse_request(): https://core.trac.wordpress.org/ticket/42061
+// Based on WooCommerce: https://github.com/woocommerce/woocommerce/blob/a8fff3175ccbb460dd0d1be1aefccf4488498105/plugins/woocommerce/includes/class-woocommerce.php#L357
 //
 function is_rest_request() : bool
 {
-  return (isset($_SERVER['REQUEST_URI']) && (strpos($_SERVER['REQUEST_URI'], rest_get_url_prefix()) !== false));
+  if (empty($_SERVER['REQUEST_URI']))
+    return false;
+
+  $rest_prefix = trailingslashit(rest_get_url_prefix());
+
+  return (strpos($_SERVER['REQUEST_URI'], $rest_prefix) !== false);
 }
 
 //
@@ -194,6 +200,7 @@ function parse_request(bool $do_parse, object $wp_env) : bool
   perf_start('RouteRequest_start');
 
   if ((is_admin()        === false) &&
+      (wp_doing_cron()   === false) &&
       (wp_doing_ajax()   === false) &&
       (is_rest_request() === false))
   {
