@@ -11,7 +11,7 @@ namespace Ultrafunk\Plugin\Constants;
 /**************************************************************************************************************************/
 
 
-const VERSION = '1.44.83';
+const VERSION = '1.45.0';
 
 const PLUGIN_ENV = [
   'site_url'            => WP_DEBUG ? 'https://wordpress.ultrafunk.com'     : 'https://ultrafunk.com',
@@ -23,12 +23,12 @@ const PLUGIN_ENV = [
   'template_class'      => WP_DEBUG ? 'ListPlayer'                          : 'ListPlayer',
 ];
 
-const DEFAULT_SETTINGS = array(
+const DEFAULT_SETTINGS = [
   'list_tracks_per_page'     => WP_DEBUG ?  25 : 25,
   'gallery_tracks_per_page'  => WP_DEBUG ?  12 : 12,
   'channels_num_top_artists' => WP_DEBUG ?  10 : 10,
   'show_top_artists_log'     => WP_DEBUG ? '1' : '1',
-);
+];
 
 // ToDo: Use PHP enum when v8.1 is ready for use
 abstract class PLAYER_TYPE

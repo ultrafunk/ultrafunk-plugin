@@ -150,7 +150,7 @@ function get_youtube_duration(string $video_id) : int
 
   $api_key = UF_YOUTUBE_DATA_API_KEY;
   $referer = PLUGIN_ENV['site_url'];
-  $options = array('http' => array('header' => array("Referer: $referer\r\n")));
+  $options = ['http' => ['header' => ["Referer: $referer\r\n"]]];
   $context = stream_context_create($options);
 
   $json_result = file_get_contents("https://www.googleapis.com/youtube/v3/videos?id=$video_id&key=$api_key&part=contentDetails&fields=items(contentDetails(duration))", false, $context);

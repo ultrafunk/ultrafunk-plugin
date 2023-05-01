@@ -11,7 +11,7 @@ Tested on servers running LAMP: Linux, Apache, MariaDB / MySQL and PHP.
 **Required:**  
 PHP version 8.0 or greater  
 [WordPress](https://wordpress.org/download/) version 6.0 or greater  
-[Ultrafunk Theme](https://github.com/ultrafunk/ultrafunk-theme/) version 1.44.X or greater  
+[Ultrafunk Theme](https://github.com/ultrafunk/ultrafunk-theme/) version 1.45.X or greater  
 
 **Optional:**  
 [PHP Intelephense](https://intelephense.com/) (PHP code intelligence for Visual Studio Code)  

@@ -83,24 +83,36 @@ add_action('rest_api_init', '\Ultrafunk\Plugin\Custom\Rest\register_custom_post_
 
 
 //
-// uf_track REST API response: Add full artists and channels links to tracks (not just IDs as per REST API defaults)
+// uf_track REST API response: Return full artists and channels links to tracks (not just IDs as per REST API defaults)
 //
 function register_custom_rest_fields() : void
 {
   register_rest_field('uf_track', 'artists_links', [
-    'get_callback' => function($post)
+    'get_callback' => function($post, $attr, $request)
     {
-      $artists = get_object_term_cache($post['id'], 'uf_artist');
-      return get_term_links($artists, '/artist/', ', ', (int)get_post_meta($post['id'], 'track_artist_id', true));
+      $links_path = isset($request['links_path']) ? ('/' . sanitize_title($request['links_path'])) : '';
+      $artists    = get_object_term_cache($post['id'], 'uf_artist');
+
+      // If data is not cached, get from DB
+      if ($artists === false)
+        $artists = wp_get_object_terms($post['id'], 'uf_artist');
+
+      return get_term_links($artists, "$links_path/artist/", ', ', (int)get_post_meta($post['id'], 'track_artist_id', true));
     },
     'schema' => null,
   ]);
 
   register_rest_field('uf_track', 'channels_links', [
-    'get_callback' => function($post)
+    'get_callback' => function($post, $attr, $request)
     {
-      $channels = get_object_term_cache($post['id'], 'uf_channel');
-      return get_term_links($channels, '/channel/', ', ');
+      $links_path = isset($request['links_path']) ? ('/' . sanitize_title($request['links_path'])) : '';
+      $channels   = get_object_term_cache($post['id'], 'uf_channel');
+
+      // If data is not cached, get from DB
+      if ($channels === false)
+        $channels = wp_get_object_terms($post['id'], 'uf_channel');
+
+      return get_term_links($channels, "$links_path/channel/", ', ');
     },
     'schema' => null,
   ]);
@@ -143,7 +155,7 @@ add_filter('rest_uf_track_query', '\Ultrafunk\Plugin\Custom\Rest\rest_uf_track_q
 function get_top_artists(WP_REST_Request $request) : ?array
 {
   $top_artists = get_transient('uf_channels_top_artists');
-  $channel_id  = isset($request['channelId']) ? intval($request['channelId']) : -1;
+  $channel_id  = isset($request['channel_id']) ? intval($request['channel_id']) : -1;
 
   if (($top_artists !== false) && isset($top_artists[$channel_id]))
   {
