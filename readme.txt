@@ -6,7 +6,7 @@ Tested on servers running LAMP: Linux, Apache, MariaDB / MySQL and PHP.
 
 # Dependencies
 **Required:**
-PHP version 8.0 or greater
+PHP version 8.1 or greater
 [WordPress](https://wordpress.org/download/) version 6.0 or greater
 [Ultrafunk Theme](https://github.com/ultrafunk/ultrafunk-theme/) version 1.45.X or greater
 
