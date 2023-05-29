@@ -66,7 +66,7 @@ function plugin_settings() : void
 
 function get_settings() : array
 {
-  $settings        = \Ultrafunk\Plugin\Constants\DEFAULT_SETTINGS;
+  $settings        = \Ultrafunk\Plugin\Storage\DEFAULT_SETTINGS;
   $stored_settings = get_option("uf_settings");
 
   if (!empty($stored_settings))

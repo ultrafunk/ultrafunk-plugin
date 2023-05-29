@@ -8,7 +8,11 @@
 namespace Ultrafunk\Plugin\Request;
 
 
-use const Ultrafunk\Plugin\Constants\PLUGIN_ENV;
+use const Ultrafunk\Plugin\Config\ {
+  IS_PROD_BUILD,
+  PLUGIN_ENV,
+};
+
 use const Ultrafunk\Plugin\Request\DEFAULT_ROUTES;
 
 use function Ultrafunk\Plugin\Globals\ {
@@ -205,8 +209,8 @@ function parse_request(bool $do_parse, object $wp_env) : bool
       (is_rest_request() === false))
   {
     // ToDo: Better solution?
-    // Make sure that only logged in users have access to custom routes when debug is enabled
-    if (WP_DEBUG && (is_user_logged_in() === false))
+    // Only logged in users have access to custom routes on dev
+    if ((IS_PROD_BUILD === false) && (is_user_logged_in() === false))
       return $do_parse;
 
     if (is_valid_permalink_structure() === false)

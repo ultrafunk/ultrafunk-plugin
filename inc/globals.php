@@ -8,12 +8,11 @@
 namespace Ultrafunk\Plugin\Globals;
 
 
-use Ultrafunk\Plugin\Constants\ {
-  PLAYER_TYPE,
-  COOKIE_KEY,
-};
+use Ultrafunk\Plugin\Shared\PLAYER_TYPE;
 
-use function Ultrafunk\Plugin\Shared\get_cookie_value;
+use Ultrafunk\Plugin\Storage\COOKIE_KEY;
+
+use function Ultrafunk\Plugin\Storage\get_cookie_value;
 
 
 /**************************************************************************************************************************/
@@ -51,7 +50,7 @@ class Globals
   // Initialize global props here if needed
   public static function construct() : void
   {
-    self::$settings         = get_option('uf_settings', \Ultrafunk\Plugin\Constants\DEFAULT_SETTINGS);
+    self::$settings         = get_option('uf_settings', \Ultrafunk\Plugin\Storage\DEFAULT_SETTINGS);
     self::$cached_home_url  = esc_url(home_url());
     self::$preferred_player = get_cookie_value(COOKIE_KEY::UF_PREFERRED_PLAYER,  0,  2, PLAYER_TYPE::LIST);
     self::$list_per_page    = get_cookie_value(COOKIE_KEY::UF_LIST_PER_PAGE,    10, 50, get_settings_value('list_tracks_per_page'));

@@ -8,12 +8,9 @@
 namespace Ultrafunk\Plugin\Request\Handler;
 
 
-use Ultrafunk\Plugin\Constants\COOKIE_KEY;
+use Ultrafunk\Plugin\Storage\COOKIE_KEY;
 
-use function Ultrafunk\Plugin\Shared\ {
-  console_log,
-  get_shuffle_transient_name,
-};
+use function Ultrafunk\Plugin\Storage\get_shuffle_transient_name;
 
 use function Ultrafunk\Plugin\Globals\ {
   set_request_params,

@@ -10,9 +10,9 @@ namespace Ultrafunk\Plugin\Request;
 
 use SimpleXMLElement;
 
-use Ultrafunk\Plugin\Constants\PLAYER_TYPE;
+use Ultrafunk\Plugin\Shared\PLAYER_TYPE;
 
-use const Ultrafunk\Plugin\Constants\PLUGIN_ENV;
+use const Ultrafunk\Plugin\Config\PLUGIN_ENV;
 
 use function Ultrafunk\Plugin\Globals\ {
   get_global,

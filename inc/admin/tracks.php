@@ -11,12 +11,9 @@ namespace Ultrafunk\Plugin\Admin\Tracks;
 use DateInterval;
 use DateTime;
 
-use Ultrafunk\Plugin\Constants\TRACK_TYPE;
+use Ultrafunk\Plugin\Shared\TRACK_TYPE;
 
-use const Ultrafunk\Plugin\Constants\ {
-  PLUGIN_ENV,
-  YOUTUBE_VIDEO_ID_REGEX,
-};
+use const Ultrafunk\Plugin\Shared\YOUTUBE_VIDEO_ID_REGEX;
 
 
 /**************************************************************************************************************************/
@@ -149,7 +146,7 @@ function get_youtube_duration(string $video_id) : int
     return 0;
 
   $api_key = UF_YOUTUBE_DATA_API_KEY;
-  $referer = PLUGIN_ENV['site_url'];
+  $referer = \Ultrafunk\Plugin\Config\PLUGIN_ENV['site_url'];
   $options = ['http' => ['header' => ["Referer: $referer\r\n"]]];
   $context = stream_context_create($options);
 

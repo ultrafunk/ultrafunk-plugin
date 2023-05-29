@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /*
- * Shared plugin + theme functions
+ * Shared plugin + theme constants and functions
  *
  */
 
@@ -8,7 +8,27 @@
 namespace Ultrafunk\Plugin\Shared;
 
 
-use Ultrafunk\Plugin\Constants\COOKIE_KEY;
+/**************************************************************************************************************************/
+
+
+// ToDo: Use PHP enum when v8.1 is ready for use
+abstract class PLAYER_TYPE
+{
+  const NONE    = 0;
+  const GALLERY = 1;
+  const LIST    = 2;
+}
+
+// ToDo: Use PHP enum when v8.1 is ready for use
+abstract class TRACK_TYPE
+{
+  const NONE       = 0;
+  const YOUTUBE    = 1;
+  const SOUNDCLOUD = 2;
+}
+
+// https://webapps.stackexchange.com/a/101153
+const YOUTUBE_VIDEO_ID_REGEX = '/[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]/';
 
 
 /**************************************************************************************************************************/
@@ -19,40 +39,8 @@ use Ultrafunk\Plugin\Constants\COOKIE_KEY;
 //
 function console_log(mixed $output) : void
 {
-  if (WP_DEBUG)
+  if (\Ultrafunk\Plugin\Config\IS_DEBUG)
     echo '<script>console.log(' . json_encode($output, JSON_HEX_TAG) . ');</script>';
-}
-
-//
-// Get named cookie value if it exists with range check and default value
-//
-function get_cookie_value(string $cookie_name, int $min_val, int $max_val, int $default_val) : int
-{
-  if (isset($_COOKIE[$cookie_name]))
-  {
-    $cookie_val = intval($_COOKIE[$cookie_name]);
-
-    if (($cookie_val >= $min_val) && ($cookie_val <= $max_val))
-      return $cookie_val;
-  }
-
-  return $default_val;
-}
-
-//
-// Get UID cookie for random shuffle transient name
-//
-function get_shuffle_transient_name() : string
-{
-  if (isset($_COOKIE[COOKIE_KEY::UF_SHUFFLE_UID]))
-  {
-    $cookie = sanitize_user(wp_unslash($_COOKIE[COOKIE_KEY::UF_SHUFFLE_UID]), true);
-
-    if (strlen($cookie) < 50)
-      return sprintf('random_shuffle_%s', $cookie);
-  }
-
-  return '';
 }
 
 //
@@ -70,21 +58,3 @@ function get_term_links(array $terms, string $path, string $separator = '',  int
 
   return implode($separator, $term_links);
 }
-
-/*
-//
-// Get named cookie json data if it exists
-//
-function get_cookie_json(string $cookie_name) : ?object
-{
-  if (isset($_COOKIE[$cookie_name]))
-  {
-    $cookie_data = json_decode(stripslashes($_COOKIE[$cookie_name]));
-
-    if ($cookie_data !== null)
-      return $cookie_data;
-  }
-
-  return null;
-}
-*/

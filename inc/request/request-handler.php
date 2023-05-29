@@ -10,7 +10,7 @@ namespace Ultrafunk\Plugin\Request;
 
 use stdClass;
 
-use const Ultrafunk\Plugin\Constants\PLUGIN_ENV;
+use const Ultrafunk\Plugin\Config\PLUGIN_ENV;
 
 use function Ultrafunk\Plugin\Globals\ {
   perf_stop,
