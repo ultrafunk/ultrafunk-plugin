@@ -1,0 +1,23 @@
+{
+  "name": "ultrafunk-plugin",
+  "version": "1.45.13",
+  "description": "WordPress plugin",
+  "homepage": "https://github.com/ultrafunk/ultrafunk-plugin",
+  "repository": "git@github.com:ultrafunk/ultrafunk-plugin.git",
+  "main": "ultrafunk.php",
+  "scripts": {
+    "build-prod": "node ..\\ultrafunk-theme-dev\\scripts\\update-build-configs.mjs prod",
+    "build-dev": "node ..\\ultrafunk-theme-dev\\scripts\\update-build-configs.mjs dev"
+  },
+  "keywords": [],
+  "author": {
+    "name": "ultrafunk.com",
+    "url": "https://ultrafunk.com"
+  },
+  "license": "MIT",
+  "com_ultrafunk": {
+    "plugin": {
+      "phpConfig": "config.php"
+    }
+  }
+}

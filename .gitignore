@@ -2,3 +2,4 @@
 .github/
 .vscode/
 .VSCodeCounter/
+node_modules/
