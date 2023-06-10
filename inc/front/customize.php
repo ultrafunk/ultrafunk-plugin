@@ -31,6 +31,9 @@ function cleanup_wp_header() : void
   // Remove oEmbed discovery links.
   remove_action('wp_head', 'wp_oembed_add_discovery_links');
 
+  // Remove page / post REST endpoint header links
+  remove_action('wp_head', 'rest_output_link_wp_head');
+
   // Remove wlwmanifest.xml (needed to support windows live writer)
   remove_action('wp_head', 'wlwmanifest_link');
 
