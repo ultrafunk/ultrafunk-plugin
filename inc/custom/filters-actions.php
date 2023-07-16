@@ -126,7 +126,7 @@ add_filter('embed_oembed_html', '\Ultrafunk\Plugin\Custom\FiltersActions\embed_o
 //
 function wp_robots(array $robots) : array
 {
-  if (is_404() || is_shuffle(PLAYER_TYPE::GALLERY) || is_shuffle(PLAYER_TYPE::LIST))
+  if (is_404() || is_shuffle())
     $robots['noindex'] = true;
 
   return $robots;

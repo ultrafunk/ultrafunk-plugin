@@ -100,7 +100,7 @@ function set_request_session_vars(array $session_vars) : array
 //
 function get_session_vars() : array
 {
-  $is_user_per_page = (is_shuffle(PLAYER_TYPE::GALLERY) || is_shuffle(PLAYER_TYPE::LIST) || is_search() || is_list_player('search'));
+  $is_user_per_page = (is_shuffle() || is_search() || is_list_player('search'));
 
   $session_vars = [
     'prevPage'       => null,

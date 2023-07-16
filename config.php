@@ -21,7 +21,7 @@ const IS_DEBUG      = false;
 /**************************************************************************************************************************/
 
 
-const VERSION = '1.45.23';
+const VERSION = '1.45.25';
 
 const PLUGIN_ENV = [
   'site_url'            => IS_PROD_BUILD ? 'https://ultrafunk.com'               : 'https://wordpress.ultrafunk.com',

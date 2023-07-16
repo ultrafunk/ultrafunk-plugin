@@ -17,6 +17,7 @@ abstract class PLAYER_TYPE
   const NONE    = 0;
   const GALLERY = 1;
   const LIST    = 2;
+  const ALL     = 100;
 }
 
 // ToDo: Use PHP enum when v8.1 is ready for use

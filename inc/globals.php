@@ -125,13 +125,16 @@ function is_list_player(string $query = null) : bool
   return is_request('get', 'list_player', $query);
 }
 
-function is_shuffle(int $player_type = PLAYER_TYPE::NONE) : bool
+function is_shuffle(int $player_type = PLAYER_TYPE::ALL) : bool
 {
   if ($player_type === PLAYER_TYPE::GALLERY)
     return !empty(Globals::$request_params->is_shuffle);
 
   if ($player_type === PLAYER_TYPE::LIST)
     return is_request('get', 'list_player', 'shuffle');
+
+  if ($player_type === PLAYER_TYPE::ALL)
+    return (is_shuffle(PLAYER_TYPE::GALLERY) || is_shuffle(PLAYER_TYPE::LIST));
 
   return false;
 }
