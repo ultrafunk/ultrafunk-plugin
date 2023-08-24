@@ -88,36 +88,32 @@ add_action('rest_api_init', '\Ultrafunk\Plugin\Custom\Rest\register_custom_post_
 function register_custom_rest_fields() : void
 {
   register_rest_field('uf_track', 'artists_links', [
-    'get_callback' => function($post, $attr, $request)
-    {
-      $links_path = isset($request['links_path']) ? ('/' . sanitize_title($request['links_path'])) : '';
-      $artists    = get_object_term_cache($post['id'], 'uf_artist');
-
-      // If data is not cached, get from DB
-      if ($artists === false)
-        $artists = wp_get_object_terms($post['id'], 'uf_artist');
-
-      return get_term_links($artists, "$links_path/artist/", ', ', (int)get_post_meta($post['id'], 'track_artist_id', true));
-    },
-    'schema' => null,
+    'get_callback' => function($post, $attr, $request) { return get_artists_channels($post, $request, 'uf_artist'); },
+    'schema'       => null,
   ]);
 
   register_rest_field('uf_track', 'channels_links', [
-    'get_callback' => function($post, $attr, $request)
-    {
-      $links_path = isset($request['links_path']) ? ('/' . sanitize_title($request['links_path'])) : '';
-      $channels   = get_object_term_cache($post['id'], 'uf_channel');
-
-      // If data is not cached, get from DB
-      if ($channels === false)
-        $channels = wp_get_object_terms($post['id'], 'uf_channel');
-
-      return get_term_links($channels, "$links_path/channel/", ', ');
-    },
-    'schema' => null,
+    'get_callback' => function($post, $attr, $request) { return get_artists_channels($post, $request, 'uf_channel'); },
+    'schema'       => null,
   ]);
 }
-add_action('rest_api_init', '\Ultrafunk\Plugin\Custom\Rest\register_custom_rest_fields' );
+add_action('rest_api_init', '\Ultrafunk\Plugin\Custom\Rest\register_custom_rest_fields');
+
+function get_artists_channels($post, $request, $taxonomy)
+{
+  $links_path = isset($request['links_path']) ? ('/' . sanitize_title($request['links_path'])) : '';
+  $separator  = isset($request['separator'])  ? ', ' : '';
+  $term_data  = get_object_term_cache($post['id'], $taxonomy);
+
+  // If data is not cached, get from DB
+  if ($term_data === false)
+    $term_data = wp_get_object_terms($post['id'], $taxonomy);
+
+  if ($taxonomy === 'uf_artist')
+    return get_term_links($term_data, "$links_path/artist/", $separator, (int)get_post_meta($post['id'], 'track_artist_id', true));
+  else
+    return get_term_links($term_data, "$links_path/channel/", $separator);
+}
 
 //
 // Modify uf_track REST request to return random shuffle query data

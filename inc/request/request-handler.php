@@ -168,7 +168,7 @@ abstract class RequestHandler
     get_header();
   }
 
-  private function end_output() : void
+  private function end_output() : never
   {
     // Stop performance counter
     perf_stop('route_request', 'RouteRequest_start');
