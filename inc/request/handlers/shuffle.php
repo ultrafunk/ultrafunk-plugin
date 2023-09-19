@@ -78,7 +78,7 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
 
   protected function has_valid_request_params() : bool
   {
-    $paged = $this->get_page_num(999999);
+    $paged = $this->get_page_num();
 
     if ($paged !== 0)
     {
@@ -216,7 +216,7 @@ class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
   //
   // Get page number for the current shuffle type
   //
-  private function get_page_num(int $max_page_num) : int
+  private function get_page_num(int $max_page_num = 999999) : int
   {
     $page_num = 0;
 

@@ -16,9 +16,6 @@ namespace Ultrafunk\Plugin\Front\Customize;
 //
 function cleanup_wp_header() : void
 {
-  // Remove comments Feed from header since comments are always disabled
-  add_filter('feed_links_show_comments_feed', '__return_false');
-
   // Remove WP generator meta tag
   remove_action('wp_head', 'wp_generator');
 
