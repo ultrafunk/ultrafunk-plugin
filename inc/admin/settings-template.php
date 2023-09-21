@@ -53,8 +53,41 @@ function settings_template(array $uf_settings, array $result = null) : void
   <p><input type="submit" class="button button-primary" name="uf-save-top-artists" value="Update Top Artists for All Channels" /></p>
   </form>
 
-  <?php echo isset($result['log']) ? '<br><hr><br><pre>' . $result['log'] . '</pre>' : ''; ?>
+  <?php
+  if (isset($result['log']))
+    echo '<br><hr><br><pre>' . $result['log'] . '</pre>';
+  else
+    display_php_error_log();
+  ?>
 
   </div>
   <?php
+}
+
+function display_php_error_log()
+{
+  if (!empty(ini_get('error_log')) && file_exists(ini_get('error_log')))
+  {
+    ?>
+    <br>
+    <h3>PHP Error Log: <?php echo ini_get('error_log'); ?></h3>
+    <textarea id="uf-plugin-php-error-log" readonly rows="50">
+    <?php
+
+    $logfile_content = '';
+
+    if ($file_handle = fopen(ini_get('error_log'), 'r'))
+    {
+      while (!feof($file_handle))
+        $logfile_content .= fread($file_handle, 1 * 1024 * 1024);
+    }
+
+    echo $logfile_content;
+
+    ?></textarea><?php
+  }
+  else
+  {
+    ?><br><h3>PHP Error Log not found</h3><?php
+  }
 }

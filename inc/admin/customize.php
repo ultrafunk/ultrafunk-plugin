@@ -50,3 +50,12 @@ function dashboard_tracks_count(array $data) : array
   return $data;
 }
 add_filter('dashboard_glance_items', '\Ultrafunk\Plugin\Admin\Customize\dashboard_tracks_count');
+
+//
+// Ultrafunk plugin admin styles
+//
+function enqueue_admin_styles()
+{
+  wp_enqueue_style('admin-settings-style', plugins_url() . '/ultrafunk/inc/admin/settings.css', [], \Ultrafunk\Plugin\Config\VERSION);
+}
+add_action('admin_enqueue_scripts', '\Ultrafunk\Plugin\Admin\Customize\enqueue_admin_styles');

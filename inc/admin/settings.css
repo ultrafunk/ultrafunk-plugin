@@ -1,0 +1,13 @@
+/*
+* Ultrafunk plugin admin styles
+*
+* https://ultrafunk.com
+*
+*/
+
+#uf-plugin-php-error-log {
+  width: 100%;
+  font-family: monospace;
+  font-size: 12px;
+  background-color: #fff;
+}
