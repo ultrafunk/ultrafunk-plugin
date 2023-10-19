@@ -71,7 +71,7 @@ function display_php_error_log()
     ?>
     <br>
     <h3>PHP Error Log: <?php echo ini_get('error_log'); ?></h3>
-    <textarea id="uf-plugin-php-error-log" readonly rows="50">
+    <textarea id="uf-plugin-php-error-log" readonly rows="40">
     <?php
 
     $logfile_content = '';
@@ -88,6 +88,6 @@ function display_php_error_log()
   }
   else
   {
-    ?><br><h3>PHP Error Log not found</h3><?php
+    ?><br><h3>PHP Error Log empty or not found: <?php ini_get('error_log'); ?></h3><?php
   }
 }

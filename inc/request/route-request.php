@@ -129,8 +129,8 @@ class RouteRequest
               if ($this->request_needs_redirect($url_parts[0]) === false)
               {
                 $this->matched_route = $key;
-                $this->handler_file  = $routes[$route_key]['handler_file']  ?? null;
-                $this->handler_class = $routes[$route_key]['handler_class'] ?? null;
+                $this->handler_file  = $routes[$route_key]['handler']['file']  ?? null;
+                $this->handler_class = $routes[$route_key]['handler']['class'] ?? null;
 
                 return true;
               }
