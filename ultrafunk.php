@@ -5,10 +5,10 @@ Plugin URI:        https://github.com/ultrafunk/ultrafunk-plugin
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress plugin
-Version:           1.46.4
-Requires at least: 6.0
-Tested up to:      6.3
-Requires PHP:      8.1
+Version:           1.46.6
+Requires at least: 6.4
+Tested up to:      6.4
+Requires PHP:      8.2
 License:           MIT License
 License URI:       https://opensource.org/licenses/MIT
 */

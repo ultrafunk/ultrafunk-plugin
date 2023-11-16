@@ -70,8 +70,14 @@ function display_php_error_log()
   {
     ?>
     <br>
-    <h3>PHP Error Log: <?php echo ini_get('error_log'); ?></h3>
-    <textarea id="uf-plugin-php-error-log" readonly rows="40">
+    <h3>PHP Error Log: <span style="font-weight: 400;"><?php echo ini_get('error_log'); ?></span></h3>
+
+    <form method="post" action="<?php echo esc_attr($_SERVER["REQUEST_URI"]); ?>">
+    <?php wp_nonce_field('_uf_error_log_', '_uf_nonce_error_log_'); ?>
+    <p><input type="submit" class="button button-primary" name="uf-delete-error-log" value="Delete Error Log" /></p>
+    </form>
+
+    <textarea id="uf-plugin-php-error-log" readonly rows="35">
     <?php
 
     $logfile_content = '';
@@ -88,6 +94,6 @@ function display_php_error_log()
   }
   else
   {
-    ?><br><h3>PHP Error Log empty or not found: <?php ini_get('error_log'); ?></h3><?php
+    ?><br><h3>PHP Error Log empty or not found: <span style="font-weight: 400;"><?php echo ini_get('error_log'); ?></span></h3><?php
   }
 }

@@ -50,6 +50,8 @@ abstract class RequestHandler
   protected bool    $is_valid_request = false;
   protected string  $template_file    = PLUGIN_ENV['template_file'];
   protected string  $template_class   = PLUGIN_ENV['template_class'];
+  protected bool    $include_header   = true;
+  protected bool    $include_footer   = true;
   protected array   $query_args       = [];
   protected mixed   $query_result     = null;
   public    ?object $params           = null;
@@ -149,6 +151,11 @@ abstract class RequestHandler
           $this->is_valid_request    = true;
         }
       }
+      else
+      {
+        $this->query_result     = true;
+        $this->is_valid_request = true;
+      }
     }
   }
 
@@ -165,7 +172,8 @@ abstract class RequestHandler
     $this->wp_env->send_headers();
 
     // Get site template header
-    get_header();
+    if ($this->include_header)
+      get_header();
   }
 
   private function end_output() : never
@@ -174,7 +182,8 @@ abstract class RequestHandler
     perf_stop('route_request', 'RouteRequest_start');
 
     // Get site template footer
-    get_footer();
+    if ($this->include_footer)
+      get_footer();
 
     // WE ARE DONE!!!
     exit;

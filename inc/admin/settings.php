@@ -57,6 +57,18 @@ function plugin_settings() : void
     ?><div class="updated"><p>Top Artists for all Channels created / updated in <?php echo $result['time']; ?> seconds.</p></div><?php
   }
 
+  if (isset($_POST['uf-delete-error-log']) && is_valid_nonce('error_log'))
+  {
+    if (true === unlink(ini_get('error_log')))
+    {
+      ?><div class="updated"><p>PHP error log deleted</p></div><?php
+    }
+    else
+    {
+      ?><div class="updated"><p>Failed to delete PHP error log</p></div><?php
+    }
+  }
+
   \Ultrafunk\Plugin\Admin\Settings\settings_template($uf_settings, (isset($result) ? $result : null));
 }
 
