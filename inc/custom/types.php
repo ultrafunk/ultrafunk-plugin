@@ -20,6 +20,7 @@ function register_custom_post_types() : void
   // Register Tracks custom post type
   //
   $labels = [
+    'add_new'                  => 'Add New Track',
     'add_new_item'             => 'Add New Track',
     'all_items'                => 'All Tracks',
     'archives'                 => 'Track Archives',
