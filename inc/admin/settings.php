@@ -37,10 +37,10 @@ function plugin_settings() : void
   $uf_settings = get_settings();
 
   if (isset($_POST['uf-save-settings']) && is_valid_nonce('settings'))
-    save_settings();
+    save_settings($uf_settings);
 
   if (isset($_POST['uf-save-top-artists']) && is_valid_nonce('top_artists'))
-    save_top_artists();
+    $result = save_top_artists($uf_settings);
 
   if (isset($_POST['uf-delete-error-log']) && is_valid_nonce('error_log'))
     delete_error_log();
@@ -52,7 +52,7 @@ function plugin_settings() : void
 /**************************************************************************************************************************/
 
 
-function save_settings() : void
+function save_settings(array &$uf_settings) : void
 {
   $uf_settings['list_tracks_per_page']    = get_post_value('list_tracks_per_page');
   $uf_settings['gallery_tracks_per_page'] = get_post_value('gallery_tracks_per_page');
@@ -62,15 +62,17 @@ function save_settings() : void
   ?><div class="updated"><p>Settings updated</p></div><?php
 }
 
-function save_top_artists() : void
+function save_top_artists(array &$uf_settings) : array
 {
   $uf_settings['channels_num_top_artists'] = get_post_value('channels_num_top_artists');
   $uf_settings['show_top_artists_log']     = get_post_string('show_top_artists_log');
 
   update_option("uf_settings", $uf_settings);
 
-  $result = \Ultrafunk\Plugin\Admin\TopArtists\set_data(absint($uf_settings['channels_num_top_artists']), ($uf_settings['show_top_artists_log'] === '1'))
-  ?><div class="updated"><p>Top Artists for all Channels created / updated in <?php echo $result['time']; ?> seconds.</p></div><?php
+  $set_top_artists_result = \Ultrafunk\Plugin\Admin\TopArtists\set_data(absint($uf_settings['channels_num_top_artists']), ($uf_settings['show_top_artists_log'] === '1'))
+  ?><div class="updated"><p>Top Artists for all Channels created / updated in <?php echo $set_top_artists_result['time']; ?> seconds.</p></div><?php
+
+  return $set_top_artists_result;
 }
 
 function delete_error_log() : void
