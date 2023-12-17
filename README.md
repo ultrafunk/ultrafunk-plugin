@@ -15,5 +15,6 @@ PHP version 8.2 or greater
 
 **Optional:**  
 [PHP Intelephense](https://intelephense.com/) (PHP code intelligence for Visual Studio Code)  
+[Plugin Check (PCP)](https://wordpress.org/plugins/plugin-check/) (WordPress Plugin from The WordPress Plugin Review Team)  
 [WP Extended Search](https://wordpress.org/plugins/wp-extended-search/) (WordPress Plugin)  
 [WP Fastest Cache](https://wordpress.org/plugins/wp-fastest-cache/) (WordPress Plugin)

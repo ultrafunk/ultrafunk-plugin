@@ -102,4 +102,11 @@ const DEFAULT_ROUTES =
       'list_player_search_page' => '/^list\/search\/page\/(?!0)\d{1,6}$/',
     ]
   ],
+  [
+    'handler'    => ['file' => 'dj-player.php', 'class' => 'DJPlayer'],
+    'route_uids' => ['dj-player'],
+    'routes' => [
+      'dj-player' => '/^dj-player$/',
+    ]
+  ],
 ];

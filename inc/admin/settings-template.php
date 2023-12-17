@@ -80,14 +80,10 @@ function display_php_error_log()
     <textarea id="uf-plugin-php-error-log" readonly rows="35">
     <?php
 
-    $logfile_content = '';
+    WP_Filesystem();
+    global $wp_filesystem;
 
-    if ($file_handle = fopen(ini_get('error_log'), 'r'))
-    {
-      while (!feof($file_handle))
-        $logfile_content .= fread($file_handle, 1 * 1024 * 1024);
-    }
-
+    $logfile_content = $wp_filesystem->get_contents(ini_get('error_log'));
     echo $logfile_content;
 
     ?></textarea><?php

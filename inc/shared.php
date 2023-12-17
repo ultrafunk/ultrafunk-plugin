@@ -41,7 +41,7 @@ const YOUTUBE_VIDEO_ID_REGEX = '/[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]/';
 function console_log(mixed $output) : void
 {
   if (\Ultrafunk\Plugin\Config\IS_DEBUG)
-    echo '<script>console.log(' . json_encode($output, JSON_HEX_TAG) . ');</script>';
+    echo '<script>console.log(' . wp_json_encode($output, JSON_HEX_TAG) . ');</script>';
 }
 
 //

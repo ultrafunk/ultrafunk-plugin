@@ -166,7 +166,7 @@ abstract class RequestHandler
   private function begin_output() : void
   {
     // Show debug info for this request
-    //console_log(\Ultrafunk\Plugin\Globals\get_request_params());
+    //\Ultrafunk\Plugin\Shared\console_log(\Ultrafunk\Plugin\Globals\get_request_params());
 
     // Output HTTP headers
     $this->wp_env->send_headers();

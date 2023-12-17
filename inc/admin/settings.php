@@ -34,7 +34,7 @@ function plugin_settings() : void
   if (current_user_can('delete_users') === false)
     wp_die('You do not have sufficient permissions to access this page.');
 
-  $uf_settings = get_settings();
+  $uf_settings = get_uf_settings();
 
   if (isset($_POST['uf-save-settings']) && is_valid_nonce('settings'))
     save_settings($uf_settings);
@@ -91,7 +91,7 @@ function delete_error_log() : void
 /**************************************************************************************************************************/
 
 
-function get_settings() : array
+function get_uf_settings() : array
 {
   $settings        = \Ultrafunk\Plugin\Storage\DEFAULT_SETTINGS;
   $stored_settings = get_option("uf_settings");

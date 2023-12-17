@@ -108,12 +108,12 @@ function embed_oembed_html(string $cache, string $url, array $attr, int $post_id
 
   if ($track_type === TRACK_TYPE::YOUTUBE)
   {
-    $cache = str_ireplace('<iframe', sprintf('<iframe id="youtube-uid-%s"', uniqid()), $cache);
+    $cache = str_ireplace('<iframe', sprintf('<iframe id="youtube-%s"', uniqid()), $cache);
     $cache = str_ireplace('feature=oembed', sprintf('feature=oembed&enablejsapi=1&disablekb=1&origin=%s', \Ultrafunk\Plugin\Config\PLUGIN_ENV['site_url']), $cache);
   }
   else if ($track_type === TRACK_TYPE::SOUNDCLOUD)
   {
-    $cache = str_ireplace('<iframe', sprintf('<iframe id="soundcloud-uid-%s" allow="autoplay"', uniqid()), $cache);
+    $cache = str_ireplace('<iframe', sprintf('<iframe id="soundcloud-%s" allow="autoplay"', uniqid()), $cache);
     $cache = str_ireplace('visual=true', 'visual=true&single_active=false', $cache);
   }
 

@@ -147,14 +147,17 @@ function get_youtube_duration(string $video_id) : int
 
   $api_key = UF_YOUTUBE_DATA_API_KEY;
   $referer = \Ultrafunk\Plugin\Config\PLUGIN_ENV['site_url'];
-  $options = ['http' => ['header' => ["Referer: $referer\r\n"]]];
-  $context = stream_context_create($options);
+  $args    = ['headers' => ['referer' => $referer]];
 
-  $json_result = file_get_contents("https://www.googleapis.com/youtube/v3/videos?id=$video_id&key=$api_key&part=contentDetails&fields=items(contentDetails(duration))", false, $context);
-  $video_data  = json_decode($json_result, true);
+  $response = wp_remote_get("https://www.googleapis.com/youtube/v3/videos?id=$video_id&key=$api_key&part=contentDetails&fields=items(contentDetails(duration))", $args);
+
+  if (is_wp_error($response) || !is_array($response))
+    return 0;
+
+  $video_data = json_decode(wp_remote_retrieve_body($response), true);
 
   if (!count($video_data['items']))
-      return 0;
+    return 0;
 
   $dateTime = new DateTime('@0');
   $dateTime->add(new DateInterval($video_data['items'][0]['contentDetails']['duration']));

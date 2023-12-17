@@ -1,6 +1,9 @@
 # **Ultrafunk plugin**
 This is the source code for the [ultrafunk.com](https://ultrafunk.com) WordPress plugin, updated each time a new release is published. The source code is provided as is with no warranties or support of any kind.
 
+License: MIT
+License URI: https://opensource.org/licenses/MIT
+
 # Server configurations
 Tested on servers running LAMP: Linux, Apache, MariaDB / MySQL and PHP.
 
@@ -12,5 +15,6 @@ PHP version 8.2 or greater
 
 **Optional:**
 [PHP Intelephense](https://intelephense.com/) (PHP code intelligence for Visual Studio Code)
+[Plugin Check (PCP)](https://wordpress.org/plugins/plugin-check/) (WordPress Plugin from The WordPress Plugin Review Team)
 [WP Extended Search](https://wordpress.org/plugins/wp-extended-search/) (WordPress Plugin)
 [WP Fastest Cache](https://wordpress.org/plugins/wp-fastest-cache/) (WordPress Plugin)
