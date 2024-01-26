@@ -76,3 +76,17 @@ function add_tracks_to_feed(array $query_vars) : array
   return $query_vars;
 }
 add_filter('request', '\Ultrafunk\Plugin\Front\Customize\add_tracks_to_feed');
+
+//
+// Filter /wp-sitemap.xml taxonomy entries to insert '/list/' in all URLs
+//
+function wp_sitemaps_taxonomies_entry (array $sitemap_entry, int $term_id, string $taxonomy) : array
+{
+  if ($taxonomy === 'uf_artist')
+    $sitemap_entry['loc'] = str_ireplace('/artist/', '/list/artist/', $sitemap_entry['loc']);
+  else if ($taxonomy === 'uf_channel')
+    $sitemap_entry['loc'] = str_ireplace('/channel/', '/list/channel/', $sitemap_entry['loc']);
+
+  return $sitemap_entry;
+}
+add_filter('wp_sitemaps_taxonomies_entry', '\Ultrafunk\Plugin\Front\Customize\wp_sitemaps_taxonomies_entry', 10, 3);
