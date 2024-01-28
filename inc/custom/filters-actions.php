@@ -66,12 +66,9 @@ function parse_query(object $query) : void
     $search  = ['&ndash;', '&mdash;', '&lsquo;', '&rsquo;', '&prime;', '&Prime;', '&ldquo;', '&rdquo;', '&quot;'];
     $replace = ['-'      , '-'      , "'"      , "'"      , "'"      , '"'      , '"'      , '"'      , '"'     ];
 
-    $new_query_string = htmlentities($query->query['s']);
-    $new_query_string = str_replace($search, $replace, $new_query_string);
+    $new_query_string = str_replace($search, $replace, htmlentities($query->query['s']));
     $new_query_string = html_entity_decode($new_query_string);
-
-    //Search string "R&B" needs special handling to match "R&amp;B"
-    $new_query_string = str_ireplace('r&b', 'r&amp;b', $new_query_string);
+    $new_query_string = preg_replace('/(?<! )&(?! )/', '&amp;', $new_query_string); // Encode & without any spaces as &amp; for search to work OK
 
     if ($new_query_string !== $query->query['s'])
       $query->set('s', $new_query_string);
