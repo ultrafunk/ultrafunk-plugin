@@ -87,7 +87,7 @@ function get_request_params() : ?object
   return Globals::$request_params;
 }
 
-function set_request_params(object $params) : void
+function set_request_params(object &$params) : void
 {
   Globals::$request_params = $params;
 }

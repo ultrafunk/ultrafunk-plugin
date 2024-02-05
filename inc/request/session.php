@@ -33,7 +33,6 @@ use function Ultrafunk\Plugin\Globals\ {
 function set_request_session_vars(array $session_vars) : array
 {
   $params = get_request_params();
-  $query  = $params->query;
   $path   = isset($params->route_path) ? $params->route_path : '';
 
   $session_vars['params']      = $params->get;
@@ -59,10 +58,10 @@ function set_request_session_vars(array $session_vars) : array
     if ($params->current_page === 2)
       $session_vars['prevPage'] = '/' . $path . '/';
   }
-  else if (isset($query['first_letter']))
+  else if (isset($params->query_vars['first_letter']))
   {
-    $letters = $query['letters_range'];
-    $index   = array_search($query['first_letter'], $letters);
+    $letters = $params->query_vars['letters_range'];
+    $index   = array_search($params->query_vars['first_letter'], $letters);
 
     if ($index === 0)
     {
@@ -83,13 +82,13 @@ function set_request_session_vars(array $session_vars) : array
   if ($session_vars['prevPage'] !== null)
   {
     $session_vars['prevPage']  = PLUGIN_ENV['site_url'] . $session_vars['prevPage'];
-    $session_vars['prevPage'] .= ($query['string'] !== null) ? "?{$query['string']}" : '';
+    $session_vars['prevPage'] .= ($params->query['string'] !== null) ? "?{$params->query['string']}" : '';
   }
 
   if ($session_vars['nextPage'] !== null)
   {
     $session_vars['nextPage']  = PLUGIN_ENV['site_url'] . $session_vars['nextPage'];
-    $session_vars['nextPage'] .= ($query['string'] !== null) ? "?{$query['string']}" : '';
+    $session_vars['nextPage'] .= ($params->query['string'] !== null) ? "?{$params->query['string']}" : '';
   }
 
   return $session_vars;

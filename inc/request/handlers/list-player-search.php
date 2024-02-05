@@ -23,7 +23,7 @@ class ListPlayerSearch extends \Ultrafunk\Plugin\Request\RequestHandler
       $this->params->title_parts    = ['prefix' => 'Search', 'title' => esc_html($this->route_request->query_params['s'])];
       $this->params->items_per_page = \Ultrafunk\Plugin\Globals\get_global('list_per_page');
 
-      $this->query_args = [
+      $this->wp_query_vars = [
         'suppress_filters' => false,
         's'                => $this->route_request->query_params['s'],
       ];

@@ -24,20 +24,22 @@ use function Ultrafunk\Plugin\Globals\ {
 
 class RequestParams
 {
-  public ?string $route_path       = null;
-  public ?array  $title_parts      = null;
-  public int     $found_items      = 0;
-  public int     $items_per_page   = 0;
-  public int     $current_page     = 1;
-  public int     $max_pages        = 1;
-  public ?array  $get              = null;
-  public ?array  $query            = null;
-  public array   $filter           = ['slug' => null, 'taxonomy' => null];
+  public ?string $route_path     = null;
+  public ?array  $title_parts    = null;
+  public int     $found_items    = 0;
+  public int     $items_per_page = 0;
+  public int     $current_page   = 1;
+  public int     $max_pages      = 1;
+  public ?array  $get            = null;
+  public ?array  $query          = null;
+  public ?array  $query_vars     = null;
+  public mixed   $query_result   = null;
+  public array   $query_filter   = ['slug' => null, 'taxonomy' => null];
 
   public function __construct(?string $query_string, ?array $query_params)
   {
     $this->items_per_page = get_settings_value('list_tracks_per_page');
-    $this->query = ['string' => $query_string, 'params' => $query_params];
+    $this->query          = ['string' => $query_string, 'params' => $query_params];
   }
 }
 
@@ -52,8 +54,7 @@ abstract class RequestHandler
   protected string  $template_class   = PLUGIN_ENV['template_class'];
   protected bool    $include_header   = true;
   protected bool    $include_footer   = true;
-  protected array   $query_args       = [];
-  protected mixed   $query_result     = null;
+  protected array   $wp_query_vars    = [];
   public    ?object $params           = null;
 
   public function __construct(protected object $wp_env, protected object $route_request)
@@ -68,8 +69,8 @@ abstract class RequestHandler
   {
     if (isset($this->route_request->query_params[$key]))
     {
-      $this->params->filter['slug']     = sanitize_title($this->route_request->query_params[$key]);
-      $this->params->filter['taxonomy'] = $taxonomy;
+      $this->params->query_filter['slug']     = sanitize_title($this->route_request->query_params[$key]);
+      $this->params->query_filter['taxonomy'] = $taxonomy;
     }
   }
 
@@ -100,7 +101,7 @@ abstract class RequestHandler
     $this->add_filter_query_args();
 
     set_is_custom_query(true);
-    $query_result = new $query_class($this->query_args);
+    $query_result = new $query_class($this->wp_query_vars);
     set_is_custom_query(false);
 
     return $query_result;
@@ -109,13 +110,13 @@ abstract class RequestHandler
   private function add_filter_query_args() : void
   {
     // Append filter (AND) second taxonomy term(s) if present
-    if (($this->params->filter['slug'] !== null) && ($this->params->filter['taxonomy'] !== null))
+    if (($this->params->query_filter['slug'] !== null) && ($this->params->query_filter['taxonomy'] !== null))
     {
-      $this->query_args['tax_query']    += ['relation' => 'AND'];
-      $this->query_args['tax_query'][1]  = [
+      $this->wp_query_vars['tax_query']    += ['relation' => 'AND'];
+      $this->wp_query_vars['tax_query'][1]  = [
         'field'    => 'slug',
-        'terms'    => $this->params->filter['slug'],
-        'taxonomy' => $this->params->filter['taxonomy'],
+        'terms'    => $this->params->query_filter['slug'],
+        'taxonomy' => $this->params->query_filter['taxonomy'],
       ];
     }
   }
@@ -126,35 +127,35 @@ abstract class RequestHandler
     {
       if (isset($this->params->get['list_player']))
       {
-        $this->query_args['post_type']        = 'uf_track';
-        $this->query_args['paged']            = $this->params->current_page;
-        $this->query_args['posts_per_page']   = $this->params->items_per_page;
-        $this->query_args['suppress_filters'] = $this->query_args['suppress_filters'] ?? true;
+        $this->wp_query_vars['post_type']        = 'uf_track';
+        $this->wp_query_vars['paged']            = $this->params->current_page;
+        $this->wp_query_vars['posts_per_page']   = $this->params->items_per_page;
+        $this->wp_query_vars['suppress_filters'] = $this->wp_query_vars['suppress_filters'] ?? true;
 
         $wp_query_result = $this->request_query('WP_Query');
 
-        $this->query_result        = $wp_query_result->posts;
-        $this->params->found_items = $wp_query_result->found_posts;
-        $this->params->max_pages   = $this->get_max_pages($wp_query_result->found_posts, $this->params->items_per_page);
-        $this->is_valid_request    = $wp_query_result->have_posts();
+        $this->params->query_result = $wp_query_result->posts;
+        $this->params->found_items  = $wp_query_result->found_posts;
+        $this->params->max_pages    = $this->get_max_pages($wp_query_result->found_posts, $this->params->items_per_page);
+        $this->is_valid_request     = $wp_query_result->have_posts();
       }
       else if (isset($this->params->get['termlist']))
       {
-        $this->query_args['hide_empty'] = true;
+        $this->wp_query_vars['hide_empty'] = true;
 
         $wp_term_query_result = $this->request_query('WP_Term_Query');
 
         if ($wp_term_query_result->terms !== null)
         {
-          $this->params->found_items = count($wp_term_query_result->terms);
-          $this->query_result        = $wp_term_query_result->terms;
-          $this->is_valid_request    = true;
+          $this->params->found_items  = count($wp_term_query_result->terms);
+          $this->params->query_result = $wp_term_query_result->terms;
+          $this->is_valid_request     = true;
         }
       }
       else
       {
-        $this->query_result     = true;
-        $this->is_valid_request = true;
+        $this->params->query_result = true;
+        $this->is_valid_request     = true;
       }
     }
   }
@@ -200,7 +201,7 @@ abstract class RequestHandler
     require get_template_directory() . PLUGIN_ENV['template_file_path'] . $this->template_file;
 
     $template_class = PLUGIN_ENV['template_class_path'] . $this->template_class;
-    $template = new $template_class($this->params, $this->query_result);
+    $template = new $template_class($this->params);
     $template->render();
 
     $this->end_output();
@@ -210,8 +211,8 @@ abstract class RequestHandler
   {
     global $wp_query;
     $response_params = new stdClass();
-    $response_params->response = $this->params->get;
-    $response_params->query    = $this->params->query;
+    $response_params->response   = $this->params->get;
+    $response_params->query_vars = $this->params->query_vars;
 
     // Setup global $wp_query so it contains relevant data to handle this request failure...
     if ((current($this->params->get) === 'search') && !empty($this->route_request->query_params['s']))

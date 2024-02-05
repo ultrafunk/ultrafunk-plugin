@@ -36,7 +36,7 @@ class ListPlayerShuffle extends \Ultrafunk\Plugin\Request\RequestHandler
       $title                        = ($shuffle_params->type === 'all') ? 'All Tracks' : $shuffle_params->slug_name;
       $this->params->title_parts    = ['prefix' => 'Shuffle', 'title' => $title];
       $this->params->current_page   = $this->wp_env->query_vars['paged'];
-      $this->query_args             = $this->wp_env->query_vars;
+      $this->wp_query_vars          = $this->wp_env->query_vars;
 
       return true;
     }
