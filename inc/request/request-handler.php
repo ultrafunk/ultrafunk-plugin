@@ -24,17 +24,17 @@ use function Ultrafunk\Plugin\Globals\ {
 
 class RequestParams
 {
-  public ?string $route_path     = null;
-  public ?array  $title_parts    = null;
-  public int     $found_items    = 0;
-  public int     $items_per_page = 0;
-  public int     $current_page   = 1;
-  public int     $max_pages      = 1;
   public ?array  $get            = null;
   public ?array  $query          = null;
   public ?array  $query_vars     = null;
-  public mixed   $query_result   = null;
   public array   $query_filter   = ['slug' => null, 'taxonomy' => null];
+  public ?string $route_path     = null;
+  public ?array  $title_parts    = null;
+  public int     $items_per_page = 0;
+  public int     $current_page   = 1;
+  public int     $max_pages      = 1;
+  public mixed   $query_result   = null;
+  public int     $found_items    = 0;
 
   public function __construct(?string $query_string, ?array $query_params)
   {
@@ -121,7 +121,7 @@ abstract class RequestHandler
     }
   }
 
-  public function get_response() : void
+  private function get_response() : void
   {
     if ($this->has_valid_request_params())
     {
@@ -237,6 +237,8 @@ abstract class RequestHandler
 
   public function render_content() : bool
   {
+    $this->get_response();
+
     if (isset($this->params->get))
     {
       if ($this->is_valid_request)

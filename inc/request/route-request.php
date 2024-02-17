@@ -223,10 +223,7 @@ function parse_request(bool $do_parse, object $wp_env) : bool
         $route_request->has_request_handler())
     {
       require ULTRAFUNK_PLUGIN_PATH . PLUGIN_ENV['handler_file_path'] . $route_request->handler_file;
-
       $request_handler = $route_request->new_request_handler($wp_env, $route_request);
-      $request_handler->get_response();
-
       return $request_handler->render_content();
     }
   }

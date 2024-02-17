@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /*
- * Ultrafunk plugin globals class and related functions
+ * Ultrafunk plugin globals class (singleton) and related functions
  *
  */
 
@@ -102,27 +102,32 @@ function set_session_vars(array $session_vars) : void
   Globals::$session_vars = $session_vars;
 }
 
-//
-// is_request('get',   'termlist',    'artists')
-// is_request('error', 'list_player', 'search')
-//
-function is_request(string $request, string $type, ?string $query = null) : bool
+function is_request(string $resource, ?string $type = null) : bool
 {
-  if ($query === null)
-    return isset(Globals::$request_params->$request[$type]);
+  if ($type === null)
+    return isset(Globals::$request_params->get[$resource]);
 
-  return (!empty(Globals::$request_params->$request[$type]) &&
-         (Globals::$request_params->$request[$type] === $query));
+  return (!empty(Globals::$request_params->get[$resource]) &&
+         (Globals::$request_params->get[$resource] === $type));
 }
 
-function is_termlist(string $query = null) : bool
+function is_response(string $resource, ?string $type = null) : bool
 {
-  return is_request('get', 'termlist', $query);
+  if ($type === null)
+    return isset(Globals::$request_params->response[$resource]);
+
+  return (!empty(Globals::$request_params->response[$resource]) &&
+         (Globals::$request_params->response[$resource] === $type));
 }
 
-function is_list_player(string $query = null) : bool
+function is_termlist(string $type = null) : bool
 {
-  return is_request('get', 'list_player', $query);
+  return is_request('termlist', $type);
+}
+
+function is_list_player(string $type = null) : bool
+{
+  return is_request('list_player', $type);
 }
 
 function is_shuffle(int $player_type = PLAYER_TYPE::ALL) : bool
@@ -131,7 +136,7 @@ function is_shuffle(int $player_type = PLAYER_TYPE::ALL) : bool
     return !empty(Globals::$request_params->is_shuffle);
 
   if ($player_type === PLAYER_TYPE::LIST)
-    return is_request('get', 'list_player', 'shuffle');
+    return is_request('list_player', 'shuffle');
 
   if ($player_type === PLAYER_TYPE::ALL)
     return (is_shuffle(PLAYER_TYPE::GALLERY) || is_shuffle(PLAYER_TYPE::LIST));

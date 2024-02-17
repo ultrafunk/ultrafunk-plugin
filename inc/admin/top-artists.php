@@ -85,11 +85,11 @@ function log_transient_data(array $top_artists) : string
 
   foreach($top_artists as $channel => $artists)
   {
-    $log_html .= '<br><b style="text-transform: uppercase; font-size: 16px;">' . get_term_by('id', $channel, 'uf_channel')->name . '</b> (Channel ID: ' . $channel . ')<br>';
+    $log_html .= '<br><b style="text-transform: uppercase; font-size: 16px;">' . esc_html(get_term_by('id', $channel, 'uf_channel')->name) . '</b> (Channel ID: ' . esc_html($channel) . ')<br>';
 
     foreach($artists as $artist => $count)
     {
-      $log_html .= get_term_by('id', $artist, 'uf_artist')->name . ' (' . $count . ' tracks)<br>';
+      $log_html .= esc_html(get_term_by('id', $artist, 'uf_artist')->name) . ' (' . esc_html($count) . ' tracks)<br>';
     }
   }
 

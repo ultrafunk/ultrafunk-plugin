@@ -70,7 +70,7 @@ function display_php_error_log()
   {
     ?>
     <br>
-    <h3>PHP error log: <span style="font-weight: 400;"><?php echo ini_get('error_log'); ?></span></h3>
+    <h3>PHP error log: <span style="font-weight: 400;"><?php echo esc_html(ini_get('error_log')); ?></span></h3>
 
     <form method="post" action="<?php echo esc_attr($_SERVER["REQUEST_URI"]); ?>">
     <?php wp_nonce_field('_uf_error_log_', '_uf_nonce_error_log_'); ?>
@@ -84,12 +84,12 @@ function display_php_error_log()
     global $wp_filesystem;
 
     $logfile_content = $wp_filesystem->get_contents(ini_get('error_log'));
-    echo $logfile_content;
+    echo esc_html($logfile_content);
 
     ?></textarea><?php
   }
   else
   {
-    ?><br><h3>PHP error log empty or not found: <span style="font-weight: 400;"><?php echo ini_get('error_log'); ?></span></h3><?php
+    ?><br><h3>PHP error log empty or not found: <span style="font-weight: 400;"><?php echo esc_html(ini_get('error_log')); ?></span></h3><?php
   }
 }

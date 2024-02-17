@@ -42,6 +42,10 @@ function cleanup_wp_header() : void
 
   // Remove Shortlink
   remove_action('wp_head', 'wp_shortlink_wp_head');
+
+  // Remove header feed / RSS links
+  remove_action('wp_head', 'feed_links', 2);
+  remove_action('wp_head', 'feed_links_extra', 3);
 }
 add_action('init', '\Ultrafunk\Plugin\Front\Customize\cleanup_wp_header');
 

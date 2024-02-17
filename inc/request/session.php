@@ -35,7 +35,7 @@ function set_request_session_vars(array $session_vars) : array
   $params = get_request_params();
   $path   = isset($params->route_path) ? $params->route_path : '';
 
-  $session_vars['params']      = $params->get;
+  $session_vars['get']         = $params->get;
   $session_vars['currentPage'] = $params->current_page;
   $session_vars['maxPages']    = $params->max_pages;
 

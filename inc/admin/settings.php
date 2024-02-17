@@ -70,21 +70,15 @@ function save_top_artists(array &$uf_settings) : array
   update_option("uf_settings", $uf_settings);
 
   $set_top_artists_result = \Ultrafunk\Plugin\Admin\TopArtists\set_data(absint($uf_settings['channels_num_top_artists']), ($uf_settings['show_top_artists_log'] === '1'))
-  ?><div class="updated"><p>Top Artists for all Channels created / updated in <?php echo $set_top_artists_result['time']; ?> seconds.</p></div><?php
+  ?><div class="updated"><p>Top Artists for all Channels created / updated in <?php echo esc_html($set_top_artists_result['time']); ?> seconds.</p></div><?php
 
   return $set_top_artists_result;
 }
 
 function delete_error_log() : void
 {
-  if (true === unlink(ini_get('error_log')))
-  {
-    ?><div class="updated"><p>PHP error log deleted</p></div><?php
-  }
-  else
-  {
-    ?><div class="updated"><p>Failed to delete PHP error log</p></div><?php
-  }
+  wp_delete_file(ini_get('error_log'));
+  ?><div class="updated"><p>PHP error log deleted</p></div><?php
 }
 
 
