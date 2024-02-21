@@ -26,7 +26,7 @@ class ListPlayerArtistChannel extends \Ultrafunk\Plugin\Request\RequestHandler
           $taxonomy     = 'uf_artist';
           $title_prefix = 'Artist';
 
-          $this->set_filter_params('channel', 'uf_channel');
+          $this->set_filter_params('channel', 'uf_channel', 'channels');
         }
         break;
 

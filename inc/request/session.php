@@ -39,6 +39,13 @@ function set_request_session_vars(array $session_vars) : array
   $session_vars['currentPage'] = $params->current_page;
   $session_vars['maxPages']    = $params->max_pages;
 
+  if (isset($params->query_filter))
+  {
+    $wp_term = get_term_by('slug', $params->query_filter['slug'], $params->query_filter['taxonomy']);
+    $session_vars['filter']['taxonomy']    = $params->query_filter['rest_taxonomy'];
+    $session_vars['filter']['taxonomy_id'] = $wp_term->term_id;
+  }
+
   if ($params->max_pages > 1)
   {
     if ($params->current_page === 1)

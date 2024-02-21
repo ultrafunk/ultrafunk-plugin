@@ -119,12 +119,15 @@ function embed_oembed_html(string $cache, string $url, array $attr, int $post_id
 add_filter('embed_oembed_html', '\Ultrafunk\Plugin\Custom\FiltersActions\embed_oembed_html', 10, 4);
 
 //
-// Add noindex meta tag to all 404 and shuffle pages
+// Add noindex + nofollow meta tags to all 404 and shuffle pages
 //
 function wp_robots(array $robots) : array
 {
   if (is_404() || is_shuffle())
-    $robots['noindex'] = true;
+  {
+    $robots['noindex']  = true;
+    $robots['nofollow'] = true;
+  }
 
   return $robots;
 }

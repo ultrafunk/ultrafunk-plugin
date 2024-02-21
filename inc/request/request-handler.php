@@ -27,7 +27,7 @@ class RequestParams
   public ?array  $get            = null;
   public ?array  $query          = null;
   public ?array  $query_vars     = null;
-  public array   $query_filter   = ['slug' => null, 'taxonomy' => null];
+  public ?array  $query_filter   = null;
   public ?string $route_path     = null;
   public ?array  $title_parts    = null;
   public int     $items_per_page = 0;
@@ -65,12 +65,13 @@ abstract class RequestHandler
 
   abstract protected function has_valid_request_params() : bool;
 
-  protected function set_filter_params(string $key, string $taxonomy = null) : void
+  protected function set_filter_params(string $key, string $taxonomy = null, string $rest_taxonomy = null) : void
   {
     if (isset($this->route_request->query_params[$key]))
     {
-      $this->params->query_filter['slug']     = sanitize_title($this->route_request->query_params[$key]);
-      $this->params->query_filter['taxonomy'] = $taxonomy;
+      $this->params->query_filter['taxonomy']      = $taxonomy;
+      $this->params->query_filter['rest_taxonomy'] = $rest_taxonomy ?? $taxonomy;
+      $this->params->query_filter['slug']          = sanitize_title($this->route_request->query_params[$key]);
     }
   }
 
@@ -110,7 +111,7 @@ abstract class RequestHandler
   private function add_filter_query_args() : void
   {
     // Append filter (AND) second taxonomy term(s) if present
-    if (($this->params->query_filter['slug'] !== null) && ($this->params->query_filter['taxonomy'] !== null))
+    if (isset($this->params->query_filter))
     {
       $this->wp_query_vars['tax_query']    += ['relation' => 'AND'];
       $this->wp_query_vars['tax_query'][1]  = [
@@ -234,6 +235,10 @@ abstract class RequestHandler
     get_template_part('php/templates/content', 'none');
     $this->end_output();
   }
+
+
+  /**************************************************************************************************************************/
+
 
   public function render_content() : bool
   {
