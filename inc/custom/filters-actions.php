@@ -97,6 +97,21 @@ function posts_results(array $posts, object $query) : array
 add_filter('posts_results', '\Ultrafunk\Plugin\Custom\FiltersActions\posts_results', 10, 2);
 
 //
+//
+//
+function youtube_iframe_set_args(string &$iframe_tag) : void
+{
+  $iframe_tag = str_ireplace('<iframe', sprintf('<iframe id="youtube-%s"', uniqid()), $iframe_tag);
+  $iframe_tag = str_ireplace('feature=oembed', sprintf('feature=oembed&enablejsapi=1&disablekb=1&origin=%s', \Ultrafunk\Plugin\Config\PLUGIN_ENV['site_url']), $iframe_tag);
+}
+
+function soundcloud_iframe_set_args(string &$iframe_tag) : void
+{
+  $iframe_tag = str_ireplace('<iframe', sprintf('<iframe id="soundcloud-%s" allow="autoplay"', uniqid()), $iframe_tag);
+  $iframe_tag = str_ireplace('visual=true', 'visual=true&single_active=false', $iframe_tag);
+}
+
+//
 // Add uniqid and other custom options for SoundCloud and YouTube iframe embeds
 //
 function embed_oembed_html(string $cache, string $url, array $attr, int $post_id) : string
@@ -104,19 +119,45 @@ function embed_oembed_html(string $cache, string $url, array $attr, int $post_id
   $track_type = intval(get_post_meta($post_id, 'track_source_type', true));
 
   if ($track_type === TRACK_TYPE::YOUTUBE)
-  {
-    $cache = str_ireplace('<iframe', sprintf('<iframe id="youtube-%s"', uniqid()), $cache);
-    $cache = str_ireplace('feature=oembed', sprintf('feature=oembed&enablejsapi=1&disablekb=1&origin=%s', \Ultrafunk\Plugin\Config\PLUGIN_ENV['site_url']), $cache);
-  }
+    youtube_iframe_set_args($cache);
   else if ($track_type === TRACK_TYPE::SOUNDCLOUD)
-  {
-    $cache = str_ireplace('<iframe', sprintf('<iframe id="soundcloud-%s" allow="autoplay"', uniqid()), $cache);
-    $cache = str_ireplace('visual=true', 'visual=true&single_active=false', $cache);
-  }
+    soundcloud_iframe_set_args($cache);
 
   return $cache;
 }
 add_filter('embed_oembed_html', '\Ultrafunk\Plugin\Custom\FiltersActions\embed_oembed_html', 10, 4);
+
+//
+//
+//
+function embed_maybe_make_link(string $output, string $url)
+{
+  global $wp_query;
+  $post_meta    = get_post_meta($wp_query->post->ID);
+  $track_type   = intval($post_meta['track_source_type'][0]);
+  $embed_domain = ($track_type === TRACK_TYPE::YOUTUBE) ? 'youtube.com' : 'soundcloud.com';
+
+  foreach($post_meta as $key => $value)
+  {
+    if (str_starts_with($key, '_oembed_'))
+    {
+      if (stripos($value[0], $embed_domain) !== false)
+      {
+        $output = $value[0];
+
+        if ($track_type === TRACK_TYPE::YOUTUBE)
+          youtube_iframe_set_args($output);
+        else if ($track_type === TRACK_TYPE::SOUNDCLOUD)
+          soundcloud_iframe_set_args($output);
+
+        error_log("oEmbed Cache ({$embed_domain}) - TrackID: {$wp_query->post->ID} => {$wp_query->post->post_title}", 0);
+      }
+    }
+  }
+
+  return $output;
+}
+add_filter('embed_maybe_make_link', '\Ultrafunk\Plugin\Custom\FiltersActions\embed_maybe_make_link', 10, 2);
 
 //
 // Add noindex + nofollow meta tags to all 404 and shuffle pages
