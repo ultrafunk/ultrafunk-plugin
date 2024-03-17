@@ -9,6 +9,7 @@ namespace Ultrafunk\Plugin\Request;
 
 
 use const Ultrafunk\Plugin\Config\ {
+  IS_DEBUG,
   IS_PROD_BUILD,
   PLUGIN_ENV,
 };
@@ -191,6 +192,27 @@ function is_valid_permalink_structure() : bool
   return true;
 }
 
+/*
+//
+// Write request variables to the PHP error log for debugging
+//
+function error_log_request_vars() : void
+{
+  if ((IS_PROD_BUILD === true) || (IS_DEBUG === false))
+    return;
+
+  $is_admin                     = is_admin()                     ? 'TRUE ' : 'FALSE';
+  $wp_doing_cron                = wp_doing_cron()                ? 'TRUE ' : 'FALSE';
+  $wp_doing_ajax                = wp_doing_ajax()                ? 'TRUE ' : 'FALSE';
+  $is_rest_request              = is_rest_request()              ? 'TRUE ' : 'FALSE';
+  $is_prod_build                = IS_PROD_BUILD                  ? 'TRUE ' : 'FALSE';
+  $is_user_logged_in            = is_user_logged_in()            ? 'TRUE ' : 'FALSE';
+  $is_valid_permalink_structure = is_valid_permalink_structure() ? 'TRUE ' : 'FALSE';
+
+  error_log("is_admin: {$is_admin} - wp_doing_cron: {$wp_doing_cron} - wp_doing_ajax: {$wp_doing_ajax} - is_rest_request: {$is_rest_request} - is_prod_build: {$is_prod_build} - is_user_logged_in: {$is_user_logged_in} - is_valid_permalink_structure: {$is_valid_permalink_structure}", 0);
+}
+*/
+
 
 /**************************************************************************************************************************/
 
@@ -202,6 +224,14 @@ function is_valid_permalink_structure() : bool
 function parse_request(bool $do_parse, object $wp_env) : bool
 {
   perf_start('RouteRequest_start');
+
+/*
+//--------------------------------------------
+// Only for DEV request debugging if needed!!!
+//--------------------------------------------
+//error_log_request_vars();
+//--------------------------------------------
+*/
 
   if ((is_admin()        === false) &&
       (wp_doing_cron()   === false) &&

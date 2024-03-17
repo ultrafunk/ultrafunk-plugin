@@ -53,8 +53,7 @@ function getarchives_where(string $where) : string
 add_filter('getarchives_where', '\Ultrafunk\Plugin\Custom\FiltersActions\getarchives_where');
 
 //
-// Enhance search results by replacing special chars in query string
-// This should be done by default in WordPress?
+// Return better term search results by replacing special chars in the query string
 //
 function parse_query(object $query) : void
 {
@@ -62,13 +61,8 @@ function parse_query(object $query) : void
 
   if (!is_admin() && $modify_query && $query->is_search())
   {
-    // https://www.w3.org/wiki/Common_HTML_entities_used_for_typography
-    $search  = ['&ndash;', '&mdash;', '&lsquo;', '&rsquo;', '&prime;', '&Prime;', '&ldquo;', '&rdquo;', '&quot;'];
-    $replace = ['-'      , '-'      , "'"      , "'"      , "'"      , '"'      , '"'      , '"'      , '"'     ];
-
-    $new_query_string = str_replace($search, $replace, htmlentities($query->query['s']));
-    $new_query_string = html_entity_decode($new_query_string);
-    $new_query_string = preg_replace('/(?<! )&(?! )/', '&amp;', $new_query_string); // Encode & without any spaces as &amp; for search to work OK
+    $new_query_string = str_replace("'", " ", $query->query['s']);                  // Replace ' with space for better term search results...
+    $new_query_string = preg_replace('/(?<! )&(?! )/', '&amp;', $new_query_string); // Encode & without any spaces as &amp; for better term search results...
 
     if ($new_query_string !== $query->query['s'])
       $query->set('s', $new_query_string);
@@ -97,7 +91,7 @@ function posts_results(array $posts, object $query) : array
 add_filter('posts_results', '\Ultrafunk\Plugin\Custom\FiltersActions\posts_results', 10, 2);
 
 //
-//
+// Add uniqid and other custom options for SoundCloud and YouTube iframe embeds
 //
 function youtube_iframe_set_args(string &$iframe_tag) : void
 {
@@ -111,9 +105,6 @@ function soundcloud_iframe_set_args(string &$iframe_tag) : void
   $iframe_tag = str_ireplace('visual=true', 'visual=true&single_active=false', $iframe_tag);
 }
 
-//
-// Add uniqid and other custom options for SoundCloud and YouTube iframe embeds
-//
 function embed_oembed_html(string $cache, string $url, array $attr, int $post_id) : string
 {
   $track_type = intval(get_post_meta($post_id, 'track_source_type', true));
@@ -128,9 +119,9 @@ function embed_oembed_html(string $cache, string $url, array $attr, int $post_id
 add_filter('embed_oembed_html', '\Ultrafunk\Plugin\Custom\FiltersActions\embed_oembed_html', 10, 4);
 
 //
+// Try to create a functioning iframe embed from a stale oEmbed Cache entry and log info for further inspection
 //
-//
-function embed_maybe_make_link(string $output, string $url)
+function embed_maybe_make_link(string $output, string $url) : string
 {
   global $wp_query;
   $post_meta    = get_post_meta($wp_query->post->ID);

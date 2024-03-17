@@ -18,3 +18,7 @@ PHP version 8.2 or greater
 [Plugin Check (PCP)](https://wordpress.org/plugins/plugin-check/) (WordPress Plugin from The WordPress Plugin Review Team)  
 [WP Extended Search](https://wordpress.org/plugins/wp-extended-search/) (WordPress Plugin)  
 [WP Fastest Cache](https://wordpress.org/plugins/wp-fastest-cache/) (WordPress Plugin)
+
+## **Screenshots**  
+![Settings](https://ultrafunk.com/wp-content/uploads/screenshots/ultrafunk-plugin_settings_1-46-22_02.png)  
+![Tracks](https://ultrafunk.com/wp-content/uploads/screenshots/ultrafunk-plugin_tracks_1-46-22_02.png)  
