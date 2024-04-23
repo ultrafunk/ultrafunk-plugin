@@ -27,7 +27,7 @@ Globals::construct();
 
 class Globals
 {
-  // Each prop has getter function for fast access
+  // Each prop has getter function for easy access
   public static array   $settings        = [];
   public static bool    $is_custom_query = false;
   public static ?object $request_params  = null;

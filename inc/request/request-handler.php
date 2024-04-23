@@ -259,7 +259,8 @@ abstract class RequestHandler
       // WordPress 6.X changed do_parse_request behaviour: https://wp.me/p2AvED-oWf
       //
       // If we want WordPress to continue normally with our parsed request parameters,
-      // we have do to some of the WP-class => WP::main() heavy lifting for it...
+      // we have do to some of the WP-class => WP::main() heavy lifting for it:
+      // https://developer.wordpress.org/reference/classes/wp/main/
       //
 
       $this->wp_env->query_posts();
