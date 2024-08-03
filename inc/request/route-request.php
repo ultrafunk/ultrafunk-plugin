@@ -162,7 +162,7 @@ class RouteRequest
 
 //
 // wp_is_rest_request() does not work until AFTER do_parse_request(): https://core.trac.wordpress.org/ticket/42061
-// Based on WooCommerce: https://github.com/woocommerce/woocommerce/blob/a8fff3175ccbb460dd0d1be1aefccf4488498105/plugins/woocommerce/includes/class-woocommerce.php#L357
+// Based on WooCommerce: https://github.com/woocommerce/woocommerce/blob/trunk/plugins/woocommerce/includes/class-woocommerce.php
 //
 function is_rest_request() : bool
 {

@@ -18,6 +18,7 @@ const DEFAULT_ROUTES =
 * Redirects first (highest priority)
 */
 
+/*
   [
     'handler'    => ['file' => 'redirect-route.php', 'class' => 'RedirectRoute'],
     'route_uids' => ['list/channel/soundcloud', 'list/shuffle/channel/soundcloud'],
@@ -28,6 +29,7 @@ const DEFAULT_ROUTES =
       'shuffle_channel_soundcloud_page' => '/^list\/shuffle\/channel\/soundcloud\/page\/(?!0)\d{1,6}$/',
     ]
   ],
+*/
 
 /*
 * Then all the normal routes...
