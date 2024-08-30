@@ -18,7 +18,7 @@ function settings_template(array $uf_settings, array $result = null) : void
 
   <h2>Ultrafunk Settings</h2>
 
-  <form method="post" action="<?php echo esc_attr($_SERVER["REQUEST_URI"]); ?>">
+  <form method="post" action="">
   <?php wp_nonce_field('_uf_settings_', '_uf_nonce_settings_'); ?>
 
   <table>
@@ -38,7 +38,7 @@ function settings_template(array $uf_settings, array $result = null) : void
   </form>
 
   <br>
-  <form method="post" action="<?php echo esc_attr($_SERVER["REQUEST_URI"]); ?>">
+  <form method="post" action="">
   <?php wp_nonce_field('_uf_top_artists_', '_uf_nonce_top_artists_'); ?>
 
   <h3>Top Artists for <a href="/channels/">All Channels</a></h3>
@@ -48,7 +48,7 @@ function settings_template(array $uf_settings, array $result = null) : void
   <td><input type="number" name="channels_num_top_artists" min="5" max="15" value="<?php echo esc_attr($uf_settings['channels_num_top_artists']); ?>" /></td>
   </tr>
   </table>
-  <p><label><input type="checkbox" name="show_top_artists_log" value="1" <?php checked(1, $uf_settings['show_top_artists_log'], true); ?> />Show create / update log</label></p>
+  <p><label><input type="checkbox" name="show_top_artists_log" value="true" <?php checked(true, $uf_settings['show_top_artists_log'], true); ?> />Show create / update log</label></p>
 
   <p><input type="submit" class="button button-primary" name="uf-save-top-artists" value="Update Top Artists for All Channels" /></p>
   </form>
@@ -72,7 +72,7 @@ function display_php_error_log()
     <br>
     <h3>PHP error log: <span style="font-weight: 400;"><?php echo esc_html(ini_get('error_log')); ?></span></h3>
 
-    <form method="post" action="<?php echo esc_attr($_SERVER["REQUEST_URI"]); ?>">
+    <form method="post" action="">
     <?php wp_nonce_field('_uf_error_log_', '_uf_nonce_error_log_'); ?>
     <p><input type="submit" class="button button-primary" name="uf-delete-error-log" value="Delete Error Log" /></p>
     </form>

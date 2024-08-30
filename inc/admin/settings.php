@@ -65,11 +65,11 @@ function save_settings(array &$uf_settings) : void
 function save_top_artists(array &$uf_settings) : array
 {
   $uf_settings['channels_num_top_artists'] = get_post_value('channels_num_top_artists');
-  $uf_settings['show_top_artists_log']     = get_post_string('show_top_artists_log');
+  $uf_settings['show_top_artists_log']     = get_post_is_checked('show_top_artists_log');
 
   update_option("uf_settings", $uf_settings);
 
-  $set_top_artists_result = \Ultrafunk\Plugin\Admin\TopArtists\set_data(absint($uf_settings['channels_num_top_artists']), ($uf_settings['show_top_artists_log'] === '1'))
+  $set_top_artists_result = \Ultrafunk\Plugin\Admin\TopArtists\set_data(absint($uf_settings['channels_num_top_artists']), $uf_settings['show_top_artists_log'])
   ?><div class="updated"><p>Top Artists for all Channels created / updated in <?php echo esc_html($set_top_artists_result['time']); ?> seconds.</p></div><?php
 
   return $set_top_artists_result;
@@ -107,9 +107,9 @@ function get_post_value(string $key, int $default_value = -1) : int
   return (isset($_POST[$key]) ? intval($_POST[$key]) : $default_value);
 }
 
-function get_post_string(string $key, string $default_string = '') : string
+function get_post_is_checked(string $key) : bool
 {
-  return (isset($_POST[$key]) ? sanitize_title($_POST[$key]) : $default_string);
+  return (isset($_POST[$key]) ? true : false);
 }
 
 function is_valid_nonce(string $uid) : bool

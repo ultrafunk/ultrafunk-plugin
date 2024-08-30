@@ -27,8 +27,6 @@ use function Ultrafunk\Plugin\Globals\ {
 
 class RouteRequest
 {
-  private ?string $server_url = null;
-
   public ?string $request_path  = null;
   public ?array  $path_parts    = null;
   public ?string $query_string  = null;
@@ -91,18 +89,15 @@ class RouteRequest
   public function host_matches() : bool
   {
     if (isset($_SERVER['REQUEST_SCHEME']) && isset($_SERVER['HTTP_HOST']))
-    {
-      $this->server_url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'];
-      return (PLUGIN_ENV['site_url'] === $this->server_url);
-    }
+      return (PLUGIN_ENV['site_url'] === ($_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST']));
 
     return false;
   }
 
-  public function route_matches(string $request_url = NULL, array $routes = DEFAULT_ROUTES) : bool
+  public function route_matches(string $request_url = null, array $routes = DEFAULT_ROUTES) : bool
   {
     if ($request_url === null)
-      $request_url = $_SERVER['REQUEST_URI'];
+      $request_url = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : null;
 
     if (isset($request_url) && isset($routes))
     {

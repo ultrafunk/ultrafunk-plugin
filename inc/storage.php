@@ -25,7 +25,7 @@ const DEFAULT_SETTINGS = [
   'list_tracks_per_page'     => 25,
   'gallery_tracks_per_page'  => 12,
   'channels_num_top_artists' => 10,
-  'show_top_artists_log'     => '1',
+  'show_top_artists_log'     => true,
 ];
 
 
