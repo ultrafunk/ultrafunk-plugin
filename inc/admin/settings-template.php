@@ -13,10 +13,15 @@ namespace Ultrafunk\Plugin\Admin\Settings;
 
 function settings_template(array $uf_settings, array $result = null) : void
 {
+  $theme_version = ULTRAFUNK_THEME_ACTIVE
+    ? \Ultrafunk\Theme\Config\VERSION
+    : 'N/A (Theme not Activated or Installed)';
+
   ?>
   <div class="wrap">
 
   <h2>Ultrafunk Settings</h2>
+  <b>Theme Version:</b> <?php echo $theme_version; ?> - <b>Plugin Version:</b> <?php echo \Ultrafunk\Plugin\Config\VERSION; ?>
 
   <form method="post" action="">
   <?php wp_nonce_field('_uf_settings_', '_uf_nonce_settings_'); ?>
@@ -48,7 +53,7 @@ function settings_template(array $uf_settings, array $result = null) : void
   <td><input type="number" name="channels_num_top_artists" min="5" max="15" value="<?php echo esc_attr($uf_settings['channels_num_top_artists']); ?>" /></td>
   </tr>
   </table>
-  <p><label><input type="checkbox" name="show_top_artists_log" value="true" <?php checked(true, $uf_settings['show_top_artists_log'], true); ?> />Show create / update log</label></p>
+  <p><label><input type="checkbox" name="show_top_artists_log" <?php checked(true, $uf_settings['show_top_artists_log'], true); ?> />Show create / update log</label></p>
 
   <p><input type="submit" class="button button-primary" name="uf-save-top-artists" value="Update Top Artists for All Channels" /></p>
   </form>
