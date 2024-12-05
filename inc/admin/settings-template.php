@@ -8,6 +8,9 @@
 namespace Ultrafunk\Plugin\Admin\Settings;
 
 
+use function Ultrafunk\Plugin\Shared\human_file_size;
+
+
 /**************************************************************************************************************************/
 
 
@@ -16,6 +19,11 @@ function settings_template(array $uf_settings, array $result = null) : void
   $theme_version = ULTRAFUNK_THEME_ACTIVE
     ? \Ultrafunk\Theme\Config\VERSION
     : 'N/A (Theme not Activated or Installed)';
+
+  $page_cache_stats = get_transient('uf_page_cache_stats');
+
+  if ($page_cache_stats === false)
+    $page_cache_stats = ['updated_at' => 0, 'total_bytes' => 0, 'total_files' => 0, 'total_dirs' => 0];
 
   ?>
   <div class="wrap">
@@ -56,6 +64,20 @@ function settings_template(array $uf_settings, array $result = null) : void
   <p><label><input type="checkbox" name="show_top_artists_log" <?php checked(true, $uf_settings['show_top_artists_log'], true); ?> />Show create / update log</label></p>
 
   <p><input type="submit" class="button button-primary" name="uf-save-top-artists" value="Update Top Artists for All Channels" /></p>
+  </form>
+
+  <br>
+  <form method="post" action="">
+  <?php wp_nonce_field('_uf_update_page_cache_stats_', '_uf_nonce_update_page_cache_stats_'); ?>
+  <h3>Page Cache Statistics</h3>
+  <p>
+    <table>
+      <tr><td><b>Last updated:</b></td><td>&nbsp;</td><td><?php echo gmdate('d-M-Y H:i:s', $page_cache_stats['updated_at']); ?> UTC</td></tr>
+      <tr><td><b>Total Page Cache Size:</b></td><td>&nbsp;</td><td><?php echo esc_html(human_file_size($page_cache_stats['total_bytes'])); ?></td></tr>
+      <tr><td><b>Number of Pages Cached:</b></td><td>&nbsp;</td><td><?php echo esc_html($page_cache_stats['total_files']); ?></td></tr>
+    </table>
+  </p>
+  <p><input type="submit" class="button button-primary" name="uf-update-page-cache-stats" value="Update Page Cache Stats" /></p>
   </form>
 
   <?php

@@ -8,6 +8,9 @@
 namespace Ultrafunk\Plugin\Admin\Settings;
 
 
+use const Ultrafunk\Plugin\Config\PLUGIN_ENV;
+
+
 /**************************************************************************************************************************/
 
 
@@ -42,6 +45,9 @@ function plugin_settings() : void
   if (isset($_POST['uf-save-top-artists']) && is_valid_nonce('top_artists'))
     $result = save_top_artists($uf_settings);
 
+  if (isset($_POST['uf-update-page-cache-stats']) && is_valid_nonce('update_page_cache_stats'))
+    update_page_cache_stats(PLUGIN_ENV['page_cache_path']);
+
   if (isset($_POST['uf-delete-error-log']) && is_valid_nonce('error_log'))
     delete_error_log();
 
@@ -73,6 +79,22 @@ function save_top_artists(array &$uf_settings) : array
   ?><div class="updated"><p>Top Artists for all Channels created / updated in <?php echo esc_html($set_top_artists_result['time']); ?> seconds.</p></div><?php
 
   return $set_top_artists_result;
+}
+
+function update_page_cache_stats(string $cache_path) : void
+{
+  require ULTRAFUNK_PLUGIN_PATH . 'inc/admin/page-cache-stats.php';
+
+  $stats_updated = \Ultrafunk\Plugin\Admin\PageCacheStats\update_page_cache_stats($cache_path);
+
+  if ($stats_updated)
+  {
+    ?><div class="updated"><p>Page Cache Statistics updated</p></div><?php
+  }
+  else
+  {
+    ?><div class="updated"><p>Unable to Update Page Cache Statistics!</p></div><?php
+  }
 }
 
 function delete_error_log() : void

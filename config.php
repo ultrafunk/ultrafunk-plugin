@@ -21,7 +21,7 @@ const IS_DEBUG      = false;
 /**************************************************************************************************************************/
 
 
-const VERSION = '1.48.26';
+const VERSION = '1.48.27';
 
 const PLUGIN_ENV = [
   'site_url'            => IS_PROD_BUILD ? 'https://ultrafunk.com'               : 'https://wordpress.ultrafunk.com',
@@ -31,4 +31,5 @@ const PLUGIN_ENV = [
   'template_file'       => IS_PROD_BUILD ? 'content-list-player.php'             : 'content-list-player.php',
   'template_class_path' => IS_PROD_BUILD ? '\Ultrafunk\Theme\Templates\\'        : '\Ultrafunk\Theme\Templates\\',
   'template_class'      => IS_PROD_BUILD ? 'ListPlayer'                          : 'ListPlayer',
+  'page_cache_path'     => IS_PROD_BUILD ? '/wp-content/cache/all/'              : '/wp-content/themes/',
 ];
