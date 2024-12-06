@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 /*
- * Update site page cache stats
+ * Page cache info
  *
  */
 
 
-namespace Ultrafunk\Plugin\Admin\PageCacheStats;
+namespace Ultrafunk\Plugin\Admin\PageCacheInfo;
 
 
 /**************************************************************************************************************************/
@@ -14,7 +14,7 @@ namespace Ultrafunk\Plugin\Admin\PageCacheStats;
 //
 // Based on: https://stackoverflow.com/a/21409562
 //
-function get_directory_stats(string $path) : array
+function get_cache_dir_info(string $path) : array
 {
   $num_bytes = 0;
   $num_files = 0;
@@ -38,15 +38,15 @@ function get_directory_stats(string $path) : array
   ];
 }
 
-function update_page_cache_stats(string $cache_path) : bool
+function update_transient(string $cache_path) : bool
 {
   if (isset($_SERVER['DOCUMENT_ROOT']))
   {
-    $page_cache_data = get_directory_stats($_SERVER['DOCUMENT_ROOT'] . $cache_path);
+    $page_cache_info = get_cache_dir_info($_SERVER['DOCUMENT_ROOT'] . $cache_path);
 
-    if (($page_cache_data['total_bytes'] !== 0) && ($page_cache_data['total_files'] !== 0))
+    if (($page_cache_info['total_bytes'] !== 0) && ($page_cache_info['total_files'] !== 0))
     {
-      set_transient('uf_page_cache_stats', $page_cache_data, (YEAR_IN_SECONDS * 10));
+      set_transient('uf_page_cache_info', $page_cache_info, YEAR_IN_SECONDS);
       return true;
     }
   }

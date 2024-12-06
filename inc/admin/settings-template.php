@@ -8,6 +8,8 @@
 namespace Ultrafunk\Plugin\Admin\Settings;
 
 
+use const Ultrafunk\Plugin\Config\PLUGIN_ENV;
+
 use function Ultrafunk\Plugin\Shared\human_file_size;
 
 
@@ -20,10 +22,10 @@ function settings_template(array $uf_settings, array $result = null) : void
     ? \Ultrafunk\Theme\Config\VERSION
     : 'N/A (Theme not Activated or Installed)';
 
-  $page_cache_stats = get_transient('uf_page_cache_stats');
+  $page_cache_info = get_transient('uf_page_cache_info');
 
-  if ($page_cache_stats === false)
-    $page_cache_stats = ['updated_at' => 0, 'total_bytes' => 0, 'total_files' => 0, 'total_dirs' => 0];
+  if ($page_cache_info === false)
+    $page_cache_info = ['updated_at' => 0, 'total_bytes' => 0, 'total_files' => 0, 'total_dirs' => 0];
 
   ?>
   <div class="wrap">
@@ -68,16 +70,17 @@ function settings_template(array $uf_settings, array $result = null) : void
 
   <br>
   <form method="post" action="">
-  <?php wp_nonce_field('_uf_update_page_cache_stats_', '_uf_nonce_update_page_cache_stats_'); ?>
-  <h3>Page Cache Statistics</h3>
+  <?php wp_nonce_field('_uf_update_page_cache_info_', '_uf_nonce_update_page_cache_info_'); ?>
+  <h3>Page Cache Info</h3>
   <p>
     <table>
-      <tr><td><b>Last updated:</b></td><td>&nbsp;</td><td><?php echo gmdate('d-M-Y H:i:s', $page_cache_stats['updated_at']); ?> UTC</td></tr>
-      <tr><td><b>Total Page Cache Size:</b></td><td>&nbsp;</td><td><?php echo esc_html(human_file_size($page_cache_stats['total_bytes'])); ?></td></tr>
-      <tr><td><b>Number of Pages Cached:</b></td><td>&nbsp;</td><td><?php echo esc_html($page_cache_stats['total_files']); ?></td></tr>
+      <tr><td><b>Page cache path:</b></td><td>&nbsp;</td><td><?php echo esc_html(PLUGIN_ENV['page_cache_path']); ?></td></tr>
+      <tr><td><b>Last updated:</b></td><td>&nbsp;</td><td><?php echo gmdate('d-M-Y H:i:s', $page_cache_info['updated_at']); ?> UTC (uf_page_cache_info)</td></tr>
+      <tr><td><b>Total page cache size:</b></td><td>&nbsp;</td><td><?php echo esc_html(human_file_size($page_cache_info['total_bytes'])); ?></td></tr>
+      <tr><td><b>Number of pages cached:</b></td><td>&nbsp;</td><td><?php echo esc_html($page_cache_info['total_files']); ?></td></tr>
     </table>
   </p>
-  <p><input type="submit" class="button button-primary" name="uf-update-page-cache-stats" value="Update Page Cache Stats" /></p>
+  <p><input type="submit" class="button button-primary" name="uf-update-page-cache-info" value="Update Page Cache Info" /></p>
   </form>
 
   <?php

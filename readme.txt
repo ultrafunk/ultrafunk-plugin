@@ -4,7 +4,7 @@ This is the source code for the [ultrafunk.com](https://ultrafunk.com) WordPress
 Requires at least: 6.7
 Tested up to:      6.7.1
 Requires PHP:      8.3
-Stable tag:        1.48.27
+Stable tag:        1.48.28
 License:           MIT
 License URI:       https://opensource.org/licenses/MIT
 
