@@ -191,7 +191,7 @@ abstract class RequestHandler
     exit;
   }
 
-  private function render_valid_response() : void
+  private function render_valid_response() : never
   {
     // Set public parameters for this request
     \Ultrafunk\Plugin\Globals\set_request_params($this->params);
@@ -208,7 +208,7 @@ abstract class RequestHandler
     $this->end_output();
   }
 
-  private function render_error_response() : void
+  private function render_error_response() : never
   {
     global $wp_query;
     $response_params = new stdClass();

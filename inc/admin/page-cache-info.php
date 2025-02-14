@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /*
- * Page cache info
+ * Get page cache info from server
  *
  */
 
@@ -18,7 +18,6 @@ function get_cache_dir_info(string $path) : array
 {
   $num_bytes = 0;
   $num_files = 0;
-  $num_dirs  = 0;
   $real_path = realpath($path);
 
   if (($real_path !== false) && ($real_path !== '') && file_exists($real_path))
@@ -34,7 +33,6 @@ function get_cache_dir_info(string $path) : array
     'updated_at'  => time(),
     'total_bytes' => $num_bytes,
     'total_files' => $num_files,
-    'total_dirs'  => $num_dirs,
   ];
 }
 

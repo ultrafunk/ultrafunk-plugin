@@ -75,7 +75,7 @@ function settings_template(array $uf_settings, array $result = null) : void
   <p>
     <table>
       <tr><td><b>Page cache path:</b></td><td>&nbsp;</td><td><?php echo esc_html(PLUGIN_ENV['page_cache_path']); ?></td></tr>
-      <tr><td><b>Last updated:</b></td><td>&nbsp;</td><td><?php echo gmdate('d-M-Y H:i:s', $page_cache_info['updated_at']); ?> UTC (uf_page_cache_info)</td></tr>
+      <tr><td><b>Cache info last updated:</b></td><td>&nbsp;</td><td><?php echo gmdate('d-M-Y H:i:s', $page_cache_info['updated_at']); ?> UTC (uf_page_cache_info transient)</td></tr>
       <tr><td><b>Total page cache size:</b></td><td>&nbsp;</td><td><?php echo esc_html(human_file_size($page_cache_info['total_bytes'])); ?></td></tr>
       <tr><td><b>Number of pages cached:</b></td><td>&nbsp;</td><td><?php echo esc_html($page_cache_info['total_files']); ?></td></tr>
     </table>

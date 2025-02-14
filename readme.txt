@@ -2,9 +2,9 @@
 This is the source code for the [ultrafunk.com](https://ultrafunk.com) WordPress plugin, updated each time a new version is released. The source code is provided as is with no warranties or support of any kind.
 
 Requires at least: 6.7
-Tested up to:      6.7.1
+Tested up to:      6.7.2
 Requires PHP:      8.3
-Stable tag:        1.48.28
+Stable tag:        1.48.29
 License:           MIT
 License URI:       https://opensource.org/licenses/MIT
 

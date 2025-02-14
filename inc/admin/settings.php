@@ -65,7 +65,7 @@ function save_settings(array &$uf_settings) : void
 
   update_option("uf_settings", $uf_settings);
 
-  ?><div class="updated"><p>Settings updated</p></div><?php
+  ?><div class="notice notice-success is-dismissible"><p>Settings updated</p></div><?php
 }
 
 function save_top_artists(array &$uf_settings) : array
@@ -76,31 +76,33 @@ function save_top_artists(array &$uf_settings) : array
   update_option("uf_settings", $uf_settings);
 
   $set_top_artists_result = \Ultrafunk\Plugin\Admin\TopArtists\set_data(absint($uf_settings['channels_num_top_artists']), $uf_settings['show_top_artists_log'])
-  ?><div class="updated"><p>Top Artists for all Channels created / updated in <?php echo esc_html($set_top_artists_result['time']); ?> seconds.</p></div><?php
+  ?><div class="notice notice-success is-dismissible"><p>Top Artists for all Channels created / updated in <?php echo esc_html($set_top_artists_result['time']); ?> seconds.</p></div><?php
 
   return $set_top_artists_result;
 }
 
 function update_page_cache_info(string $cache_path) : void
 {
+  $start_time = microtime(true);
+
   require ULTRAFUNK_PLUGIN_PATH . 'inc/admin/page-cache-info.php';
 
   $info_updated = \Ultrafunk\Plugin\Admin\PageCacheInfo\update_transient($cache_path);
 
   if ($info_updated)
   {
-    ?><div class="updated"><p>Page Cache Info updated</p></div><?php
+    ?><div class="notice notice-success is-dismissible"><p>Page cache info updated in <?php echo round((microtime(true) - $start_time), 3) . ' seconds.'; ?></p></div><?php
   }
   else
   {
-    ?><div class="updated"><p>Unable to Update Page Cache Info!</p></div><?php
+    ?><div class="notice notice-error is-dismissible"><p>Unable to update page cache info!</p></div><?php
   }
 }
 
 function delete_error_log() : void
 {
   wp_delete_file(ini_get('error_log'));
-  ?><div class="updated"><p>PHP error log deleted</p></div><?php
+  ?><div class="notice notice-success is-dismissible"><p>PHP error log deleted</p></div><?php
 }
 
 
