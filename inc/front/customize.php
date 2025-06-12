@@ -70,6 +70,15 @@ function remove_classic_theme_styles()
 add_action('wp_enqueue_scripts', '\Ultrafunk\Plugin\Front\Customize\remove_classic_theme_styles');
 
 //
+// Disable since WP 6.7: https://core.trac.wordpress.org/ticket/62413
+//
+add_filter('wp_img_tag_add_auto_sizes', '__return_false');
+
+
+/**************************************************************************************************************************/
+
+
+//
 // Show Tracks in site RSS feed
 //
 function add_tracks_to_feed(array $query_vars) : array

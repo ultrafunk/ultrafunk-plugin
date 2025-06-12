@@ -23,9 +23,15 @@ function settings_template(array $uf_settings, array $result = null) : void
     : 'N/A (Theme not Activated or Installed)';
 
   $page_cache_info = get_transient('uf_page_cache_info');
+  $channels_top_artists_updated_at = get_transient('uf_channels_top_artists_updated_at');
 
   if ($page_cache_info === false)
     $page_cache_info = ['updated_at' => 0, 'total_bytes' => 0, 'total_files' => 0, 'total_dirs' => 0];
+
+  if ($channels_top_artists_updated_at !== false)
+    $channels_top_artists_updated_at = gmdate('d. F Y H:i:s', intval($channels_top_artists_updated_at)) . ' UTC';
+  else
+    $channels_top_artists_updated_at = 'N/A';
 
   ?>
   <div class="wrap">
@@ -63,8 +69,9 @@ function settings_template(array $uf_settings, array $result = null) : void
   <td><input type="number" name="channels_num_top_artists" min="5" max="15" value="<?php echo esc_attr($uf_settings['channels_num_top_artists']); ?>" /></td>
   </tr>
   </table>
-  <p><label><input type="checkbox" name="show_top_artists_log" <?php checked(true, $uf_settings['show_top_artists_log'], true); ?> />Show create / update log</label></p>
 
+  <p><b>Last updated:</b> <?php echo $channels_top_artists_updated_at; ?></p>
+  <p><label><input type="checkbox" name="show_top_artists_log" <?php checked(true, $uf_settings['show_top_artists_log'], true); ?> />Show create / update log</label></p>
   <p><input type="submit" class="button button-primary" name="uf-save-top-artists" value="Update Top Artists for All Channels" /></p>
   </form>
 
@@ -75,7 +82,7 @@ function settings_template(array $uf_settings, array $result = null) : void
   <p>
     <table>
       <tr><td><b>Page cache path:</b></td><td>&nbsp;</td><td><?php echo esc_html(PLUGIN_ENV['page_cache_path']); ?></td></tr>
-      <tr><td><b>Cache info last updated:</b></td><td>&nbsp;</td><td><?php echo gmdate('d-M-Y H:i:s', $page_cache_info['updated_at']); ?> UTC (uf_page_cache_info transient)</td></tr>
+      <tr><td><b>Cache info last updated:</b></td><td>&nbsp;</td><td><?php echo gmdate('d. F Y H:i:s', $page_cache_info['updated_at']); ?> UTC (uf_page_cache_info transient)</td></tr>
       <tr><td><b>Total page cache size:</b></td><td>&nbsp;</td><td><?php echo esc_html(human_file_size($page_cache_info['total_bytes'])); ?></td></tr>
       <tr><td><b>Number of pages cached:</b></td><td>&nbsp;</td><td><?php echo esc_html($page_cache_info['total_files']); ?></td></tr>
     </table>
@@ -107,7 +114,7 @@ function display_php_error_log()
     <p><input type="submit" class="button button-primary" name="uf-delete-error-log" value="Delete Error Log" /></p>
     </form>
 
-    <textarea id="uf-plugin-php-error-log" readonly rows="35">
+    <textarea id="uf-plugin-php-error-log" readonly rows="50">
     <?php
 
     WP_Filesystem();

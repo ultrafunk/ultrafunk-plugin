@@ -1,10 +1,10 @@
 # **Ultrafunk plugin**
 This is the source code for the [ultrafunk.com](https://ultrafunk.com) WordPress plugin, updated each time a new version is released. The source code is provided as is with no warranties or support of any kind.
 
-Requires at least: 6.7
-Tested up to:      6.7.2
+Requires at least: 6.8
+Tested up to:      6.8
 Requires PHP:      8.3
-Stable tag:        1.48.29
+Stable tag:        1.48.31
 License:           MIT
 License URI:       https://opensource.org/licenses/MIT
 
@@ -14,7 +14,7 @@ Tested on servers running LAMP: Linux, Apache, MariaDB / MySQL and PHP.
 # Dependencies
 **Required:**
 PHP version 8.3 or greater.
-[WordPress](https://wordpress.org/download/) version 6.7 or greater.
+[WordPress](https://wordpress.org/download/) version 6.8 or greater.
 [Ultrafunk Theme](https://github.com/ultrafunk/ultrafunk-theme/) version 1.48.X or greater.
 
 **Optional:**

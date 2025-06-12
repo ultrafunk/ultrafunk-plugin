@@ -65,6 +65,7 @@ function set_data(int $max_entries = 10, bool $create_log = false) : array
   }
 
   set_transient('uf_channels_top_artists', $top_artists, 0);
+  set_transient('uf_channels_top_artists_updated_at', time(), YEAR_IN_SECONDS);
 
   $end_time = microtime(true);
 
