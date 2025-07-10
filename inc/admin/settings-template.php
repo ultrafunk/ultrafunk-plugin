@@ -16,7 +16,7 @@ use function Ultrafunk\Plugin\Shared\human_file_size;
 /**************************************************************************************************************************/
 
 
-function settings_template(array $uf_settings, array $result = null) : void
+function settings_template(array $uf_settings, ?array $result = null) : void
 {
   $theme_version = ULTRAFUNK_THEME_ACTIVE
     ? \Ultrafunk\Theme\Config\VERSION

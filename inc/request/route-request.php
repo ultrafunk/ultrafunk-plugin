@@ -94,7 +94,7 @@ class RouteRequest
     return false;
   }
 
-  public function route_matches(string $request_url = null, array $routes = DEFAULT_ROUTES) : bool
+  public function route_matches(?string $request_url = null, array $routes = DEFAULT_ROUTES) : bool
   {
     if ($request_url === null)
       $request_url = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : null;

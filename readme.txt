@@ -3,8 +3,8 @@ This is the source code for the [ultrafunk.com](https://ultrafunk.com) WordPress
 
 Requires at least: 6.8
 Tested up to:      6.8
-Requires PHP:      8.3
-Stable tag:        1.48.31
+Requires PHP:      8.4
+Stable tag:        1.48.33
 License:           MIT
 License URI:       https://opensource.org/licenses/MIT
 
@@ -13,7 +13,7 @@ Tested on servers running LAMP: Linux, Apache, MariaDB / MySQL and PHP.
 
 # Dependencies
 **Required:**
-PHP version 8.3 or greater.
+PHP version 8.4 or greater.
 [WordPress](https://wordpress.org/download/) version 6.8 or greater.
 [Ultrafunk Theme](https://github.com/ultrafunk/ultrafunk-theme/) version 1.48.X or greater.
 

@@ -65,7 +65,7 @@ abstract class RequestHandler
 
   abstract protected function has_valid_request_params() : bool;
 
-  protected function set_filter_params(string $key, string $taxonomy = null, string $rest_taxonomy = null) : void
+  protected function set_filter_params(string $key, ?string $taxonomy = null, ?string $rest_taxonomy = null) : void
   {
     if (isset($this->route_request->query_params[$key]))
     {

@@ -120,12 +120,12 @@ function is_response(string $resource, ?string $type = null) : bool
          (Globals::$request_params->response[$resource] === $type));
 }
 
-function is_termlist(string $type = null) : bool
+function is_termlist(?string $type = null) : bool
 {
   return is_request('termlist', $type);
 }
 
-function is_list_player(string $type = null) : bool
+function is_list_player(?string $type = null) : bool
 {
   return is_request('list_player', $type);
 }
