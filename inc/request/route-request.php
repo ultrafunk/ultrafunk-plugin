@@ -25,7 +25,7 @@ use function Ultrafunk\Plugin\Globals\ {
 /**************************************************************************************************************************/
 
 
-class RouteRequest
+final class RouteRequest
 {
   public ?string $request_path  = null;
   public ?array  $path_parts    = null;

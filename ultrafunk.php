@@ -5,7 +5,7 @@ Plugin URI:        https://github.com/ultrafunk/ultrafunk-plugin
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress plugin
-Version:           1.48.33
+Version:           1.48.34
 Requires at least: 6.8
 Tested up to:      6.8
 Requires PHP:      8.4
@@ -49,13 +49,13 @@ if (ULTRAFUNK_THEME_ACTIVE === false)
 else
 {
   require ULTRAFUNK_PLUGIN_PATH . 'config.php';
-  require ULTRAFUNK_PLUGIN_PATH . 'inc/storage.php';
-  require ULTRAFUNK_PLUGIN_PATH . 'inc/shared.php';
-  require ULTRAFUNK_PLUGIN_PATH . 'inc/custom/types.php';
+  require ULTRAFUNK_PLUGIN_PATH . 'inc/shared/constants.php';
+  require ULTRAFUNK_PLUGIN_PATH . 'inc/shared/custom-types.php';
+  require ULTRAFUNK_PLUGIN_PATH . 'inc/shared/utils.php';
 
   if (is_admin())
   {
-    require ULTRAFUNK_PLUGIN_PATH . 'inc/admin/customize.php';
+    require ULTRAFUNK_PLUGIN_PATH . 'inc/admin/filters-actions.php';
     require ULTRAFUNK_PLUGIN_PATH . 'inc/admin/tracks.php';
     require ULTRAFUNK_PLUGIN_PATH . 'inc/admin/settings-template.php';
     require ULTRAFUNK_PLUGIN_PATH . 'inc/admin/settings.php';
@@ -70,7 +70,7 @@ else
     require ULTRAFUNK_PLUGIN_PATH . 'inc/request/session.php';
     require ULTRAFUNK_PLUGIN_PATH . 'inc/custom/rest.php';
     require ULTRAFUNK_PLUGIN_PATH . 'inc/custom/filters-actions.php';
-    require ULTRAFUNK_PLUGIN_PATH . 'inc/front/customize.php';
+    require ULTRAFUNK_PLUGIN_PATH . 'inc/custom/wp-defaults.php';
   }
 }
 
@@ -84,7 +84,7 @@ else
 function activate() : void
 {
   if (ULTRAFUNK_THEME_ACTIVE)
-    \Ultrafunk\Plugin\Custom\Types\register_custom_post_types();
+    \Ultrafunk\Plugin\Shared\CustomTypes\register_custom_post_types();
 
   flush_rewrite_rules();
 }

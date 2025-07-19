@@ -22,7 +22,7 @@ use function Ultrafunk\Plugin\Globals\ {
 /**************************************************************************************************************************/
 
 
-class RequestParams
+final class RequestParams
 {
   public ?array  $get            = null;
   public ?array  $query          = null;
@@ -168,7 +168,7 @@ abstract class RequestHandler
   private function begin_output() : void
   {
     // Show debug info for this request
-    //\Ultrafunk\Plugin\Shared\console_log(\Ultrafunk\Plugin\Globals\get_request_params());
+    //\Ultrafunk\Plugin\Shared\Utils\console_log(\Ultrafunk\Plugin\Globals\get_request_params());
 
     // Output HTTP headers
     $this->wp_env->send_headers();

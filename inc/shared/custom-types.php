@@ -5,7 +5,7 @@
  */
 
 
-namespace Ultrafunk\Plugin\Custom\Types;
+namespace Ultrafunk\Plugin\Shared\CustomTypes;
 
 
 /**************************************************************************************************************************/
@@ -63,7 +63,7 @@ function register_custom_post_types() : void
 
   register_post_type('uf_track', $args);
 }
-add_action('init', '\Ultrafunk\Plugin\Custom\Types\register_custom_post_types');
+add_action('init', '\Ultrafunk\Plugin\Shared\CustomTypes\register_custom_post_types');
 
 
 /**************************************************************************************************************************/
@@ -140,4 +140,4 @@ function register_custom_taxonomies() : void
 
   register_taxonomy('uf_channel', 'uf_track', $args);
 }
-add_action('init', '\Ultrafunk\Plugin\Custom\Types\register_custom_taxonomies');
+add_action('init', '\Ultrafunk\Plugin\Shared\CustomTypes\register_custom_taxonomies');

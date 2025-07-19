@@ -8,9 +8,9 @@
 namespace Ultrafunk\Plugin\Request\Handler;
 
 
-use Ultrafunk\Plugin\Storage\COOKIE_KEY;
+use Ultrafunk\Plugin\Shared\Constants\COOKIE_KEY;
 
-use function Ultrafunk\Plugin\Storage\get_shuffle_transient_name;
+use function Ultrafunk\Plugin\Shared\Utils\get_shuffle_transient_name;
 
 use function Ultrafunk\Plugin\Globals\ {
   set_request_params,
@@ -22,7 +22,7 @@ use function Ultrafunk\Plugin\Globals\ {
 /**************************************************************************************************************************/
 
 
-class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
+final class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
 {
   private bool $shuffle_all       = false;
   private bool $shuffle_all_page  = false;

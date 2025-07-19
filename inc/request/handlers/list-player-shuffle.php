@@ -11,7 +11,7 @@ namespace Ultrafunk\Plugin\Request\Handler;
 /**************************************************************************************************************************/
 
 
-class ListPlayerShuffle extends \Ultrafunk\Plugin\Request\RequestHandler
+final class ListPlayerShuffle extends \Ultrafunk\Plugin\Request\RequestHandler
 {
   protected function has_valid_request_params() : bool
   {

@@ -7,25 +7,18 @@
 
 namespace Ultrafunk\Plugin\Globals;
 
+use Ultrafunk\Plugin\Shared\Constants\ {
+  PLAYER_TYPE,
+  COOKIE_KEY,
+};
 
-use Ultrafunk\Plugin\Shared\PLAYER_TYPE;
-
-use Ultrafunk\Plugin\Storage\COOKIE_KEY;
-
-use function Ultrafunk\Plugin\Storage\get_cookie_value;
-
-
-/**************************************************************************************************************************/
-
-
-// Call Globals class constructor manually since it is "static"
-Globals::construct();
+use function Ultrafunk\Plugin\Shared\Utils\get_cookie_value;
 
 
 /**************************************************************************************************************************/
 
 
-class Globals
+final class Globals
 {
   // Each prop has getter function for easy access
   public static array   $settings        = [];
@@ -50,13 +43,20 @@ class Globals
   // Initialize global props here if needed
   public static function construct() : void
   {
-    self::$settings         = get_option('uf_settings', \Ultrafunk\Plugin\Storage\DEFAULT_SETTINGS);
+    self::$settings         = get_option('uf_settings', \Ultrafunk\Plugin\Shared\Constants\DEFAULT_SETTINGS);
     self::$cached_home_url  = esc_url(home_url());
     self::$preferred_player = get_cookie_value(COOKIE_KEY::UF_PREFERRED_PLAYER,  0,  2, PLAYER_TYPE::LIST);
     self::$list_per_page    = get_cookie_value(COOKIE_KEY::UF_LIST_PER_PAGE,    10, 50, get_settings_value('list_tracks_per_page'));
     self::$gallery_per_page = get_cookie_value(COOKIE_KEY::UF_GALLERY_PER_PAGE,  4, 24, get_settings_value('gallery_tracks_per_page'));
   }
 }
+
+
+/**************************************************************************************************************************/
+
+
+// Call Globals class constructor manually since it is "static"
+Globals::construct();
 
 
 /**************************************************************************************************************************/

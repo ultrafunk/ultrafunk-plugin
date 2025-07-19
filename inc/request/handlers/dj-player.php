@@ -11,7 +11,7 @@ namespace Ultrafunk\Plugin\Request\Handler;
 /**************************************************************************************************************************/
 
 
-class DJPlayer extends \Ultrafunk\Plugin\Request\RequestHandler
+final class DJPlayer extends \Ultrafunk\Plugin\Request\RequestHandler
 {
   protected function has_valid_request_params() : bool
   {

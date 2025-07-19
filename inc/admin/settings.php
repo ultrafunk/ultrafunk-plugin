@@ -111,7 +111,7 @@ function delete_error_log() : void
 
 function get_uf_settings() : array
 {
-  $settings        = \Ultrafunk\Plugin\Storage\DEFAULT_SETTINGS;
+  $settings        = \Ultrafunk\Plugin\Shared\Constants\DEFAULT_SETTINGS;
   $stored_settings = get_option("uf_settings");
 
   if (!empty($stored_settings))

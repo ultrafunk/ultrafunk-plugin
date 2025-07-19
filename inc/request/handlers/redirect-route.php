@@ -11,7 +11,7 @@ namespace Ultrafunk\Plugin\Request\Handler;
 /**************************************************************************************************************************/
 
 
-class RedirectRoute extends \Ultrafunk\Plugin\Request\RequestHandler
+final class RedirectRoute extends \Ultrafunk\Plugin\Request\RequestHandler
 {
   protected function has_valid_request_params() : bool
   {

@@ -1,32 +1,47 @@
 <?php declare(strict_types=1);
 /*
- * Storage functions
+ * Shared plugin + theme utility functions
  *
  */
 
 
-namespace Ultrafunk\Plugin\Storage;
+namespace Ultrafunk\Plugin\Shared\Utils;
+
+
+use Ultrafunk\Plugin\Shared\Constants\COOKIE_KEY;
 
 
 /**************************************************************************************************************************/
 
 
-abstract class COOKIE_KEY
+//
+// Output debug info to the browser console, this will not always work and may cause strange side effects!
+//
+function console_log(mixed $output) : void
 {
-//const UF_USER_SETTINGS    = 'uf_user_settings';
-  const UF_GALLERY_PER_PAGE = 'uf_gallery_per_page';
-  const UF_LIST_PER_PAGE    = 'uf_list_per_page';
-  const UF_PREFERRED_PLAYER = 'uf_preferred_player';
-  const UF_SHUFFLE_UID      = 'uf_shuffle_uid';
-  const UF_RESHUFFLE        = 'uf_reshuffle';
+  if (\Ultrafunk\Plugin\Config\IS_DEBUG)
+    echo '<script>console.log(' . wp_json_encode($output, JSON_HEX_TAG) . ');</script>';
 }
 
-const DEFAULT_SETTINGS = [
-  'list_tracks_per_page'     => 25,
-  'gallery_tracks_per_page'  => 12,
-  'channels_num_top_artists' => 10,
-  'show_top_artists_log'     => true,
-];
+
+/**************************************************************************************************************************/
+
+
+//
+// Return HTML links: <a href=""></a> for an array of WP_Terms
+//
+function get_term_links(array $terms, string $path, string $separator = '',  int $primary_id = -1) : string
+{
+  $term_links = [];
+
+  foreach ($terms as $term)
+  {
+    $class = (($primary_id !== -1) && ($term->term_id === $primary_id)) ? 'primary' : 'secondary';
+    $term_links[] = "<a class=\"$class\" href=\"$path$term->slug/\">$term->name</a>";
+  }
+
+  return implode($separator, $term_links);
+}
 
 
 /**************************************************************************************************************************/

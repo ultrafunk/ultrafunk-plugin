@@ -11,9 +11,9 @@ namespace Ultrafunk\Plugin\Admin\Tracks;
 use DateInterval;
 use DateTime;
 
-use Ultrafunk\Plugin\Shared\TRACK_TYPE;
+use Ultrafunk\Plugin\Shared\Constants\TRACK_TYPE;
 
-use const Ultrafunk\Plugin\Shared\YOUTUBE_VIDEO_ID_REGEX;
+use const Ultrafunk\Plugin\Shared\Constants\YOUTUBE_VIDEO_ID_REGEX;
 
 
 /**************************************************************************************************************************/

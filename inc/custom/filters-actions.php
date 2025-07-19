@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /*
- * Ultrafunk custom plugin filters + actions
+ * Ultrafunk plugin filters and actions
  *
  */
 
@@ -8,7 +8,7 @@
 namespace Ultrafunk\Plugin\Custom\FiltersActions;
 
 
-use Ultrafunk\Plugin\Shared\ {
+use Ultrafunk\Plugin\Shared\Constants\ {
   PLAYER_TYPE,
   TRACK_TYPE,
 };
@@ -176,3 +176,29 @@ function wp_lazy_loading_enabled(bool $default, string $tag_name, string $contex
   return $default;
 }
 add_filter('wp_lazy_loading_enabled', '\Ultrafunk\Plugin\Custom\FiltersActions\wp_lazy_loading_enabled', 10, 3);
+
+//
+// Show Tracks in site RSS feed
+//
+function add_tracks_to_feed(array $query_vars) : array
+{
+  if (isset($query_vars['feed']))
+    $query_vars['post_type'] = ['post', 'uf_track'];
+
+  return $query_vars;
+}
+add_filter('request', '\Ultrafunk\Plugin\Custom\FiltersActions\add_tracks_to_feed');
+
+//
+// Filter /wp-sitemap.xml taxonomy entries to insert '/list/' in all URLs
+//
+function wp_sitemaps_taxonomies_entry (array $sitemap_entry, int $term_id, string $taxonomy) : array
+{
+  if ($taxonomy === 'uf_artist')
+    $sitemap_entry['loc'] = str_ireplace('/artist/', '/list/artist/', $sitemap_entry['loc']);
+  else if ($taxonomy === 'uf_channel')
+    $sitemap_entry['loc'] = str_ireplace('/channel/', '/list/channel/', $sitemap_entry['loc']);
+
+  return $sitemap_entry;
+}
+add_filter('wp_sitemaps_taxonomies_entry', '\Ultrafunk\Plugin\Custom\FiltersActions\wp_sitemaps_taxonomies_entry', 10, 3);

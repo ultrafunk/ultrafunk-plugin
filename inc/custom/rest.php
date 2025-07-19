@@ -11,7 +11,7 @@ namespace Ultrafunk\Plugin\Custom\Rest;
 use WP_REST_Request;
 use WP_Term_Query;
 
-use function Ultrafunk\Plugin\Shared\get_term_links;
+use function Ultrafunk\Plugin\Shared\Utils\get_term_links;
 
 
 /**************************************************************************************************************************/
@@ -125,7 +125,7 @@ function rest_uf_track_query(array $args, object $request) : array
     $shuffle_path = 'all';
     $shuffle_type = $request->get_param('shuffle_type');
     $shuffle_slug = $request->get_param('shuffle_slug');
-    $transient    = get_transient(\Ultrafunk\Plugin\Storage\get_shuffle_transient_name());
+    $transient    = get_transient(\Ultrafunk\Plugin\Shared\Utils\get_shuffle_transient_name());
 
     if ($shuffle_slug !== null)
       $shuffle_path = $shuffle_type . '/' . $shuffle_slug;

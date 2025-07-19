@@ -10,8 +10,6 @@ namespace Ultrafunk\Plugin\Admin\Settings;
 
 use const Ultrafunk\Plugin\Config\PLUGIN_ENV;
 
-use function Ultrafunk\Plugin\Shared\human_file_size;
-
 
 /**************************************************************************************************************************/
 
@@ -101,6 +99,10 @@ function settings_template(array $uf_settings, ?array $result = null) : void
   <?php
 }
 
+
+/**************************************************************************************************************************/
+
+
 function display_php_error_log()
 {
   if (!empty(ini_get('error_log')) && file_exists(ini_get('error_log')))
@@ -129,4 +131,18 @@ function display_php_error_log()
   {
     ?><br><h3>PHP error log empty or not found: <span style="font-weight: 400;"><?php echo esc_html(ini_get('error_log')); ?></span></h3><?php
   }
+}
+
+//
+// Based on: https://stackoverflow.com/a/28047922
+//
+function human_file_size(int $bytes) : string
+{
+  if ($bytes === 0)
+    return "0.00 B";
+
+  $units = [' B', ' KB', ' MB', ' GB', ' TB', ' PB'];
+  $index = floor(log($bytes, 1024));
+
+  return round($bytes / pow(1024, $index), 2).$units[$index];
 }
