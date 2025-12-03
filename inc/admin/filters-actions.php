@@ -8,6 +8,9 @@
 namespace Ultrafunk\Plugin\Admin\FiltersActions;
 
 
+use function Ultrafunk\Plugin\Shared\Utils\get_channels_top_artists_info;
+
+
 /**************************************************************************************************************************/
 
 
@@ -44,10 +47,7 @@ add_action('admin_menu', '\Ultrafunk\Plugin\Admin\FiltersActions\swap_menu_items
 //
 function dashboard_tracks_count(array $data) : array
 {
-  $count  = wp_count_posts('uf_track');
-  $data[] = "<a href='/wp-admin/edit.php?post_type=uf_track'>$count->publish Tracks</a>";
-
-  return $data;
+  return [ "<a href='/wp-admin/edit.php?post_type=uf_track'>" . get_channels_top_artists_info()['all_tracks_count'] . " Tracks</a>" ];
 }
 add_filter('dashboard_glance_items', '\Ultrafunk\Plugin\Admin\FiltersActions\dashboard_tracks_count');
 

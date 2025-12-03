@@ -73,10 +73,23 @@ function get_shuffle_transient_name() : string
     $cookie = sanitize_user(wp_unslash($_COOKIE[COOKIE_KEY::UF_SHUFFLE_UID]), true);
 
     if (strlen($cookie) < 50)
-      return sprintf('random_shuffle_%s', $cookie);
+      return sprintf('uf_random_shuffle_%s', $cookie);
   }
 
   return '';
+}
+
+//
+//
+//
+function get_channels_top_artists_info() : array
+{
+  $channels_top_artists_info = get_transient('uf_channels_top_artists_info');
+
+  if ($channels_top_artists_info === false)
+    return [ 'updated_at' => 0, 'all_tracks_count' => wp_count_posts('uf_track')->publish ];
+
+  return $channels_top_artists_info;
 }
 
 /*

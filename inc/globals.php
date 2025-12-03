@@ -132,14 +132,17 @@ function is_list_player(?string $type = null) : bool
 
 function is_shuffle(int $player_type = PLAYER_TYPE::ALL) : bool
 {
-  if ($player_type === PLAYER_TYPE::GALLERY)
-    return !empty(Globals::$request_params->is_shuffle);
+  switch ($player_type)
+  {
+    case PLAYER_TYPE::GALLERY:
+      return !empty(Globals::$request_params->is_shuffle);
 
-  if ($player_type === PLAYER_TYPE::LIST)
-    return is_request('list_player', 'shuffle');
+    case PLAYER_TYPE::LIST:
+      return is_request('list_player', 'shuffle');
 
-  if ($player_type === PLAYER_TYPE::ALL)
-    return (is_shuffle(PLAYER_TYPE::GALLERY) || is_shuffle(PLAYER_TYPE::LIST));
+    case PLAYER_TYPE::ALL:
+      return (is_shuffle(PLAYER_TYPE::GALLERY) || is_shuffle(PLAYER_TYPE::LIST));
+  }
 
   return false;
 }

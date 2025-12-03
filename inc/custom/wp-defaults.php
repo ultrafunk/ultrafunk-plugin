@@ -12,6 +12,15 @@ namespace Ultrafunk\Plugin\Custom\WPDefaults;
 
 
 //
+// Remove ALL inlined Gutenberg block library CSS
+//
+function after_setup_theme() : void
+{
+  add_filter('should_load_separate_core_block_assets', '__return_false');
+}
+add_action('after_setup_theme', '\Ultrafunk\Plugin\Custom\WPDefaults\after_setup_theme');
+
+//
 // Remove default WordPress header stuff that is not needed...
 //
 function cleanup_header() : void
@@ -34,7 +43,7 @@ function cleanup_header() : void
   // Remove wlwmanifest.xml (needed to support windows live writer)
   remove_action('wp_head', 'wlwmanifest_link');
 
-  // Remove Gutenberg CSS for visitors
+  // Remove Gutenberg 'wp-block-library-css' CSS file
   remove_action('wp_enqueue_scripts', 'wp_common_block_scripts_and_styles');
 
   // Remove RSD link
@@ -50,24 +59,14 @@ function cleanup_header() : void
 add_action('init', '\Ultrafunk\Plugin\Custom\WPDefaults\cleanup_header');
 
 //
-// Remove Gutenberg Block Library stuff from header (CSS) + footer (SVGs)
-// https://github.com/WordPress/gutenberg/issues/38299
+// Remove unused CSS that is by default included or inlined by WordPress
 //
-function remove_wp_block_library() : void
-{
-  remove_action('wp_enqueue_scripts', 'wp_enqueue_global_styles');
-  remove_action('wp_body_open', 'wp_global_styles_render_svg_filters');
-}
-add_action('after_setup_theme', '\Ultrafunk\Plugin\Custom\WPDefaults\remove_wp_block_library', 10, 0);
-
-//
-// Remove /wp-includes/css/classic-themes.min.css that is added by default in WP 6.1
-//
-function remove_classic_theme_styles()
+function remove_unused_styles()
 {
   wp_dequeue_style('classic-theme-styles');
+  wp_dequeue_style('global-styles');
 }
-add_action('wp_enqueue_scripts', '\Ultrafunk\Plugin\Custom\WPDefaults\remove_classic_theme_styles');
+add_action('wp_enqueue_scripts', '\Ultrafunk\Plugin\Custom\WPDefaults\remove_unused_styles');
 
 //
 // Disable since WP 6.7: https://core.trac.wordpress.org/ticket/62413

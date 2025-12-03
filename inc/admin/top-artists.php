@@ -24,10 +24,12 @@ function set_data(int $max_entries = 10, bool $create_log = false) : array
     'suppress_filters' => true,
   ]);
 
+  $all_tracks_count = count($tracks);
+
   if ($create_log)
   {
     $log_entries .= 'Get All Tracks..: ' . round((microtime(true) - $interval), 3) . ' seconds <br>';
-    $log_entries .= 'All Tracks Count: ' . count($tracks) . '<br>';
+    $log_entries .= 'All Tracks Count: ' . $all_tracks_count . '<br>';
     $interval     = microtime(true);
   }
 
@@ -64,8 +66,10 @@ function set_data(int $max_entries = 10, bool $create_log = false) : array
     $log_entries .= 'Sort + Trim list: ' . round((microtime(true) - $interval), 3) . ' seconds <br>';
   }
 
+  $channels_top_artists_info = [ 'updated_at' => time(), 'all_tracks_count' => $all_tracks_count ];
+
   set_transient('uf_channels_top_artists', $top_artists, 0);
-  set_transient('uf_channels_top_artists_updated_at', time(), YEAR_IN_SECONDS);
+  set_transient('uf_channels_top_artists_info', $channels_top_artists_info, YEAR_IN_SECONDS);
 
   $end_time = microtime(true);
 

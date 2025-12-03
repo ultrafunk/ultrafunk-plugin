@@ -10,6 +10,8 @@ namespace Ultrafunk\Plugin\Admin\Settings;
 
 use const Ultrafunk\Plugin\Config\PLUGIN_ENV;
 
+use function Ultrafunk\Plugin\Shared\Utils\get_channels_top_artists_info;
+
 
 /**************************************************************************************************************************/
 
@@ -21,15 +23,10 @@ function settings_template(array $uf_settings, ?array $result = null) : void
     : 'N/A (Theme not Activated or Installed)';
 
   $page_cache_info = get_transient('uf_page_cache_info');
-  $channels_top_artists_updated_at = get_transient('uf_channels_top_artists_updated_at');
+  $channels_top_artists_info = get_channels_top_artists_info();
 
   if ($page_cache_info === false)
     $page_cache_info = ['updated_at' => 0, 'total_bytes' => 0, 'total_files' => 0, 'total_dirs' => 0];
-
-  if ($channels_top_artists_updated_at !== false)
-    $channels_top_artists_updated_at = gmdate('d. F Y H:i:s', intval($channels_top_artists_updated_at)) . ' UTC';
-  else
-    $channels_top_artists_updated_at = 'N/A';
 
   ?>
   <div class="wrap">
@@ -68,7 +65,8 @@ function settings_template(array $uf_settings, ?array $result = null) : void
   </tr>
   </table>
 
-  <p><b>Last updated:</b> <?php echo $channels_top_artists_updated_at; ?></p>
+  <p><b>Last updated:</b> <?php echo gmdate('d. F Y H:i:s', $channels_top_artists_info['updated_at']); ?>
+  UTC <b>for</b> <?php echo intval($channels_top_artists_info['all_tracks_count']); ?> tracks.</p>
   <p><label><input type="checkbox" name="show_top_artists_log" <?php checked(true, $uf_settings['show_top_artists_log'], true); ?> />Show create / update log</label></p>
   <p><input type="submit" class="button button-primary" name="uf-save-top-artists" value="Update Top Artists for All Channels" /></p>
   </form>

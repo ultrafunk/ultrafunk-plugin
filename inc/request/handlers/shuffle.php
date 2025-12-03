@@ -200,7 +200,7 @@ final class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
       if (empty($transient_name))
       {
         $uid            = uniqid('', true);
-        $transient_name = sprintf('random_shuffle_%s', $uid);
+        $transient_name = sprintf('uf_random_shuffle_%s', $uid);
         $this->set_cookie($uid);
       }
 
