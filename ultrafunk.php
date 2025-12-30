@@ -5,7 +5,7 @@ Plugin URI:        https://github.com/ultrafunk/ultrafunk-plugin
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress plugin
-Version:           1.48.40
+Version:           1.48.41
 Requires at least: 6.9
 Tested up to:      6.9
 Requires PHP:      8.4
@@ -18,9 +18,9 @@ namespace Ultrafunk\Plugin;
 
 
 /**************************************************************************************************************************/
-
-
 if (!defined('ABSPATH')) exit;
+/**************************************************************************************************************************/
+
 
 define('ULTRAFUNK_PLUGIN_PATH',  plugin_dir_path(__FILE__));
 define('ULTRAFUNK_THEME_ACTIVE', (get_option('template') === 'ultrafunk'));

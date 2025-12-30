@@ -8,6 +8,11 @@
 namespace Ultrafunk\Plugin\Admin\Settings;
 
 
+/**************************************************************************************************************************/
+if (!defined('ABSPATH')) exit;
+/**************************************************************************************************************************/
+
+
 use const Ultrafunk\Plugin\Config\PLUGIN_ENV;
 
 use function Ultrafunk\Plugin\Shared\Utils\get_channels_top_artists_info;

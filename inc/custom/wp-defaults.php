@@ -9,6 +9,8 @@ namespace Ultrafunk\Plugin\Custom\WPDefaults;
 
 
 /**************************************************************************************************************************/
+if (!defined('ABSPATH')) exit;
+/**************************************************************************************************************************/
 
 
 //
@@ -39,9 +41,6 @@ function cleanup_header() : void
 
   // Remove page / post REST endpoint header links
   remove_action('wp_head', 'rest_output_link_wp_head');
-
-  // Remove wlwmanifest.xml (needed to support windows live writer)
-  remove_action('wp_head', 'wlwmanifest_link');
 
   // Remove Gutenberg 'wp-block-library-css' CSS file
   remove_action('wp_enqueue_scripts', 'wp_common_block_scripts_and_styles');
