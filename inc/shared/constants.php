@@ -19,6 +19,7 @@ const DEFAULT_SETTINGS = [
   'gallery_tracks_per_page'  => 12,
   'channels_num_top_artists' => 10,
   'show_top_artists_log'     => true,
+  'error_log_word_wrap'      => true,
 ];
 
 // ToDo: Use PHP enum when v8.1 is ready for use

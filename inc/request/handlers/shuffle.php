@@ -8,6 +8,11 @@
 namespace Ultrafunk\Plugin\Request\Handler;
 
 
+/**************************************************************************************************************************/
+if (!defined('ABSPATH')) exit;
+/**************************************************************************************************************************/
+
+
 use Ultrafunk\Plugin\Shared\Constants\COOKIE_KEY;
 
 use function Ultrafunk\Plugin\Shared\Utils\get_shuffle_transient_name;

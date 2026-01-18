@@ -9,6 +9,8 @@ namespace Ultrafunk\Plugin\Request\Handler;
 
 
 /**************************************************************************************************************************/
+if (!defined('ABSPATH')) exit;
+/**************************************************************************************************************************/
 
 
 final class ListPlayerAll extends \Ultrafunk\Plugin\Request\RequestHandler

@@ -95,7 +95,7 @@ function settings_template(array $uf_settings, ?array $result = null) : void
   if (isset($result['log']))
     echo '<br><hr><br><pre>' . $result['log'] . '</pre>';
   else
-    display_php_error_log();
+    display_php_error_log($uf_settings);
   ?>
 
   </div>
@@ -106,7 +106,7 @@ function settings_template(array $uf_settings, ?array $result = null) : void
 /**************************************************************************************************************************/
 
 
-function display_php_error_log()
+function display_php_error_log(array $uf_settings)
 {
   if (!empty(ini_get('error_log')) && file_exists(ini_get('error_log')))
   {
@@ -116,10 +116,13 @@ function display_php_error_log()
 
     <form method="post" action="">
     <?php wp_nonce_field('_uf_error_log_', '_uf_nonce_error_log_'); ?>
-    <p><input type="submit" class="button button-primary" name="uf-delete-error-log" value="Delete Error Log" /></p>
+    <p>
+    <input type="submit" class="button button-primary" name="uf-delete-error-log" value="Delete Error Log" />
+    <label>&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="uf-error-log-word-wrap" name="uf-error-log-word-wrap" <?php checked(true, $uf_settings['error_log_word_wrap'], true); ?> />Word Wrapping</label>
+    </p>
     </form>
 
-    <textarea id="uf-plugin-php-error-log" readonly rows="50">
+    <textarea id="uf-plugin-php-error-log" readonly rows="50" wrap="<?php echo !empty($uf_settings['error_log_word_wrap']) ? "on" : "off"; ?>">
     <?php
 
     WP_Filesystem();
@@ -128,7 +131,20 @@ function display_php_error_log()
     $logfile_content = $wp_filesystem->get_contents(ini_get('error_log'));
     echo esc_html($logfile_content);
 
-    ?></textarea><?php
+    ?></textarea>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () =>
+    {
+      document.querySelector('form input.uf-error-log-word-wrap')?.addEventListener('click', (event) =>
+      {
+        const textArea = document.getElementById('uf-plugin-php-error-log');
+        textArea.setAttribute('wrap', event.target.checked ? 'on' : 'off');
+      });
+    });
+    </script>
+
+    <?php
   }
   else
   {

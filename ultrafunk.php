@@ -5,7 +5,7 @@ Plugin URI:        https://github.com/ultrafunk/ultrafunk-plugin
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress plugin
-Version:           1.48.41
+Version:           1.48.42
 Requires at least: 6.9
 Tested up to:      6.9
 Requires PHP:      8.4

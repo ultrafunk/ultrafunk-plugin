@@ -106,6 +106,9 @@ function update_page_cache_info(string $cache_path) : void
 
 function delete_error_log() : void
 {
+//$uf_settings['error_log_word_wrap'] = get_post_is_checked('error_log_word_wrap');
+//update_option("uf_settings", $uf_settings);
+
   wp_delete_file(ini_get('error_log'));
   ?><div class="notice notice-success is-dismissible"><p>PHP error log deleted</p></div><?php
 }
