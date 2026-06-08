@@ -10,7 +10,7 @@ Tested on servers running LAMP: Linux, Apache, MariaDB / MySQL and PHP.
 # Dependencies
 **Required:**  
 PHP version 8.4 or greater.  
-[WordPress](https://wordpress.org/download/) version 6.9 or greater.  
+[WordPress](https://wordpress.org/download/) version 7.0 or greater.  
 [Ultrafunk Theme](https://github.com/ultrafunk/ultrafunk-theme/) version 1.48.X or greater.  
 
 **Optional:**  
@@ -20,5 +20,5 @@ PHP version 8.4 or greater.
 [WP Fastest Cache](https://wordpress.org/plugins/wp-fastest-cache/) - WordPress cache plugin developed to speed up WordPress sites.  
 
 ## **Screenshots**  
-![Settings](https://ultrafunk.com/wp-content/uploads/screenshots/ultrafunk-plugin_settings_1-46-22_02.png)  
+![Settings](https://ultrafunk.com/wp-content/uploads/screenshots/ultrafunk-plugin_settings_1-48-42.png)  
 ![Tracks](https://ultrafunk.com/wp-content/uploads/screenshots/ultrafunk-plugin_tracks_1-46-22_02.png)  

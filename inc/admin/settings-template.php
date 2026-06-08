@@ -161,7 +161,7 @@ function human_file_size(int $bytes) : string
     return "0.00 B";
 
   $units = [' B', ' KB', ' MB', ' GB', ' TB', ' PB'];
-  $index = floor(log($bytes, 1024));
+  $index = (int) floor(log($bytes, 1024));
 
   return round($bytes / pow(1024, $index), 2).$units[$index];
 }

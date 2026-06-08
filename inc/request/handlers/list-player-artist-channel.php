@@ -17,6 +17,9 @@ final class ListPlayerArtistChannel extends \Ultrafunk\Plugin\Request\RequestHan
 {
   protected function has_valid_request_params() : bool
   {
+    $taxonomy     = null;
+    $title_prefix = null;
+
     switch ($this->route_request->matched_route)
     {
       case 'list_player_artist':
