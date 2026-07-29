@@ -21,7 +21,7 @@ use const Ultrafunk\Plugin\Config\ {
 
 use const Ultrafunk\Plugin\Request\DEFAULT_ROUTES;
 
-use function Ultrafunk\Plugin\Globals\ {
+use function Ultrafunk\Plugin\Singleton\ {
   perf_start,
   perf_stop,
 };

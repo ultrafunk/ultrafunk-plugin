@@ -18,8 +18,8 @@ use Ultrafunk\Plugin\Shared\Constants\ {
   TRACK_TYPE,
 };
 
-use function Ultrafunk\Plugin\Globals\ {
-  get_global,
+use function Ultrafunk\Plugin\Singleton\ {
+  get_prop,
   get_settings_value,
   is_custom_query,
   is_shuffle,
@@ -40,7 +40,7 @@ function pre_get_posts(object $query) : void
       $query->set('post_type', ['uf_track']);
 
     if ($query->is_search() || is_shuffle(PLAYER_TYPE::GALLERY))
-      $query->set('posts_per_page', get_global('gallery_per_page'));
+      $query->set('posts_per_page', get_prop('gallery_per_page'));
     else if (is_page() === false)
       $query->set('posts_per_page', get_settings_value('gallery_tracks_per_page'));
   }

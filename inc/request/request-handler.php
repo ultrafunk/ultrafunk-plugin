@@ -17,7 +17,7 @@ use stdClass;
 
 use const Ultrafunk\Plugin\Config\PLUGIN_ENV;
 
-use function Ultrafunk\Plugin\Globals\ {
+use function Ultrafunk\Plugin\Singleton\ {
   perf_stop,
   set_is_custom_query,
   get_settings_value,
@@ -173,7 +173,7 @@ abstract class RequestHandler
   private function begin_output() : void
   {
     // Show debug info for this request
-    //\Ultrafunk\Plugin\Shared\Utils\console_log(\Ultrafunk\Plugin\Globals\get_request_params());
+    //\Ultrafunk\Plugin\Shared\Utils\console_log(\Ultrafunk\Plugin\Singleton\get_request_params());
 
     // Output HTTP headers
     $this->wp_env->send_headers();
@@ -199,7 +199,7 @@ abstract class RequestHandler
   private function render_valid_response() : void
   {
     // Set public parameters for this request
-    \Ultrafunk\Plugin\Globals\set_request_params($this->params);
+    \Ultrafunk\Plugin\Singleton\set_request_params($this->params);
 
     $this->begin_output();
 
@@ -216,25 +216,25 @@ abstract class RequestHandler
   private function render_error_response() : void
   {
     global $wp_query;
-    $response_params = new stdClass();
-    $response_params->response   = $this->params->get;
-    $response_params->query_vars = $this->params->query_vars;
+    $request_params = new stdClass();
+    $request_params->response   = $this->params->get;
+    $request_params->query_vars = $this->params->query_vars;
 
     // Setup global $wp_query so it contains relevant data to handle this request failure...
     if ((current($this->params->get) === 'search') && !empty($this->route_request->query_params['s']))
     {
-      $response_params->error    = ['http_status' => 200, 'details' => 'No search matches'];
+      $request_params->error    = ['http_status' => 200, 'details' => 'No search matches'];
       $wp_query->is_search       = true;
       $wp_query->query_vars['s'] = $this->route_request->query_params['s'];
     }
     else
     {
-      $response_params->error = ['http_status' => 404, 'details' => 'Page not found'];
+      $request_params->error = ['http_status' => 404, 'details' => 'Page not found'];
       $wp_query->set_404();
       status_header(404);
     }
 
-    \Ultrafunk\Plugin\Globals\set_request_params($response_params);
+    \Ultrafunk\Plugin\Singleton\set_request_params($request_params);
 
     $this->begin_output();
     get_template_part('php/templates/content', 'none');

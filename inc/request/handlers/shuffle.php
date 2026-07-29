@@ -17,7 +17,7 @@ use Ultrafunk\Plugin\Shared\Constants\COOKIE_KEY;
 
 use function Ultrafunk\Plugin\Shared\Utils\get_shuffle_transient_name;
 
-use function Ultrafunk\Plugin\Globals\ {
+use function Ultrafunk\Plugin\Singleton\ {
   set_request_params,
   perf_start,
   perf_stop,
@@ -36,9 +36,6 @@ final class Shuffle extends \Ultrafunk\Plugin\Request\RequestHandler
 
   public ?object $params = null;
 
-  //
-  // Constructor -- Set all private class data / variables
-  //
   public function __construct(object $wp_env, object $route_request)
   {
     parent::__construct($wp_env, $route_request);

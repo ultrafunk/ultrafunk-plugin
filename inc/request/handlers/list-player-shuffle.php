@@ -28,12 +28,12 @@ final class ListPlayerShuffle extends \Ultrafunk\Plugin\Request\RequestHandler
 
     if ($shuffle_handler->has_valid_request_params())
     {
-      $shuffle_params = \Ultrafunk\Plugin\Globals\get_request_params();
+      $shuffle_params = \Ultrafunk\Plugin\Singleton\get_request_params();
 
       $this->params->get['shuffle_type'] = $shuffle_params->type;
       $this->params->get['shuffle_slug'] = $shuffle_params->slug;
 
-      $this->params->items_per_page = \Ultrafunk\Plugin\Globals\get_global('list_per_page');
+      $this->params->items_per_page = \Ultrafunk\Plugin\Singleton\get_prop('list_per_page');
       $this->params->route_path     = 'list/shuffle/' . $shuffle_params->path;
       $title                        = ($shuffle_params->type === 'all') ? 'All Tracks' : $shuffle_params->slug_name;
       $this->params->title_parts    = ['prefix' => 'Shuffle', 'title' => $title];

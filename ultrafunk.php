@@ -5,7 +5,7 @@ Plugin URI:        https://github.com/ultrafunk/ultrafunk-plugin
 Author:            Ultrafunk
 Author URI:        https://ultrafunk.com
 Description:       ultrafunk.com WordPress plugin
-Version:           1.48.45
+Version:           1.48.46
 Requires at least: 7.0
 Tested up to:      7.0
 Requires PHP:      8.4
@@ -29,7 +29,9 @@ define('ULTRAFUNK_THEME_ACTIVE', (get_option('template') === 'ultrafunk'));
 /**************************************************************************************************************************/
 
 
+//
 // Check if the needed (companion) Ultrafunk theme is installed and active
+//
 if (ULTRAFUNK_THEME_ACTIVE === false)
 {
   if (is_admin())
@@ -63,11 +65,11 @@ else
   }
   else
   {
-    require ULTRAFUNK_PLUGIN_PATH . 'inc/globals.php';
+    require ULTRAFUNK_PLUGIN_PATH . 'inc/singleton.php';
     require ULTRAFUNK_PLUGIN_PATH . 'inc/request/default-routes.php';
     require ULTRAFUNK_PLUGIN_PATH . 'inc/request/route-request.php';
     require ULTRAFUNK_PLUGIN_PATH . 'inc/request/request-handler.php';
-    require ULTRAFUNK_PLUGIN_PATH . 'inc/request/session.php';
+    require ULTRAFUNK_PLUGIN_PATH . 'inc/request/response-params.php';
     require ULTRAFUNK_PLUGIN_PATH . 'inc/custom/rest.php';
     require ULTRAFUNK_PLUGIN_PATH . 'inc/custom/filters-actions.php';
     require ULTRAFUNK_PLUGIN_PATH . 'inc/custom/wp-defaults.php';
@@ -78,9 +80,6 @@ else
 /**************************************************************************************************************************/
 
 
-//
-// Activate the plugin
-//
 function activate() : void
 {
   if (ULTRAFUNK_THEME_ACTIVE)
@@ -90,9 +89,6 @@ function activate() : void
 }
 register_activation_hook(__FILE__, '\Ultrafunk\Plugin\activate');
 
-//
-// Deactivate the plugin
-//
 function deactivate() : void
 {
   unregister_post_type('uf_track');
@@ -100,9 +96,6 @@ function deactivate() : void
 }
 register_deactivation_hook(__FILE__, '\Ultrafunk\Plugin\deactivate');
 
-//
-// Uninstall the plugin
-//
 function uninstall() : void
 {
   delete_option('uf_settings');

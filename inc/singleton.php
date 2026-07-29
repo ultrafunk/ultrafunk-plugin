@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 /*
- * Ultrafunk plugin globals class (singleton) and related functions
+ * Ultrafunk plugin singleton class and related functions
  *
  */
 
 
-namespace Ultrafunk\Plugin\Globals;
+namespace Ultrafunk\Plugin\Singleton;
 
 
 /**************************************************************************************************************************/
@@ -24,15 +24,23 @@ use function Ultrafunk\Plugin\Shared\Utils\get_cookie_value;
 /**************************************************************************************************************************/
 
 
-final class Globals
+final class Singleton
 {
+  private function __construct() {}
+  private function __clone() {}
+
   // Each prop has getter function for easy access
   public static array   $settings        = [];
   public static bool    $is_custom_query = false;
   public static ?object $request_params  = null;
-  public static array   $session_vars    = [];
+  public static array   $response_params = [];
   public static ?string $cached_title    = null;
   public static ?string $cached_home_url = null;
+
+  // Use get_prop('prop_name') for these
+  public static int $preferred_player = 0;
+  public static int $list_per_page    = 0;
+  public static int $gallery_per_page = 0;
 
   public static array $perf_data = [
     'display_perf_results' => true,
@@ -41,13 +49,7 @@ final class Globals
     'route_request'        => 0,
   ];
 
-  // Use get_global('prop_name') for these
-  public static int $preferred_player = 0;
-  public static int $list_per_page    = 0;
-  public static int $gallery_per_page = 0;
-
-  // Initialize global props here if needed
-  public static function construct() : void
+  public static function initialize() : void
   {
     self::$settings         = get_option('uf_settings', \Ultrafunk\Plugin\Shared\Constants\DEFAULT_SETTINGS);
     self::$cached_home_url  = esc_url(home_url());
@@ -61,69 +63,68 @@ final class Globals
 /**************************************************************************************************************************/
 
 
-// Call Globals class constructor manually since it is "static"
-Globals::construct();
+Singleton::initialize();
 
 
 /**************************************************************************************************************************/
 
 
-function get_global(string $property) : mixed
+function get_prop(string $property) : mixed
 {
-  return Globals::$$property;
+  return Singleton::$$property;
 }
 
 function get_settings_value(string $key) : int
 {
-  return Globals::$settings[$key];
+  return Singleton::$settings[$key];
 }
 
 function is_custom_query() : bool
 {
-  return Globals::$is_custom_query;
+  return Singleton::$is_custom_query;
 }
 
 function set_is_custom_query(bool $value = true) : void
 {
-  Globals::$is_custom_query = $value;
+  Singleton::$is_custom_query = $value;
 }
 
 function get_request_params() : ?object
 {
-  return Globals::$request_params;
+  return Singleton::$request_params;
 }
 
-function set_request_params(object &$params) : void
+function set_request_params(object &$request_params) : void
 {
-  Globals::$request_params = $params;
+  Singleton::$request_params = $request_params;
 }
 
-function get_session_vars() : array
+function get_response_params() : array
 {
-  return Globals::$session_vars;
+  return Singleton::$response_params;
 }
 
-function set_session_vars(array $session_vars) : void
+function set_response_params(array $response_params) : void
 {
-  Globals::$session_vars = $session_vars;
+  Singleton::$response_params = $response_params;
 }
 
 function is_request(string $resource, ?string $type = null) : bool
 {
   if ($type === null)
-    return isset(Globals::$request_params->get[$resource]);
+    return isset(Singleton::$request_params->get[$resource]);
 
-  return (!empty(Globals::$request_params->get[$resource]) &&
-         (Globals::$request_params->get[$resource] === $type));
+  return (!empty(Singleton::$request_params->get[$resource]) &&
+         (Singleton::$request_params->get[$resource] === $type));
 }
 
 function is_response(string $resource, ?string $type = null) : bool
 {
   if ($type === null)
-    return isset(Globals::$request_params->response[$resource]);
+    return isset(Singleton::$request_params->response[$resource]);
 
-  return (!empty(Globals::$request_params->response[$resource]) &&
-         (Globals::$request_params->response[$resource] === $type));
+  return (!empty(Singleton::$request_params->response[$resource]) &&
+         (Singleton::$request_params->response[$resource] === $type));
 }
 
 function is_termlist(?string $type = null) : bool
@@ -141,7 +142,7 @@ function is_shuffle(int $player_type = PLAYER_TYPE::ALL) : bool
   switch ($player_type)
   {
     case PLAYER_TYPE::GALLERY:
-      return !empty(Globals::$request_params->is_shuffle);
+      return !empty(Singleton::$request_params->is_shuffle);
 
     case PLAYER_TYPE::LIST:
       return is_request('list_player', 'shuffle');
@@ -155,30 +156,30 @@ function is_shuffle(int $player_type = PLAYER_TYPE::ALL) : bool
 
 function get_cached_title() : ?string
 {
-  return Globals::$cached_title;
+  return Singleton::$cached_title;
 }
 
 function set_cached_title(string $title) : void
 {
-  Globals::$cached_title = $title;
+  Singleton::$cached_title = $title;
 }
 
 function get_cached_home_url(string $path = '') : ?string
 {
-  return Globals::$cached_home_url . $path;
+  return Singleton::$cached_home_url . $path;
 }
 
 function get_perf_data() : array
 {
-  return Globals::$perf_data;
+  return Singleton::$perf_data;
 }
 
 function perf_start(string $startTimerKey) : void
 {
-  Globals::$perf_data[$startTimerKey] = hrtime(true);
+  Singleton::$perf_data[$startTimerKey] = hrtime(true);
 }
 
 function perf_stop(string $perfTimerKey, string $startTimerKey) : void
 {
-  Globals::$perf_data[$perfTimerKey] = round(((hrtime(true) - Globals::$perf_data[$startTimerKey]) / 1e+6), 2);
+  Singleton::$perf_data[$perfTimerKey] = round(((hrtime(true) - Singleton::$perf_data[$startTimerKey]) / 1e+6), 2);
 }
